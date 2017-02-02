@@ -4,36 +4,32 @@ HOST: http://api.junashare.com/
 # Junashare Service 1.x
 享什么app API 1.x 版本
 
+# Data Structures
+
+## Banner (object)
++ type (enum[string]) - Banner所属的类型
+    
+    + `0` - 表示普通图片Banner
+    + `1` - 表示白领商品Banner
+    + `2` - 表示壹购商品Banner
+    + `3` - 表示URL Banner
+        
++ parameter (string) - 当type为1或者2时，该值为商品id，当type为3时是URL地址，其他为null
++ images (object)
+    + fid: 1 - 图片文件id
+    + self: `http://drupal7.local/sites/default/files/banner_image/pic2-003%403x.jpg` - 图片的URL
+    + filemime: `image/jpeg` - 图片类型
+    + filesize: 55573 - 图片大小
+    + width: 750 - 图片宽度
+    + height: 690 - 图片高度
+    + styles (object) - 其他大小的图片，例如hdpi和hhdpi
+
 # Group Banner
 
-## Banner Collection [/api/v1.0/banner/{id}]
+## Banner List [/api/v1.0/banner/]
 
-### Retrieve A Banner [GET]
-
-+ Attributes (object)
-    + type (enum[string]) - Banner所属的类型
-    
-        + `0` - 表示普通图片Banner
-        + `1` - 表示白领商品Banner
-        + `2` - 表示壹购商品Banner
-        + `3` - 表示URL Banner
-        
-    + parameter (string) - 当type为1或者2时，该值为商品id，当type为3时是URL地址，其他为null
-    + images
-        + (object)
-            + fid - 图片文件id
-            + self - 图片的URL
-            + filemime - 图片类型
-            + filesize - 图片大小
-            + width - 图片宽度
-            + height - 图片高度
-            + styles: null (object) - 其他尺寸的图片，例如hdpi，hhdpi
-    
-+ Parameters
-    + id (number, required) - Banner Id 
-
+### Retrieve All Banners [GET]
 + Response 200 (application/json)
-        
-            {
-                "data": Attributes (array[Retrieve A Banner])
-            }
+    + Attributes (object)
+        + data (array[Banner])
+        + count: 1 - 数据库中banner对象的总个数
