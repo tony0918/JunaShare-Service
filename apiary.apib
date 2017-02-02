@@ -11,33 +11,29 @@ HOST: http://api.junashare.com/
 ### Retrieve A Banner [GET]
 
 + Attributes (object)
-    + type (enum[string], required) - Banner所属的类型
+    + type (enum[string]) - Banner所属的类型
     
         + `0` - 表示普通图片Banner
         + `1` - 表示白领商品Banner
         + `2` - 表示壹购商品Banner
         + `3` - 表示URL Banner
         
-    + parameter: 1 (string, required) - 当type为1或者2时，该值为商品id，当type为3时是URL地址，其他为null
-    + percent_off: 25 (number)
-
-            A positive integer between 1 and 100 that represents the discount
-            the coupon will apply.
-
-    + redeem_by (number) - Date after which the coupon can no longer be redeemed
+    + parameter (string) - 当type为1或者2时，该值为商品id，当type为3时是URL地址，其他为null
+    + images
+        + (object)
+            + fid - 图片文件id
+            + self - 图片的URL
+            + filemime - 图片类型
+            + filesize - 图片大小
+            + width - 图片宽度
+            + height - 图片高度
+            + styles: null (object) - 其他尺寸的图片，例如hdpi，hhdpi
     
 + Parameters
     + id (number, required) - Banner Id 
 
 + Response 200 (application/json)
-
-    + Attributes
-
-    + Body
-
+        
             {
-                "id": "250FF",
-                "created": 1415203908,
-                "percent_off": 25,
-                "redeem_by": null
+                "data": Attributes (array[Retrieve A Banner])
             }
