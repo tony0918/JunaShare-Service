@@ -1,0 +1,16 @@
+{
+    "id": 1, // 享什么产品编号
+    "title": "Product Name", // 享什么商品名字
+    "market_price": 189.56, //
+    "total_number": 30, //
+    "remaining_number": 21, //
+    "inbox_number": 10, //
+    "description": "<div>Description</div>", //
+    "product_images": [
+        "images/products/product1.jpg",
+        "images/products/product2.jpg",
+        "images/products/product3.jpg"
+    ], // 商品的轮播kv的图片
+    "overdue": 0, // 商品是否已经过期
+    "create": 34567890 // 商品创建时间，unix时间戳
+}

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Juna Basic Features feature.
+ */
+
+include_once 'juna_basic_features.features.inc';
