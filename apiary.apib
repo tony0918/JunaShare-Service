@@ -9,10 +9,10 @@ HOST: http://api.junashare.com/
 ## Banner (object)
 + type (enum[string]) - Banner所属的类型
     
-    + `0` - 表示普通图片Banner
-    + `1` - 表示白领商品Banner
-    + `2` - 表示壹购商品Banner
-    + `3` - 表示URL Banner
+    + `0` - 表示普通图片Banner，只需要展示
+    + `1` - 表示白领商品Banner，点击后进入白领商品
+    + `2` - 表示壹购商品Banner，点击后进入壹购商品
+    + `3` - 表示URL Banner，点击后展示URL内容
         
 + parameter (string) - 当type为1或者2时，该值为商品id，当type为3时是URL地址，其他为null
 + images (object)
@@ -26,9 +26,30 @@ HOST: http://api.junashare.com/
 
 # Group Banner
 
-## Banner List [/api/v1.0/banner/]
+## Banner List [/api/v1.0/banner/{?fields,filter}]
 
 ### Retrieve All Banners [GET]
++ Parameters
+    + fields (enum[string]) - 接口可以获取到的所有的banner对象的字段都能单独获取，
+    
+        例如：fields=type,parameter,images.self
+    
+        + Members
+            + `type`
+            + `parameter`
+            + `images.self`
+            + `...`
+
+    + filter (enum[string]) - 接口可以通过字段来筛选数据，
+    
+        例如：filter[column]=1 则表示获取所有column=1的数据。
+        column的可选值是：_1_ 表示享什么板块，_2_ 表示壹购板块
+        
+        + Members
+            + `column`
+            + `...`
+        
+
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[Banner])
