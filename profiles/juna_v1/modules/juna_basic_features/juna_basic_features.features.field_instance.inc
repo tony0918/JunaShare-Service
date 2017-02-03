@@ -184,7 +184,11 @@ function juna_basic_features_field_default_field_instances() {
   // Exported field_instance: 'node-ad_banner-field_target_type'.
   $field_instances['node-ad_banner-field_target_type'] = array(
     'bundle' => 'ad_banner',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -205,7 +209,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_target_type',
     'label' => 'Target Type',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),

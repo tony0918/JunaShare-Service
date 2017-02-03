@@ -116,8 +116,10 @@ function juna_basic_features_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
-        1 => '商品',
-        2 => 'URL',
+        0 => '普通图片',
+        1 => '白领商品',
+        2 => '壹购商品',
+        3 => 'URL',
       ),
       'allowed_values_function' => '',
     ),

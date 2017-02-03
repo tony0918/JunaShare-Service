@@ -1,6 +1,6 @@
 name = Juna Services
 description = Provides a RESTful service for Junashare.
-package = juna
+package = Juna
 core = 7.x
 version = 7.x-1.0
 
