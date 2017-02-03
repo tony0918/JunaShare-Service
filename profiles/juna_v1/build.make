@@ -43,7 +43,8 @@ projects[strongarm][type] = module
 projects[jquery_update][version] = 2.7
 projects[jquery_update][type] = module
 
-
+projects[libraries][version] = 2.3
+projects[libraries][type] = module
 
 ;projects[entityreference][version] = 1.2
 ;projects[entityreference][type] = module
@@ -59,11 +60,6 @@ projects[jquery_update][type] = module
 
 ;projects[i18n][version] = 1.14
 ;projects[i18n][type] = module
-
-
-
-;projects[libraries][version] = 2.1
-;projects[libraries][type] = module
 
 ;projects[login_security][version] = 1.9
 ;projects[login_security][type] = module
@@ -91,7 +87,6 @@ projects[jquery_update][type] = module
 
 ;projects[state_machine][version] = 2.6
 ;projects[state_machine][type] = module
-
 
 ;projects[table_element][version] = 1.0-beta5
 ;projects[table_element][type] = module
