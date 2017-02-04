@@ -24,6 +24,11 @@ HOST: http://api.junashare.com/
     + height: 690 - 图片高度
     + styles (object) - 其他大小的图片，例如hdpi和hhdpi
 
+## Column (object)
++ id (string) - 栏目id
++ label (string) - 栏目名字
++ self (string) - 指向获取该栏目的api地址
+
 # Group Banner
 
 ## Banner List [/api/v1.0/banner/{?fields,filter}]
@@ -49,8 +54,8 @@ HOST: http://api.junashare.com/
             + `column`
             + `...`
         
-
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[Banner])
         + count: 1 - 数据库中banner对象的总个数
+        + column (Column)
