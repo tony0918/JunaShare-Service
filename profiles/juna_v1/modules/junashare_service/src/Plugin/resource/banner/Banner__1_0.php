@@ -54,8 +54,7 @@ class Banner__1_0 extends ResourceNode {
         'name' => 'columns',
         'majorVersion' => 1,
         'minorVersion' => 0
-      ),
-      'methods' => array()
+      )
     );
 
     // Clean up some fields.
