@@ -51,6 +51,14 @@ function juna_basic_features_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
+    'info_page' => array(
+      'name' => t('Info Page'),
+      'base' => 'node_content',
+      'description' => t('规则或者信息页面的实体'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
     'sku_product' => array(
       'name' => t('SKU Product'),
       'base' => 'node_content',

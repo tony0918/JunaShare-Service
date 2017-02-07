@@ -26,6 +26,10 @@ use Drupal\restful\Plugin\resource\ResourceNode;
  * )
  */
 class Yaoxiang__1_0 extends ResourceNode {
+
+  /**
+   * {@inheritdoc}
+   */
   protected function publicFields() {
     $public_fields = parent::publicFields();
 

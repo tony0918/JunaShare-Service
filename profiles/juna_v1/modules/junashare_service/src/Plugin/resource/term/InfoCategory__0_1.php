@@ -6,27 +6,26 @@ use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Taxonomy中的Columns接口
- * Class Columns__1_0
+ * Class InfoCategory__0_1
  * @package Drupal\junashare_service\Plugin\resource\term
  *
  * @Resource(
- *   name = "columns:1.0",
- *   resource = "columns",
- *   label = "Columns",
- *   description = "Export the columns taxonomy term.",
+ *   name = "infocategory:1.0",
+ *   resource = "infocategory",
+ *   label = "InfoCategory",
+ *   description = "Export the InfoCategory taxonomy term.",
  *   authenticationTypes = TRUE,
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "taxonomy_term",
  *     "bundles": {
- *       "columns"
+ *       "info_category"
  *     },
  *   },
  *   majorVersion = 1,
  *   minorVersion = 0
  * )
  */
-class Columns__1_0 extends ResourceEntity implements ResourceInterface {
+class InfoCategory__0_1 extends ResourceEntity implements ResourceInterface {
 
 }
