@@ -25,17 +25,20 @@ HOST: http://api.junashare.com/
     + styles (object) - 其他大小的图片，例如hdpi和hhdpi
 
 ## Column (object)
-+ id (string) - 栏目id
++ id (string) - id
 + label (string) - 栏目名字
 + self (string) - 指向获取该栏目的api地址
 
+## InfoCategory (Column)
++ label (string) - 信息或者规则页面所属的分类
+
 # Group Banner
 
-## Banner List [/api/v1.0/banner/{?fields,filter}]
+## Banner List [/api/v1.0/banner{?fields,filter}]
 
 ### Retrieve All Banners [GET]
 + Parameters
-    + fields (enum[string]) - 接口可以获取到的所有的banner对象的字段都能单独获取，
+    + fields (enum[string]) - 接口可以获取到的所有的字段都能单独获取，
     
         例如：fields=type,parameter,images.self
     
@@ -57,5 +60,38 @@ HOST: http://api.junashare.com/
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[Banner])
-        + count: 1 - 数据库中banner对象的总个数
+        + count: 1 - 数据库中对象的总个数
         + column (Column)
+
+# Group Info Page
+
+## Info Page List [/api/v1.0/infopage{?fields,filter}]
+
+### Retrieve All Info Pages [GET]
++ Parameters
+    + fields (enum[string]): `items` - 接口可以获取到的所有的字段都能单独获取，
+    
+        例如：fields=items
+    
+        + Members
+            + `items`
+
+    + filter (enum[string]) - 接口可以通过字段来筛选数据，
+    
+        例如：filter[category.label]=认证须知 则表示获取所有category.label为认证须知的数据。
+        category.label的可选值是：
+        
+        + Members
+            + `认证须知`
+            + `为何需要认证`
+        
++ Response 200 (application/json)
+    + Attributes (object)
+        + items (array[string])
+            + `1.上传证明资料正面`
+            + `2.确保公司全称、公司地址、姓名与手机号码等信息齐全（在职证明需盖公章）`
+            + `3.保证所有信息清晰可辩认`
+            + `4.不可上传电子截屏`
+        + count: 1 - 数据库中对象的总个数
+        + category (InfoCategory)
+            + label: `认证须知`

@@ -46,8 +46,14 @@ projects[jquery_update][type] = module
 projects[libraries][version] = 2.3
 projects[libraries][type] = module
 
-;projects[entityreference][version] = 1.2
-;projects[entityreference][type] = module
+projects[link][version] = 1.4
+projects[link][type] = module
+
+projects[media][version] = 1.6
+projects[media][type] = module
+
+projects[entityreference][version] = 1.2
+projects[entityreference][type] = module
 
 ;projects[field_collection][version] = 1.0-beta12
 ;projects[field_collection][type] = module
@@ -106,8 +112,6 @@ projects[libraries][type] = module
 ;projects[ultimate_cron][version] = 2.0
 ;projects[ultimate_cron][type] = module
 
-;projects[url][version] = 1.x-dev
-;projects[url][type] = module
 ;projects[url][patch][] = "https://drupal.org/files/0001-entity_metadata_wrapper.patch"
 
 ;projects[views][version] = 3.11

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Including some useful utilities for Junashare Service.
+ */
+
 namespace Drupal\junashare_service\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\Field\ResourceFieldBase;

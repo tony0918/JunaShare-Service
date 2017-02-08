@@ -51,6 +51,30 @@ function juna_basic_features_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
+    'info_page' => array(
+      'name' => t('Info Page'),
+      'base' => 'node_content',
+      'description' => t('规则或者信息页面的实体'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'sku_product' => array(
+      'name' => t('SKU Product'),
+      'base' => 'node_content',
+      'description' => t('拥有SKU的实际产品'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'yaoxiang_product' => array(
+      'name' => t('Yaoxiang Product'),
+      'base' => 'node_content',
+      'description' => t('摇享商品-需要配合SKU产品使用，先创建SKU产品'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
   );
   drupal_alter('node_info', $items);
   return $items;
