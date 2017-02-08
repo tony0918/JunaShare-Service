@@ -137,8 +137,8 @@ projects[module_filter][type] = module
 ; --------
 ; Include any themes that are hosted remotely.
 
-projects[bootstrap][version] = 3.10
-projects[bootstrap][type] = theme
+;projects[bootstrap][version] = 3.10
+;projects[bootstrap][type] = theme
 
 ; Libraries
 ; ---------
