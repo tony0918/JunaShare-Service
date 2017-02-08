@@ -32,6 +32,8 @@ class Yaoxiang__1_0 extends ResourceNode {
    */
   protected function publicFields() {
     $public_fields = parent::publicFields();
+    $public_fields['totalAmount'] = array('property' => 'field_product_total_amount');
+    $public_fields['yaoxiangPrice'] = array('property' => 'field_product_yaoxiang_price');
 
     $public_fields['skuProductItem'] = array(
       'property' => 'field_sku_product_item',
@@ -45,5 +47,11 @@ class Yaoxiang__1_0 extends ResourceNode {
     return $public_fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return 'Drupal\junashare_service\Plugin\resource\DataProvider\DataProviderYaoxiangNode';
+  }
 
 }

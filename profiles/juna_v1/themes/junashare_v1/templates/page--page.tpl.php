@@ -76,6 +76,9 @@
 <div id="page-wrapper" class="container-fluid">
   <div id="page" class="row">
     <div id="content" class="column col-xs-12">
+      <?php if ($tabs): ?>
+        <div class="tabs"><?php print render($tabs); ?></div>
+      <?php endif; ?>
       <?php print render($page['content']); ?>
     </div>
   </div>
