@@ -298,8 +298,18 @@ function coupon_resync_item($data) {
   // ...
 }
 
+/**
+ * Implementation of hook_permission().
+ * @return array
+ */
 function coupon_permission() {
   $perms = array(
+    'access coupon portal' => array(
+      'title' => t('Access coupon protal'),
+    ),
+    'access coupon creation form' => array(
+      'title' => t('Access coupon creation form'),
+    ),
     'administer coupon add' => array(
       'title' => t('批量创建白领券'),
     ),
@@ -314,7 +324,7 @@ function coupon_permission() {
     ),
     'administer swing share lottery' => array(
       'title' => t('摇享设置中奖')
-    )
+    ),
   );
 
   return $perms;
@@ -334,31 +344,34 @@ function coupon_permission() {
  */
 function coupon_menu() {
   $items = array();
-  $items['admin/coupon'] = array(
-    'title' => '白领券',
-    'description' => '白领券配置界面',
-    'access arguments' => array('administer coupon list'),
+  $items['admin/juna/coupon'] = array(
+    'title' => 'Coupon Configuration Portal',
+    'description' => 'Manage coupons.',
+    'access arguments' => array('access coupon portal'),
     'type' => MENU_NORMAL_ITEM,
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('coupon_batch_create_form'),
+    'page callback' => 'coupon_admin_juna_coupon_index',
   );
-  $items['admin/coupon/create'] = array(
-    'title' => '创建白领券',
-    'description' => '创建白领券',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('coupon_batch_create_form'),
-    'access arguments' => array('administer coupon add'),
+  $items['admin/juna/coupon/index'] = array(
+    'title' => 'Coupon Configuration Portal',
+    'description' => 'Manage coupons.',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/coupon/list'] = array(
+  $items['admin/juna/coupon/create'] = array(
+    'title' => 'Creating and sending coupon',
+    'description' => 'Create and send new coupon to members.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('coupon_batch_create_form'),
+    'access arguments' => array('access coupon creation form'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/juna/coupon/list'] = array(
     'title' => '白领券列表',
     'description' => '白领券列表',
     'page callback' => 'coupon_list',
     'access arguments' => array('administer coupon list'),
     'type' => MENU_LOCAL_TASK,
   );
-
-  $items['admin/coupon/send'] = array(
+  $items['admin/juna/coupon/send'] = array(
     'title' => '发放白领券',
     'description' => '支付相关配置',
     'page callback' => 'drupal_get_form',
@@ -525,7 +538,6 @@ function coupon_swingshare_lottery($id) {
   drupal_write_record('coupon_usage', $rec);
   return '设置中奖成功';
 }
-
 
 function coupon_swingshare_clottery($id) {
   $query = db_query('SELECT * FROM {user_wingshare_log} WHERE id=:id', array(':id' => $id))->fetchAssoc();
@@ -808,8 +820,9 @@ function coupon_batch_create_form($form, &$form_state) {
     '#type' => 'select',
     '#options' => array(
       'single_person' => t('Single Person'),
-      'all' => t('All')
+      'all' => t('All Certified Members')
     ),
+    '#description' => t('请注意，选择单人发放方式时，手机号码是必填项。'),
   );
 
   $form['mobile'] = array(
@@ -881,7 +894,7 @@ function coupon_batch_create_form_submit($form, &$form_state) {
   }
   else {
     if ($form_state['values']['category'] === 'all') {
-      // To create coupons for all of identified members.
+      // To create coupons for all of certified members.
       $query = new EntityFieldQuery();
       $users = $query->entityCondition('entity_type', 'user')
         ->fieldCondition('field_certed', 'value', 1)
@@ -901,6 +914,9 @@ function coupon_batch_create_form_submit($form, &$form_state) {
 
 }
 
+function coupon_admin_juna_coupon_index() {
+  return t('Welcome to Juna Coupon Configuration Portal.');
+}
 
 function coupon_list() {
   //module_load_include('inc','coupon','includes/coupon_helper');
@@ -1082,6 +1098,11 @@ function coupon_cron() {
 
 /**
  * Implementation of hook_theme().
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ * @return array
  */
 function coupon_theme($existing, $type, $theme, $path) {
   return array(
@@ -1091,6 +1112,6 @@ function coupon_theme($existing, $type, $theme, $path) {
         'total_enrollment' => 0,
         'bingo_users' => array(),
       ),
-    ),
+    )
   );
 }

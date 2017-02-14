@@ -5,3 +5,4 @@ package = juna
 project = 7.x
 
 dependencies[] = date
+dependencies[] = date_popup
