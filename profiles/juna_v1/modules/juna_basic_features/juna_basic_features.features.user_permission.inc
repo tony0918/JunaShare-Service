@@ -105,5 +105,15 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'filter',
   );
 
+  // Exported permission: 'view the administration theme'.
+  $permissions['view the administration theme'] = array(
+    'name' => 'view the administration theme',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'editor' => 'editor',
+    ),
+    'module' => 'system',
+  );
+
   return $permissions;
 }

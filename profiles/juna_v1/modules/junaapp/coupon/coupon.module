@@ -841,7 +841,7 @@ function coupon_batch_create_form($form, &$form_state) {
   $form['start_date'] = array(
     '#type' => 'date_popup',
     '#title' => t('生效/开始时间'),
-    '#description' => t('白领券会在这天开始'),
+    '#description' => t('白领券会在这天开始，最小单位为天，时和分的设置将不会起作用'),
     '#date_type' => DATE_DATETIME,
     '#data_format' => $format,
     '#date_timezone' => variable_get('date_default_timezone', @date_default_timezone_get()),
