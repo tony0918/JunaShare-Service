@@ -1,0 +1,8 @@
+name = Juna Coupon
+description = juna白领券
+core = 7.x
+package = juna
+project = 7.x
+
+dependencies[] = date
+dependencies[] = date_popup
