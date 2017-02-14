@@ -18,7 +18,6 @@ function coupon_schema() {
         'description' => '白领券状态',
         'default' => 0
       ),
-
       'created' => array(
         'type' => 'int',
         'not null' => TRUE,
@@ -45,7 +44,6 @@ function coupon_schema() {
         'description' => '用户id',
         'unsigned' => TRUE
       )
-
     ),
     'primary key' => array('id'),
   );
@@ -68,7 +66,6 @@ function coupon_schema() {
         'default' => 0,
         'length' => '16'
       ),
-
       'created' => array(
         'type' => 'int',
         'not null' => TRUE,
@@ -97,8 +94,6 @@ function coupon_schema() {
         'not null' => TRUE,
         'description' => '订单编号'
       ),
-
-
     ),
     'primary key' => array('id'),
   );

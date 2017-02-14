@@ -327,10 +327,16 @@ function coupon_permission() {
   );
   return $paths;
 }*/
+
+/**
+ * Implementation of hook_menu()
+ * @return array
+ */
 function coupon_menu() {
   $items = array();
   $items['admin/coupon'] = array(
     'title' => '白领券',
+    'description' => '白领券配置界面',
     'access arguments' => array('administer coupon list'),
     'type' => MENU_NORMAL_ITEM,
     'page callback' => 'drupal_get_form',
@@ -787,19 +793,112 @@ function coupon_create_swingshare_lottery_list() {
   drupal_set_message('发放中奖名单成功');
 }
 
+/**
+ * Custom form for coupon configuration.
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
 function coupon_batch_create_form($form, &$form_state) {
-  $form['num'] = array(
-    '#markup' => '可能需要等待几秒到几分钟<br/>',
+  $date = format_date(REQUEST_TIME, 'custom', 'Y-m-d');
+  $format = 'Y-m-d';
+
+  $form['category'] = array(
+    '#title' => t('发放类型'),
+    '#type' => 'select',
+    '#options' => array(
+      'single_person' => t('Single Person'),
+      'all' => t('All')
+    ),
   );
 
-  $form['submit'] = array('#type' => 'submit', '#value' => t('给会员发放白领券'));
+  $form['mobile'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Mobile Number'),
+    '#autocomplete_path' => 'user/autocomplete',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="category"]' => array(
+          'value' => 'single_person'
+        )
+      )
+    ),
+  );
+
+  $form['start_date'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('生效/开始时间'),
+    '#description' => t('白领券会在这天开始'),
+    '#date_type' => DATE_DATETIME,
+    '#data_format' => $format,
+    '#date_timezone' => variable_get('date_default_timezone', @date_default_timezone_get()),
+    '#default_value' => $date,
+    '#require' => TRUE,
+    '#date_year_range' => '-1:+3',
+  );
+
+  $form['end_date'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('过期时间'),
+    '#description' => t('白领券会在这天过期，过期日期必须大于等于开始日期，否则程序会出错'),
+    '#date_type' => DATE_DATETIME,
+    '#data_format' => $format,
+    '#date_timezone' => variable_get('date_default_timezone', @date_default_timezone_get()),
+    '#default_value' => $date,
+    '#require' => TRUE,
+    '#date_year_range' => '-1:+3',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Send Coupons')
+  );
   return $form;
 }
 
+/**
+ * Implementation of coupon_batch_create_form_submit().
+ * @param $form
+ * @param $form_state
+ */
 function coupon_batch_create_form_submit($form, &$form_state) {
   module_load_include('inc', 'coupon', 'includes/coupon_helper');
-  create_coupon();
-  drupal_set_message('批量发放白领券成功');
+  if ($form_state['values']['category'] === 'single_person'
+    && !empty($form_state['values']['mobile'])
+  ) {
+    // To create a new coupon for one person.
+    $u = user_load_by_name($form_state['values']['mobile']);
+    if ($u && $u->status == 1) {
+      coupon_helper_deliver_a_coupon($u->uid,
+        $form_state['values']['start_date'],
+        $form_state['values']['end_date']
+      );
+      drupal_set_message('发放成功');
+    }
+    else {
+      drupal_set_message('用户手机号码错误', 'error');
+    }
+  }
+  else {
+    if ($form_state['values']['category'] === 'all') {
+      // To create coupons for all of identified members.
+      $query = new EntityFieldQuery();
+      $users = $query->entityCondition('entity_type', 'user')
+        ->fieldCondition('field_certed', 'value', 1)
+        ->execute();
+      if (!empty($users) && isset($users['user'])) {
+        coupon_helper_deliver_coupons($users['user'],
+          $form_state['values']['start_date'],
+          $form_state['values']['end_date']
+        );
+      }
+      drupal_set_message('发放成功');
+    }
+    else {
+      drupal_set_message('缺少手机号码', 'error');
+    }
+  }
+
 }
 
 

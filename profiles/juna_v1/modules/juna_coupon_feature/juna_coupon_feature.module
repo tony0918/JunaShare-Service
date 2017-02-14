@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Juna Coupon Feature feature.
+ */
+
+include_once 'juna_coupon_feature.features.inc';
