@@ -38,6 +38,16 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'toolbar',
   );
 
+  // Exported permission: 'access user profiles'.
+  $permissions['access user profiles'] = array(
+    'name' => 'access user profiles',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'editor' => 'editor',
+    ),
+    'module' => 'user',
+  );
+
   // Exported permission: 'administer fields'.
   $permissions['administer fields'] = array(
     'name' => 'administer fields',

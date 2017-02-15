@@ -898,6 +898,7 @@ function coupon_batch_create_form_submit($form, &$form_state) {
       $query = new EntityFieldQuery();
       $users = $query->entityCondition('entity_type', 'user')
         ->fieldCondition('field_certed', 'value', 1)
+        ->propertyCondition('status', 1, '=')
         ->execute();
       if (!empty($users) && isset($users['user'])) {
         coupon_helper_deliver_coupons($users['user'],
