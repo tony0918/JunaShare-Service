@@ -1,5 +1,4 @@
 <?php
-
 //function coupon_cron(){
 //	watchdog('mycron','my cron executed');
 //$queue = DrupalQueue::get("resync");
@@ -313,8 +312,8 @@ function coupon_permission() {
     'administer coupon add' => array(
       'title' => t('批量创建白领券'),
     ),
-    'administer coupon list' => array(
-      'title' => t('白领券列表'),
+    'access coupon list' => array(
+      'title' => t('Access coupon list'),
     ),
     'administer coupon send' => array(
       'title' => t('发放白领券'),
@@ -363,13 +362,15 @@ function coupon_menu() {
     'page arguments' => array('coupon_batch_create_form'),
     'access arguments' => array('access coupon creation form'),
     'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
   );
   $items['admin/juna/coupon/list'] = array(
-    'title' => '白领券列表',
-    'description' => '白领券列表',
-    'page callback' => 'coupon_list',
-    'access arguments' => array('administer coupon list'),
+    'title' => 'Coupon List',
+    'description' => 'Coupon list.',
+    'page callback' => 'coupon_coupon_list',
+    'access arguments' => array('access coupon list'),
     'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
   );
   $items['admin/juna/coupon/send'] = array(
     'title' => '发放白领券',
@@ -427,8 +428,38 @@ function coupon_menu() {
     'weight' => 0,
     'type' => MENU_CALLBACK,
   );
+//  $items['admin/tonytest'] = array(
+//    'title' => '设置中奖',
+//    'page callback' => 'coupon_admin_tonytest',
+//    'access arguments' => array('access coupon list'),
+//    'type' => MENU_CALLBACK,
+//  );
   return $items;
 }
+
+//function coupon_admin_tonytest() {
+//  $query = new EntityFieldQuery();
+//  $result = $query->entityCondition('entity_type', 'user')
+//    ->fieldCondition('field_certed', 'value', 1)
+//    ->propertyCondition('status', 1, '=')
+//    ->execute();
+//  $uid = array_keys($result['user']);
+//  $users = entity_load('user', $uid);
+////  $users = entity_load('users', $uids);
+//
+//  $files = array();
+//  if (!empty($users)) {
+//    foreach ($users as $key => $value) {
+//      $files[$key] = file_create_url($value->field_cert[LANGUAGE_NONE][0]['uri']);
+//    }
+////    coupon_helper_deliver_coupons($users['user'],
+////      $form_state['values']['start_date'],
+////      $form_state['values']['end_date']
+////    );
+//  }
+//  print_r($files);
+//  exit;
+//}
 
 function coupon_lotterylist($id) {
   $r = db_query('SELECT * from user_wingshare_log WHERE id=:id', array(':id' => $id))->fetchAssoc();
@@ -898,6 +929,7 @@ function coupon_batch_create_form_submit($form, &$form_state) {
       $query = new EntityFieldQuery();
       $users = $query->entityCondition('entity_type', 'user')
         ->fieldCondition('field_certed', 'value', 1)
+        ->propertyCondition('status', 1, '=')
         ->execute();
       if (!empty($users) && isset($users['user'])) {
         coupon_helper_deliver_coupons($users['user'],
@@ -914,162 +946,158 @@ function coupon_batch_create_form_submit($form, &$form_state) {
 
 }
 
+/**
+ * Implementation of menu item.
+ * @return null|string
+ */
 function coupon_admin_juna_coupon_index() {
   return t('Welcome to Juna Coupon Configuration Portal.');
 }
 
-function coupon_list() {
-  //module_load_include('inc','coupon','includes/coupon_helper');
-  //create_coupon();exit;
+/**
+ * Implementation of coupon_admin_coupon_filter_form().
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function coupon_admin_coupon_filter_form($form, &$form_state) {
+  if (!isset($_SESSION['coupon_filters'])) {
+    $_SESSION['coupon_filters'] = array(
+      'coupon_status' => '0'
+    );
+  }
+  $form['filters'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Show only items where'),
+    '#theme' => 'exposed_filters__node',
+  );
+  $form['filters']['coupon_status'] = array(
+    '#type' => 'select',
+    '#title' => t('Coupon Status'),
+    '#options' => array(
+      0 => t('All'),
+      1 => t('已发放'),
+      2 => t('冻结中'),
+      3 => t('已使用'),
+      4 => t('已过期'),
+    ),
+    '#default_value' => $_SESSION['coupon_filters']['coupon_status'],
+  );
+  $form['filters']['mobile'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Mobile Number'),
+    '#autocomplete_path' => 'user/autocomplete',
+    '#default_value' => $_SESSION['coupon_filters']['mobile'],
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Filter'),
+  );
+  return $form;
+}
+
+/**
+ * Implementation of coupon_admin_coupon_filter_form_submit().
+ * @param $form
+ * @param $form_state
+ */
+function coupon_admin_coupon_filter_form_submit($form, &$form_state) {
+  $_SESSION['coupon_filters'] = $form_state['values'];
+}
+
+/**
+ * Implementation of coupon_list.
+ * @return string
+ */
+function coupon_coupon_list() {
+  $status_names = array('1' => '已发放', '2' => '冻结中', '3' => '已使用', '4' => '已过期');
   $header = array(
-    'title' => array('data' => t('Title'), 'field' => 'n.title'),
-    'uid' => t('发放用户'),
-    'status' => array('data' => t('Status'), 'field' => 'n.status'),
-    'changed' => array('data' => t('Updated'), 'field' => 'n.changed', 'sort' => 'desc')
+    'nid' => array(
+      'data' => t('Coupon ID'),
+      'type' => 'property',
+      'specifier' => 'nid',
+    ),
+    'mobile' => t('Mobile'),
+    'full_name' => t('Full Name'),
+    'company' => t('Company'),
+    'status' => array(
+      'data' => t('Status'),
+      'type' => 'field',
+      'specifier' => array('field' => 'field_status', 'column' => 'value')
+    ),
+    'valid_period' => t('Valid Period'),
+    'changed' => array(
+      'data' => t('Updated'),
+      'type' => 'property',
+      'specifier' => 'changed',
+      'sort' => 'desc'
+    ),
   );
 
-  $header['operations'] = array('data' => t('Operations'));
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'coupon')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->pager(100)
+    ->tableSort($header);
 
-  $query = db_select('node', 'n')->extend('PagerDefault')->extend('TableSort');
-  //$query->addTag('node_admin_filter');
-  //module_load_include('inc','node','node.admin');
-  //node_build_filter_query($query);
-
-
-  // If not, restrict the query to published nodes.
-  $query->condition('n.status', 1);
-
-  $nids = $query
-    ->fields('n', array('nid'))
-    ->condition('type', 'coupon')
-    ->limit(50)
-    ->orderByHeader($header)
-    ->addTag('node_access')
-    ->execute()
-    ->fetchCol();
-  $nodes = node_load_multiple($nids);
-  //print_r($nodes);exit;
-  $languages = language_list();
-  $destination = drupal_get_destination();
-  $options = array();
-  foreach ($nodes as $node) {
-    $langcode = entity_language('node', $node);
-    $uri = entity_uri('node', $node);
-    if ($langcode != LANGUAGE_NONE && isset($languages[$langcode])) {
-      $uri['options']['language'] = $languages[$langcode];
+  if (isset($_SESSION['coupon_filters'])) {
+    if (in_array($_SESSION['coupon_filters']['coupon_status'], array_keys($status_names))) {
+      $query->fieldCondition('field_status', 'value', $_SESSION['coupon_filters']['coupon_status'], '=');
     }
-    $referuser = [];
-    if ($node->field_uid && (!empty($node->field_uid['und'][0]['uid']))) {
-      $referuser = user_load($node->field_uid['und'][0]['uid']);
-    }
-    $status = empty($node->field_status) ? 0 : $node->field_status['und'][0]['value'];
-    switch ($status) {
-      case '1':
-        $status = '已发放';
-        break;
-      case '2':
-        $status = '冻结中';
-        break;
-      case '3':
-        $status = '已使用';
-        break;
-      case '4':
-        $status = '已过期';
-        break;
-      default:
-        $status = '未发放';
-        break;
-    }
-    $uri = entity_uri('node', $node);
-    $options[$node->nid] = array(
-      'title' => array(
-        'data' => array(
-          '#type' => 'link',
-          '#title' => $node->title,
-          '#href' => 'node/' . $node->nid . '/edit',
-          '#options' => $uri['options'],
-
-        ),
-      ),
-      'author' => theme('username', array('account' => $referuser)),
-      'status' => $status,
-      'changed' => format_date($node->changed, 'short'),
-    );
-    /* if(empty($node -> field)){
-       $options[$node->nid]['author'] = theme('username', array('account' => $node->field_uid));
-     }else{
-       $options[$node->nid]['author'] = theme('username', array('account' => $node->field_uid['und'][0]['uid']));
-     }*/
-
-    // Build a list of all the accessible operations for the current node.
-    $operations = array();
-    if ($status == '未发放') {
-      $operations['send'] = array(
-        'title' => t('发放'),
-        'href' => 'node/' . $node->nid . '/edit',
-        'query' => $destination,
-      );
-    }
-    else {
-      $operations['send'] = array(
-        'title' => $status,
-
-      );
-
-    }
-
-
-    $options[$node->nid]['operations'] = array();
-    if (count($operations) > 1) {
-      // Render an unordered list of operations links.
-      $options[$node->nid]['operations'] = array(
-        'data' => array(
-          '#theme' => 'links__node_operations',
-          '#links' => $operations,
-          '#attributes' => array('class' => array('links', 'inline')),
-        ),
-      );
-    }
-    elseif (!empty($operations)) {
-      // Render the first and only operation as a link.
-      $link = reset($operations);
-      if (count($link) > 1) {
-        $options[$node->nid]['operations'] = array(
-          'data' => array(
-            '#type' => 'link',
-            '#title' => $link['title'],
-            '#href' => $link['href'],
-            '#options' => array('query' => $link['query']),
-          ),
-        );
+    if (isset($_SESSION['coupon_filters']['mobile']) && $_SESSION['coupon_filters']['mobile']) {
+      $u = user_load_by_name($_SESSION['coupon_filters']['mobile']);
+      if (!empty($u)) {
+        $query->fieldCondition('field_uid', 'uid', $u->uid, '=');
       }
-      else {
-        $options[$node->nid]['operations'] = $link['title'];
-      }
-
     }
   }
-  $admin_access = user_access('administer nodes');
-  // Only use a tableselect when the current user is able to perform any
-  // operations.
 
-  $form['nodes'] = array(
+  $result = $query->execute();
+  $rows = array();
+  $test_users = [
+    '18616230121', // Jason
+    '13817392424', // Tony
+    '13661478757',
+    '13585884436',
+    'junashare',
+    'editor',
+    '13123456789',
+    '13795306151', // Jason
+    '13512345678',
+    '13098765432',
+    '13312345678',
+    '13585884445',
+    '18616230911',
+    '13412345678',
+    '17701758268', // 王亮
+  ];
+  if (isset($result['node'])) {
+    $nids = array_keys($result['node']);
+    $nodes = entity_load('node', $nids);
+    foreach ($nodes as $key => $value) {
+      $u = user_load($value->field_uid[LANGUAGE_NONE][0]['uid']);
+      $suffix = (isset($u->name) && in_array($u->name, $test_users)) ? '(test)' : '';
+      $rows[$key]['nid'] = l($key, 'node/' . $key);
+      $rows[$key]['mobile'] = theme('username', array('account' => $u));
+      $rows[$key]['full_name'] = (isset($u->field_username[LANGUAGE_NONE][0]['safe_value']) ? $u->field_username[LANGUAGE_NONE][0]['safe_value'] : '') . $suffix;
+      $rows[$key]['company'] = isset($u->field_company_name[LANGUAGE_NONE][0]['safe_value']) ? $u->field_company_name[LANGUAGE_NONE][0]['safe_value'] : '';
+      $st = in_array($value->field_status[LANGUAGE_NONE][0]['value'], array_keys($status_names)) ? $status_names[$value->field_status[LANGUAGE_NONE][0]['value']] : '未发放';
+      $rows[$key]['status'] = $st;
+      $rows[$key]['valid_period'] = $value->field_starttime[LANGUAGE_NONE][0]['value'] . ' ~ ' . $value->field_endtime[LANGUAGE_NONE][0]['value'];
+      $rows[$key]['changed'] = format_date($value->changed);
+    }
+  }
+
+  $form = drupal_get_form('coupon_admin_coupon_filter_form');
+  $form['coupons'] = array(
     '#theme' => 'table',
     '#header' => $header,
-    '#rows' => $options,
+    '#rows' => $rows,
     '#empty' => t('No content available.'),
   );
-  /*return theme_table(array(
-    '#theme' => 'table',
-    '#header' => $header,
-    '#rows' => $options,
-    '#empty' => t('No content available.'),
-  ));*/
-
-
   $form['pager'] = array('#markup' => theme('pager'));
   return $form;
-  return 'success';
 }
 
 function coupon_cron() {
