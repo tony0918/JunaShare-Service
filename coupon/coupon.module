@@ -273,10 +273,6 @@ function coupon_mylists($type, $page) {
       $node[$k]->cstatus = '未使用';
     }
     $endtime = strtotime($v->field_endtime['und'][0]['value']);
-    //$today = strtotime(date('Y-m-d'));
-    //if($endtime < $today){
-    //$node[$k] -> cstatus = '已过期';
-    //}
   }
   $ends = microtime_float();
   calcrequesttime($starts, $ends, "我的白领券for用户{$user->uid}");
