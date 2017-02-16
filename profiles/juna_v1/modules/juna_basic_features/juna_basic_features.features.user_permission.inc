@@ -87,6 +87,15 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'filter',
   );
 
+  // Exported permission: 'administer privatemsg settings'.
+  $permissions['administer privatemsg settings'] = array(
+    'name' => 'administer privatemsg settings',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
+  );
+
   // Exported permission: 'administer shortcuts'.
   $permissions['administer shortcuts'] = array(
     'name' => 'administer shortcuts',
@@ -94,6 +103,15 @@ function juna_basic_features_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'shortcut',
+  );
+
+  // Exported permission: 'allow disabling privatemsg'.
+  $permissions['allow disabling privatemsg'] = array(
+    'name' => 'allow disabling privatemsg',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
   );
 
   // Exported permission: 'create ad_banner content'.
@@ -223,6 +241,15 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'delete privatemsg'.
+  $permissions['delete privatemsg'] = array(
+    'name' => 'delete privatemsg',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
+  );
+
   // Exported permission: 'edit any ad_banner content'.
   $permissions['edit any ad_banner content'] = array(
     'name' => 'edit any ad_banner content',
@@ -315,6 +342,42 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'read all private messages'.
+  $permissions['read all private messages'] = array(
+    'name' => 'read all private messages',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
+  );
+
+  // Exported permission: 'read privatemsg'.
+  $permissions['read privatemsg'] = array(
+    'name' => 'read privatemsg',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
+  );
+
+  // Exported permission: 'reply only privatemsg'.
+  $permissions['reply only privatemsg'] = array(
+    'name' => 'reply only privatemsg',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
+  );
+
+  // Exported permission: 'select text format for privatemsg'.
+  $permissions['select text format for privatemsg'] = array(
+    'name' => 'select text format for privatemsg',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
+  );
+
   // Exported permission: 'switch shortcut sets'.
   $permissions['switch shortcut sets'] = array(
     'name' => 'switch shortcut sets',
@@ -346,6 +409,24 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'filter',
   );
 
+  // Exported permission: 'use tokens in privatemsg'.
+  $permissions['use tokens in privatemsg'] = array(
+    'name' => 'use tokens in privatemsg',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg',
+  );
+
+  // Exported permission: 'view roles recipients'.
+  $permissions['view roles recipients'] = array(
+    'name' => 'view roles recipients',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'privatemsg_roles',
+  );
+
   // Exported permission: 'view the administration theme'.
   $permissions['view the administration theme'] = array(
     'name' => 'view the administration theme',
@@ -354,6 +435,26 @@ function juna_basic_features_user_default_permissions() {
       'editor' => 'editor',
     ),
     'module' => 'system',
+  );
+
+  // Exported permission: 'write privatemsg'.
+  $permissions['write privatemsg'] = array(
+    'name' => 'write privatemsg',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'editor' => 'editor',
+    ),
+    'module' => 'privatemsg',
+  );
+
+  // Exported permission: 'write privatemsg to roles'.
+  $permissions['write privatemsg to roles'] = array(
+    'name' => 'write privatemsg to roles',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'editor' => 'editor',
+    ),
+    'module' => 'privatemsg_roles',
   );
 
   return $permissions;

@@ -55,6 +55,12 @@ projects[media][type] = module
 projects[entityreference][version] = 1.2
 projects[entityreference][type] = module
 
+projects[themekey][version] = 3.4
+projects[themekey][type] = module
+
+projects[privatemsg][version] = 1.4
+projects[privatemsg][type] = module
+
 ;projects[field_collection][version] = 1.0-beta12
 ;projects[field_collection][type] = module
 
