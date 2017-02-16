@@ -963,7 +963,8 @@ function coupon_admin_juna_coupon_index() {
 function coupon_admin_coupon_filter_form($form, &$form_state) {
   if (!isset($_SESSION['coupon_filters'])) {
     $_SESSION['coupon_filters'] = array(
-      'coupon_status' => '0'
+      'coupon_status' => '0',
+      'mobile' => ''
     );
   }
   $form['filters'] = array(
