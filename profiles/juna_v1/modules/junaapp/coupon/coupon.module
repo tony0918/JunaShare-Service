@@ -201,38 +201,39 @@ function coupon_mylists($type, $page) {
     $query->fieldCondition('field_status', 'value', array(1, 2), 'in');
   }
   elseif ($type == 2) {
-    $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid', array(':uid' => $user->uid))->fetchAll();
-    //print_r($res);exit;
-    foreach ($res as $key => $value) {
-      $res[$key]->picture = "";
-      $res[$key]->title = "";
-      $n = node_load($value->nid);
-      $res[$key]->price = 0;
-      if ($n) {
-        /* $uri = "";
-        if(!empty($n -> field_images_for_share)){
-          $uri = file_create_url($n -> field_images_for_share['und'][0]['uri']);
-        }*/
-        $uri = file_create_url($n->field_pictures['und'][0]['uri']);
-        $res[$key]->picture = $uri;
-        $res[$key]->title = $n->title;
-        $res[$key]->price = $n->field_price['und'][0]['value'];
+      $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid order by created DESC', array(':uid' => 135))->fetchAll();
+      //print_r($res);exit;
+      foreach ($res as $key => $value) {
+          $res[$key]->picture = "";
+          $res[$key]->title = "";
+          $n = node_load($value->nid);
+          $res[$key]->price = 0;
+          if ($n) {
+              /* $uri = "";
+              if(!empty($n -> field_images_for_share)){
+                $uri = file_create_url($n -> field_images_for_share['und'][0]['uri']);
+              }*/
+              $uri = file_create_url($n->field_pictures['und'][0]['uri']);
+              $res[$key]->picture = $uri;
+              $res[$key]->title = $n->title;
+              $res[$key]->price = $n->field_price['und'][0]['value'];
+          }
+          $res[$key]->created = date('Y-m-d H:i:s', $value->created);
+
+
       }
-      $res[$key]->created = date('Y-m-d H:i:s', $value->created);
-
-
-    }
-    return ['data' => $res];
+      return ['data' => $res];
   }
   elseif ($type == 3) {
-    $query->fieldCondition('field_status', 'value', 4, '=');
-    //$query -> fieldCondition('field_endtime','value',date('Y-m-d'),'<');
+      $query->fieldCondition('field_status', 'value', 4, '=');
+      //$query -> fieldCondition('field_endtime','value',date('Y-m-d'),'<');
   }
-  $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'coupon')
-    ->fieldCondition('field_uid', 'uid', $user->uid, '=')
-    ->fieldOrderBy('field_starttime', 'value', 'DESC')
-    ->range($offset, $limit);
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'coupon')
+        ->fieldCondition('field_uid', 'uid', 135, '=')
+        ->propertyOrderBy('changed','DESC')
+        //->fieldOrderBy('changed', 'value', 'DESC')
+        ->range($offset, $limit);
   $result = $query->execute();
   $nids = [];
   if (isset($result['node'])) {
