@@ -201,7 +201,7 @@ function coupon_mylists($type, $page) {
     $query->fieldCondition('field_status', 'value', array(1, 2), 'in');
   }
   elseif ($type == 2) {
-    $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid', array(':uid' => $user->uid))->fetchAll();
+    $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid ORDER BY created DESC', array(':uid' => $user->uid))->fetchAll();
     //print_r($res);exit;
     foreach ($res as $key => $value) {
       $res[$key]->picture = "";
@@ -231,7 +231,8 @@ function coupon_mylists($type, $page) {
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'coupon')
     ->fieldCondition('field_uid', 'uid', $user->uid, '=')
-    ->fieldOrderBy('field_starttime', 'value', 'DESC')
+    ->propertyOrderBy('changed', 'DESC')
+    //->fieldOrderBy('changed', 'value', 'DESC')
     ->range($offset, $limit);
   $result = $query->execute();
   $nids = [];
