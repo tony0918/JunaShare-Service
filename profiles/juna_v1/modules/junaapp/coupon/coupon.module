@@ -231,7 +231,7 @@ function coupon_mylists($type, $page) {
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'coupon')
     ->fieldCondition('field_uid', 'uid', $user->uid, '=')
-    ->propertyOrderBy('field_starttime', 'value', 'DESC')
+    ->propertyOrderBy('changed', 'value', 'DESC')
     ->range($offset, $limit);
   $result = $query->execute();
   $nids = [];
