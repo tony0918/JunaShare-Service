@@ -201,7 +201,7 @@ function coupon_mylists($type, $page)
   if ($type == 1) {
     $query->fieldCondition('field_status', 'value', array(1, 2), 'in');
   } elseif ($type == 2) {
-    $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid order by created DESC', array(':uid' => 135))->fetchAll();
+    $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid order by created DESC', array(':uid' => $user->uid))->fetchAll();
     //print_r($res);exit;
     foreach ($res as $key => $value) {
       $res[$key]->picture = "";
