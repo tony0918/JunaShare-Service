@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Shawn
- * Date: 2016/11/14
- * Time: 9:50
- */
-
-/**
  * Implements hook_services_resources().
  */
 function orders_services_resources() {
@@ -32,7 +25,6 @@ function orders_services_resources() {
               'description' => t('订单状态'),
               'type' => 'int',
             ),
-
           ),
         ),
         'update' => array(
@@ -54,7 +46,6 @@ function orders_services_resources() {
               'source' => 'data',
               'optional' => FALSE,
             ),
-
           ),
         )
       ),
@@ -71,7 +62,6 @@ function orders_services_resources() {
               'optional' => FALSE,
               'source' => array('data' => 'orderid')
             ),
-
             array(
               'name' => 'payment_type',
               'type' => 'int',
@@ -79,8 +69,6 @@ function orders_services_resources() {
               'optional' => FALSE,
               'source' => array('data' => 'payment_type')
             ),
-
-
           ),
         ),
         'app_payment_callback' => array(
@@ -95,15 +83,10 @@ function orders_services_resources() {
               'source' => 'data',
               'optional' => FALSE,
             ),
-
-
           ),
         ),
-
       )
-
     ),
-
   );
 }
 
@@ -144,7 +127,6 @@ function orders_alipay_callback($appdata) {
   else {
     return services_error(t('订单id错误'), 406);
   }
-
 }
 
 function orders_menu() {
@@ -281,189 +263,209 @@ function orders_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['admin/orders'] = array(
-    'title' => '订单列表',
-    'description' => '订单列表',
+  // Menus for order management.
+  $items['admin/juna/orders'] = array(
+    'title' => 'Order Management Portal',
+    'description' => 'Manage orders.',
+    'access arguments' => array('access order management portal'),
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'orders_admin_juna_orders_index',
+  );
+  $items['admin/juna/orders/index'] = array(
+    'title' => 'Order Management Portal',
+    'description' => 'Manage orders.',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/juna/orders/list'] = array(
+    'title' => 'Order List',
+    'description' => 'Order list',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('orders_admin_list'),
-    'access arguments' => array('administer order list'),
-    'type' => MENU_NORMAL_ITEM,
+    'access arguments' => array('access order list'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
   );
   return $items;
 }
 
-function orders_permission() {
-  $perms = array(
-    'administer order list' => array(
-      'title' => t('订单列表'),
-    ),
-
-  );
-
-  return $perms;
+/**
+ * Implementation of admin/juna/orders menu callback.
+ * @return null|string
+ */
+function orders_admin_juna_orders_index() {
+  return t('Welcome to order management portal.');
 }
 
-function orders_admin_list($form, &$form_state) {
-  $form['starttime'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('开始时间'),
-
-    '#default_value' => empty($_SESSION['orders_admin_list_filter']['starttime']) ? '' : $_SESSION['orders_admin_list_filter']['starttime'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-    '#description' => '日期格式为1990-02-01'
-
-  );
-  $form['endtime'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('结束时间'),
-
-    '#default_value' => empty($_SESSION['orders_admin_list_filter']['endtime']) ? '' : $_SESSION['orders_admin_list_filter']['endtime'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-    '#description' => '日期格式为1990-02-01'
-
-  );
-  $form['uid'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('用户id'),
-
-    '#default_value' => empty($_SESSION['orders_admin_list_filter']['uid']) ? '' : $_SESSION['orders_admin_list_filter']['uid'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-  );
-  $form['nid'] = array(
-    '#type' => 'textfield',
-    '#title' => '商品id',
-    '#default_value' => empty($_SESSION['orders_admin_list_filter']['uid']) ? '' : $_SESSION['orders_admin_list_filter']['uid'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-  );
-  $form['product_type'] = array(
-    '#type' => 'select',
-    '#title' => '订单类型',
-    '#default_value' => empty($_SESSION['orders_admin_list_filter']['product_type']) ? '' : $_SESSION['orders_admin_list_filter']['product_type'],
-    '#options' => array(
-      'product' => t('购买订单'),
-      'share_product' => t('申领订单')
+/**
+ * Implementation of hook_permission().
+ * @return array
+ */
+function orders_permission() {
+  return array(
+    'access order list' => array(
+      'title' => t('Access order list'),
     ),
-    '#empty_value' => '请选择',
-
+    'access order management portal' => array(
+      'title' => t('Access order management portal'),
+    )
   );
+}
 
-  $form['submit'] = array('#type' => 'submit', '#value' => t('搜索'));
+/**
+ * Implementation of orders_admin_order_list_filter_form().
+ * @param $form
+ * @param $form_state
+ * @return mixed
+ */
+function orders_admin_order_list_filter_form($form, &$form_state) {
+  $mobile = isset($_SESSION['order_list_filters']['mobile']) ? $_SESSION['order_list_filters']['mobile'] : '';
+  $nid = isset($_SESSION['order_list_filters']['nid']) ? $_SESSION['order_list_filters']['nid'] : '';
+  $timezone = variable_get('date_default_timezone', @date_default_timezone_get());
+  $format = 'Y-m-d';
+  $start = isset($_SESSION['order_list_filters']['start']) ? $_SESSION['order_list_filters']['start'] : '';
+  $end = isset($_SESSION['order_list_filters']['end']) ? $_SESSION['order_list_filters']['end'] : '';
+  $order_status = isset($_SESSION['order_list_filters']['order_status']) ? $_SESSION['order_list_filters']['order_status'] : '';
+  $order_type = isset($_SESSION['order_list_filters']['order_type']) ? $_SESSION['order_list_filters']['order_type'] : '';
+
+  $form['filters'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Show only items where'),
+    '#theme' => 'exposed_filters__node',
+  );
+  $form['filters']['start'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('Start'),
+    '#date_type' => DATE_DATETIME,
+    '#data_format' => $format,
+    '#date_timezone' => $timezone,
+    '#default_value' => $start,
+    '#date_year_range' => '-3:+3',
+  );
+  $form['filters']['end'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('End'),
+    '#date_type' => DATE_DATETIME,
+    '#data_format' => $format,
+    '#date_timezone' => $timezone,
+    '#default_value' => $end,
+    '#date_year_range' => '-3:+3',
+  );
+  $form['filters']['mobile'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Mobile Number'),
+    '#autocomplete_path' => 'user/autocomplete',
+    '#default_value' => $mobile,
+  );
+  $form['filters']['nid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('商品nid'),
+    '#default_value' => $nid,
+  );
+  $form['filters']['order_status'] = array(
+    '#type' => 'select',
+    '#title' => t('Order Status'),
+    '#default_value' => $order_status,
+    '#options' => array('全部', '待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '已取消', '待评价')
+  );
+  $form['filters']['order_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Order Type'),
+    '#default_value' => $order_type,
+    '#options' => array('all' => '全部', 'share_product' => '申领', 'product' => '购买', 'swingshare' => '摇享')
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Filter')
+  );
+  return $form;
+}
+
+/**
+ * Implementation of menu item admin/juna/orders/list callback.
+ * @param $form
+ * @param $form_state
+ * @return array|mixed
+ */
+function orders_admin_list($form, &$form_state) {
+  $status_name = array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '已取消', '待评价');
+  $order_types = array('share_product' => '申领', 'product' => '购买', 'swingshare' => '摇享');
   $header = array(
-    'id' => array('data' => t('id'), 'field' => 'po.id', 'sort' => 'desc'),
-    'nid' => array('data' => t('商品id'), 'field' => 'po.nid'),
-    'uid' => array('data' => t('用户id'), 'field' => 'po.uid'),
-    'created' => array('data' => t('购买时间'), 'field' => 'po.created'),
-    'weixin_order_id' => array('data' => t('微信订单号'), 'field' => 'po.weixin_order_id'),
-
-    'status' => array('data' => t('订单状态'), 'field' => 'po.status'),
-    'title' => t('商品名称'),
-
-    'couponid' => t('白领券id'),
-    'otype' => t('订单类型'),
+    'id' => array(
+      'data' => t('Order ID'),
+      'field' => 'po.id',
+    ),
+    'title' => t('Product'),
+    'uid' => t('Mobile'),
+//    'weixin_order_id' => array('data' => t('微信订单号'), 'field' => 'po.weixin_order_id'),
+    'status' => array(
+      'data' => t('Status'),
+      'field' => 'po.status'
+    ),
+    'order_type' => t('Order Type'),
+    'coupon_id' => t('Coupon ID'),
+    'created' => array(
+      'data' => t('Date'),
+      'field' => 'po.created',
+      'sort' => 'desc',
+    ),
   );
-  $query = db_select('product_order', 'po')->extend('PagerDefault')->extend('TableSort')->fields('po', array(
-    'id',
-    'nid',
-    'uid',
-    'created',
-    'weixin_order_id',
-    'status'
-  ))->fields('n', array('title', 'type'))->orderByHeader($header);
-  $query->leftJoin('coupon_usage', 'cu', 'cu.sorderid=po.sorderid');
-  $query->fields('cu', array('couponid'));
-  //$query -> condition('cu.nid')
-  $filters = [];
-  if (!empty($_SESSION['orders_admin_list_filter'])) {
-    $filters = $_SESSION['orders_admin_list_filter'];
 
-  }
-  $valid = ['starttime', 'endtime', 'uid', 'nid', 'product_type'];
-  foreach ($filters as $k => $v) {
-    if (in_array($k, $valid)) {
-      if ($k == 'starttime') {
-        $query->condition('po.created', strtotime($v), '>=');
-      }
-      if ($k == 'endtime') {
-        $query->condition('po.created', strtotime($v), '<=');
-      }
-      if ($k != 'starttime' && $k != 'endtime') {
-        if ($v != '请选择') {
-          $query->condition('po.' . $k, $v);
-        }
+  $query = db_select('product_order', 'po')
+    ->extend('PagerDefault')->limit(100)
+    ->extend('TableSort')->orderByHeader($header)
+    ->fields('po', array('id', 'nid', 'uid', 'created', 'status'));
 
-      }
-    }
-
-  }
   $query->join('node', ' n', 'po.nid = n.nid');
-  $result = $query->execute();
-  $rows = [];
-  $destination = drupal_get_destination();
-  while ($record = $result->fetchAssoc()) {
-    switch ($record['status']) {
-      case 0:
-        $record['status'] = '待付款';
-        break;
-      case 1:
-        $record['status'] = '已付款';
-        break;
-      case 2:
-        $record['status'] = '待发货';
-        break;
-      case 3:
-        $record['status'] = '待收货';
-        break;
-      case 4:
-        $record['status'] = '已评价';
-        break;
-      case 5:
-        $record['status'] = '交易完成';
-        break;
-      case 6:
-        $record['status'] = '已取消';
-      case 7:
-        $record['status'] = '待评价';
-        break;
-      default:
-        $record['status'] = '待付款';
-        break;
-    }
-    if ($record['type'] == 'share_product') {
-      $record['otype'] = '申领订单';
-    }
-    else {
-      $record['otype'] = '购买订单';
-    }
-    $record['created'] = date('Y-m-d H:i:s', $record['created']);
+  $query->condition('n.status', NODE_PUBLISHED, '=');
+  $query->fields('n', array('title', 'type'));
 
-    unset($record['type']);
-    $rows[] = $record;
+  $query->join('users', 'u', 'po.uid=u.uid');
+  $query->addField('u', 'name');
 
+  $query->leftJoin('coupon_usage', 'cu', 'cu.sorderid=po.sorderid');
+  $query->addField('cu', 'couponid');
 
+  if (isset($_SESSION['order_list_filters']['mobile']) && !empty(trim($_SESSION['order_list_filters']['mobile']))) {
+    $query->condition('u.name', $_SESSION['order_list_filters']['mobile'], '=');
   }
-  //print_r($rows);exit;
+
+  if (isset($_SESSION['order_list_filters']['nid']) && !empty(trim($_SESSION['order_list_filters']['nid']))) {
+    $query->condition('po.nid', $_SESSION['order_list_filters']['nid'], '=');
+  }
+
+  if (isset($_SESSION['order_list_filters']['order_type'])
+    && in_array($_SESSION['order_list_filters']['order_type'], array_keys($order_types))
+  ) {
+    $query->condition('po.product_type', $_SESSION['order_list_filters']['order_type'], '=');
+  }
+
+  if (isset($_SESSION['order_list_filters']['order_status'])
+    && in_array($_SESSION['order_list_filters']['order_status'] - 1, array_keys($status_name))
+  ) {
+    $query->condition('po.status', $_SESSION['order_list_filters']['order_status'] - 1);
+  }
+
+  if (isset($_SESSION['order_list_filters']['start']) && !empty(trim($_SESSION['order_list_filters']['start']))) {
+    $query->condition('po.created', strtotime($_SESSION['order_list_filters']['start']), '>=');
+  }
+
+  if (isset($_SESSION['order_list_filters']['end']) && !empty(trim($_SESSION['order_list_filters']['end']))) {
+    $query->condition('po.created', strtotime($_SESSION['order_list_filters']['end']), '<=');
+  }
+
+  $result = $query->execute()->fetchAll();
+  $rows = [];
+  foreach ($result as $key => $value) {
+    $rows[$key]['id'] = $value->id;
+    $rows[$key]['title'] = l("(nid:$value->nid) $value->title", 'node/' . $value->nid);
+    $rows[$key]['uid'] = l($value->name, 'user/' . $value->uid);
+    $rows[$key]['status'] = $status_name[$value->status];
+    $rows[$key]['order_type'] = $order_types[$value->type];
+    $rows[$key]['coupon_id'] = $value->couponid;
+    $rows[$key]['created'] = format_date($value->created);
+  }
+
+  $form = orders_admin_order_list_filter_form($form, $form_state);
   $form['nodes'] = array(
     '#theme' => 'table',
     '#header' => $header,
@@ -474,31 +476,13 @@ function orders_admin_list($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Implementation of orders_admin_list_submit().
+ * @param $form
+ * @param $form_state
+ */
 function orders_admin_list_submit($form, &$form_state) {
-  switch ($form_state['values']['op']) {
-    case '搜索':
-      foreach ($form_state['values'] as $k => $v) {
-        if (trim($v) != "") {
-          $_SESSION['orders_admin_list_filter'][$k] = $v;
-        }
-        else {
-          unset($_SESSION['orders_admin_list_filter'][$k]);
-        }
-      }
-      break;
-    case '发布当日中奖名单':
-      return coupon_create_swingshare_lottery_list();
-      break;
-    default:
-      foreach ($form_state['values'] as $k => $v) {
-        if (trim($v) != "") {
-          $_SESSION['orders_admin_list_filter'][$k] = $v;
-        }
-      }
-      break;
-  }
-
-
+  $_SESSION['order_list_filters'] = $form_state['values'];
 }
 
 function orders_weixin_notify() {
@@ -1068,8 +1052,6 @@ function orders_notify() {
       'sign_type' => 'RSA',
       'timestamp' => '2016-12-11 11:57:52',//date('Y-m-d H:i:s',$order -> created),
       'version' => '1.0',
-
-
     ];
     $signparam = $_POST;
     unset($signparam['sign_type']);
