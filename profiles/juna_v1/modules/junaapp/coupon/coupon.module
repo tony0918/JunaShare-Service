@@ -15,7 +15,8 @@
 // Run the queue
 //drupal_queue_cron_run();
 //}
-function coupon_services_resources() {
+function coupon_services_resources()
+{
   return array(
     'myswingshare' => array(
       'operations' => array(
@@ -76,7 +77,8 @@ function coupon_services_resources() {
  * @param $yaoxiang_nid
  * @return string
  */
-function coupon_prizelist($yaoxiang_nid) {
+function coupon_prizelist($yaoxiang_nid)
+{
   $info = array(
     'total_product' => 0,
     'total_enrollment' => 0,
@@ -115,7 +117,8 @@ function coupon_prizelist($yaoxiang_nid) {
 /**
  *我的摇享
  */
-function coupon_swingsharelists($page) {
+function coupon_swingsharelists($page)
+{
   $starts = microtime_float();
   global $user;
   if (!$user->uid) {
@@ -123,8 +126,7 @@ function coupon_swingsharelists($page) {
   }
   if (!isset($page)) {
     $page = 1;
-  }
-  else {
+  } else {
     $page = intval($page);
     if ($page <= 1) {
       $page = 1;
@@ -160,8 +162,7 @@ function coupon_swingsharelists($page) {
         $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
       }
 
-    }
-    else {
+    } else {
       $results[$k]->pictures = '';
     }
     $results[$k]->remaintime = $remaintime;
@@ -173,7 +174,8 @@ function coupon_swingsharelists($page) {
 
 }
 
-function coupon_mylists($type, $page) {
+function coupon_mylists($type, $page)
+{
   $starts = microtime_float();
   global $user;
   if (!$user->uid) {
@@ -181,8 +183,7 @@ function coupon_mylists($type, $page) {
   }
   if (!isset($page)) {
     $page = 1;
-  }
-  else {
+  } else {
     $page = intval($page);
     if ($page <= 1) {
       $page = 1;
@@ -199,41 +200,39 @@ function coupon_mylists($type, $page) {
   $query = new EntityFieldQuery();
   if ($type == 1) {
     $query->fieldCondition('field_status', 'value', array(1, 2), 'in');
-  }
-  elseif ($type == 2) {
-      $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid order by created DESC', array(':uid' => 135))->fetchAll();
-      //print_r($res);exit;
-      foreach ($res as $key => $value) {
-          $res[$key]->picture = "";
-          $res[$key]->title = "";
-          $n = node_load($value->nid);
-          $res[$key]->price = 0;
-          if ($n) {
-              /* $uri = "";
-              if(!empty($n -> field_images_for_share)){
-                $uri = file_create_url($n -> field_images_for_share['und'][0]['uri']);
-              }*/
-              $uri = file_create_url($n->field_pictures['und'][0]['uri']);
-              $res[$key]->picture = $uri;
-              $res[$key]->title = $n->title;
-              $res[$key]->price = $n->field_price['und'][0]['value'];
-          }
-          $res[$key]->created = date('Y-m-d H:i:s', $value->created);
-
-
+  } elseif ($type == 2) {
+    $res = db_query('SELECT * FROM coupon_usage WHERE uid=:uid order by created DESC', array(':uid' => 135))->fetchAll();
+    //print_r($res);exit;
+    foreach ($res as $key => $value) {
+      $res[$key]->picture = "";
+      $res[$key]->title = "";
+      $n = node_load($value->nid);
+      $res[$key]->price = 0;
+      if ($n) {
+        /* $uri = "";
+        if(!empty($n -> field_images_for_share)){
+          $uri = file_create_url($n -> field_images_for_share['und'][0]['uri']);
+        }*/
+        $uri = file_create_url($n->field_pictures['und'][0]['uri']);
+        $res[$key]->picture = $uri;
+        $res[$key]->title = $n->title;
+        $res[$key]->price = $n->field_price['und'][0]['value'];
       }
-      return ['data' => $res];
+      $res[$key]->created = date('Y-m-d H:i:s', $value->created);
+
+
+    }
+    return ['data' => $res];
+  } elseif ($type == 3) {
+    $query->fieldCondition('field_status', 'value', 4, '=');
+    //$query -> fieldCondition('field_endtime','value',date('Y-m-d'),'<');
   }
-  elseif ($type == 3) {
-      $query->fieldCondition('field_status', 'value', 4, '=');
-      //$query -> fieldCondition('field_endtime','value',date('Y-m-d'),'<');
-  }
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'coupon')
-        ->fieldCondition('field_uid', 'uid', 135, '=')
-        ->propertyOrderBy('changed','DESC')
-        //->fieldOrderBy('changed', 'value', 'DESC')
-        ->range($offset, $limit);
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'coupon')
+    ->fieldCondition('field_uid', 'uid', $user->uid, '=')
+    ->propertyOrderBy('changed', 'DESC')
+    //->fieldOrderBy('changed', 'value', 'DESC')
+    ->range($offset, $limit);
   $result = $query->execute();
   $nids = [];
   if (isset($result['node'])) {
@@ -267,8 +266,7 @@ function coupon_mylists($type, $page) {
           # code...
           break;
       }
-    }
-    else {
+    } else {
       $node[$k]->cstatus = '未使用';
     }
     $endtime = strtotime($v->field_endtime['und'][0]['value']);
@@ -283,7 +281,8 @@ function coupon_mylists($type, $page) {
 
 }
 
-function coupon_cron_queue_info() {
+function coupon_cron_queue_info()
+{
   /* $queues['resync'] = array (
      'worker callback' => 'coupon_resync_item',
      'time' => 60,    // Time, in seconds, to let this process run [Optional]
@@ -291,7 +290,8 @@ function coupon_cron_queue_info() {
    return $queues;*/
 }
 
-function coupon_resync_item($data) {
+function coupon_resync_item($data)
+{
   //watchdog('mycron','my cron executed');
   // ...
   // Code to resync data here
@@ -302,7 +302,8 @@ function coupon_resync_item($data) {
  * Implementation of hook_permission().
  * @return array
  */
-function coupon_permission() {
+function coupon_permission()
+{
   $perms = array(
     'access coupon portal' => array(
       'title' => t('Access coupon protal'),
@@ -342,7 +343,8 @@ function coupon_permission() {
  * Implementation of hook_menu()
  * @return array
  */
-function coupon_menu() {
+function coupon_menu()
+{
   $items = array();
   $items['admin/juna/coupon'] = array(
     'title' => 'Coupon Configuration Portal',
@@ -462,7 +464,8 @@ function coupon_menu() {
 //  exit;
 //}
 
-function coupon_lotterylist($id) {
+function coupon_lotterylist($id)
+{
   $r = db_query('SELECT * from user_wingshare_log WHERE id=:id', array(':id' => $id))->fetchAssoc();
   $header = array(
     'id' => array('data' => t('id'), 'field' => 'usl.id', 'sort' => 'desc'),
@@ -487,19 +490,17 @@ function coupon_lotterylist($id) {
   $row = $result->fetchAll();
   $rows = [];
   foreach ($row as $key => $value) {
-    $rows[$key] = (array) $value;
+    $rows[$key] = (array)$value;
   }
   return theme('table', array('header' => $header, 'rows' => $rows));
   if (!isset($date)) {
     $hours = date('G');
     if ($hours < 22) {
       $pdate = date('Y-n-j', strtotime('-1 day'));
-    }
-    else {
+    } else {
       $pdate = date('Y-n-j');
     }
-  }
-  else {
+  } else {
     $pdate = $date;
   }
   $result = db_query('SELECT user.name mobile,fdfu.field_username_value username FROM {user_wingshare_log} uwl LEFT JOIN users user ON uwl.uid = user.uid LEFT JOIN field_data_field_username fdfu ON fdfu.entity_id = uwl.uid WHERE uwl.pdate=:pdate and uwl.status=:status', array(
@@ -510,15 +511,15 @@ function coupon_lotterylist($id) {
   calcrequesttime($starts, $ends, $pdate . "中奖列表");
   if ($r) {
     $pdate = $r['pdate'];
-  }
-  else {
+  } else {
 
   }
 
 
 }
 
-function coupon_swingshare_lottery($id) {
+function coupon_swingshare_lottery($id)
+{
   $query = db_query('SELECT * FROM {user_wingshare_log} WHERE id=:id', array(':id' => $id))->fetchAssoc();
   if (!$query) {
     return '参数错误';
@@ -571,7 +572,8 @@ function coupon_swingshare_lottery($id) {
   return '设置中奖成功';
 }
 
-function coupon_swingshare_clottery($id) {
+function coupon_swingshare_clottery($id)
+{
   $query = db_query('SELECT * FROM {user_wingshare_log} WHERE id=:id', array(':id' => $id))->fetchAssoc();
   if (!$query) {
     return '参数错误';
@@ -594,7 +596,8 @@ function coupon_swingshare_clottery($id) {
   return '取消中奖成功';
 }
 
-function coupon_swingshare_form($form, &$form_state) {
+function coupon_swingshare_form($form, &$form_state)
+{
   $now = REQUEST_TIME;
   $stime = date('Y-m-01', strtotime('-2months', $now));
   $form['starttime'] = array(
@@ -695,8 +698,7 @@ function coupon_swingshare_form($form, &$form_state) {
 
       );
       $record['status'] = '未中奖';
-    }
-    elseif ($record['status'] == 1) {
+    } elseif ($record['status'] == 1) {
       $record['operations'] = array(
         'data' => array(
           '#type' => 'link',
@@ -709,8 +711,7 @@ function coupon_swingshare_form($form, &$form_state) {
       );
       //$record['operations'] = '已中奖';
       $record['status'] = '已中奖';
-    }
-    else {
+    } else {
       $record['operations'] = array(
         'data' => array(
           '#type' => 'link',
@@ -737,7 +738,8 @@ function coupon_swingshare_form($form, &$form_state) {
   return $form;
 }
 
-function coupon_swingshare_form_validate($form, &$form_state) {
+function coupon_swingshare_form_validate($form, &$form_state)
+{
   switch ($form_state['values']['op']) {
     case '搜索':
 
@@ -759,14 +761,14 @@ function coupon_swingshare_form_validate($form, &$form_state) {
   }
 }
 
-function coupon_swingshare_form_submit($form, &$form_state) {
+function coupon_swingshare_form_submit($form, &$form_state)
+{
   switch ($form_state['values']['op']) {
     case '搜索':
       foreach ($form_state['values'] as $k => $v) {
         if (trim($v) != "") {
           $_SESSION['swingshare_filter'][$k] = $v;
-        }
-        else {
+        } else {
           unset($_SESSION['swingshare_filter'][$k]);
         }
       }
@@ -786,7 +788,8 @@ function coupon_swingshare_form_submit($form, &$form_state) {
 
 }
 
-function coupon_create_swingshare_lottery_list() {
+function coupon_create_swingshare_lottery_list()
+{
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node');
   $query->propertyCondition('status', NODE_PUBLISHED);
@@ -843,7 +846,8 @@ function coupon_create_swingshare_lottery_list() {
  * @param $form_state
  * @return mixed
  */
-function coupon_batch_create_form($form, &$form_state) {
+function coupon_batch_create_form($form, &$form_state)
+{
   $date = format_date(REQUEST_TIME, 'custom', 'Y-m-d');
   $format = 'Y-m-d';
 
@@ -906,7 +910,8 @@ function coupon_batch_create_form($form, &$form_state) {
  * @param $form
  * @param $form_state
  */
-function coupon_batch_create_form_submit($form, &$form_state) {
+function coupon_batch_create_form_submit($form, &$form_state)
+{
   module_load_include('inc', 'coupon', 'includes/coupon_helper');
   if ($form_state['values']['category'] === 'single_person'
     && !empty($form_state['values']['mobile'])
@@ -919,12 +924,10 @@ function coupon_batch_create_form_submit($form, &$form_state) {
         $form_state['values']['end_date']
       );
       drupal_set_message('发放成功');
-    }
-    else {
+    } else {
       drupal_set_message('用户手机号码错误', 'error');
     }
-  }
-  else {
+  } else {
     if ($form_state['values']['category'] === 'all') {
       // To create coupons for all of certified members.
       $query = new EntityFieldQuery();
@@ -939,8 +942,7 @@ function coupon_batch_create_form_submit($form, &$form_state) {
         );
       }
       drupal_set_message('发放成功');
-    }
-    else {
+    } else {
       drupal_set_message('缺少手机号码', 'error');
     }
   }
@@ -951,7 +953,8 @@ function coupon_batch_create_form_submit($form, &$form_state) {
  * Implementation of menu item.
  * @return null|string
  */
-function coupon_admin_juna_coupon_index() {
+function coupon_admin_juna_coupon_index()
+{
   return t('Welcome to Juna Coupon Configuration Portal.');
 }
 
@@ -961,7 +964,8 @@ function coupon_admin_juna_coupon_index() {
  * @param $form_state
  * @return mixed
  */
-function coupon_admin_coupon_filter_form($form, &$form_state) {
+function coupon_admin_coupon_filter_form($form, &$form_state)
+{
   if (!isset($_SESSION['coupon_filters'])) {
     $_SESSION['coupon_filters'] = array(
       'coupon_status' => '0',
@@ -1003,7 +1007,8 @@ function coupon_admin_coupon_filter_form($form, &$form_state) {
  * @param $form
  * @param $form_state
  */
-function coupon_admin_coupon_filter_form_submit($form, &$form_state) {
+function coupon_admin_coupon_filter_form_submit($form, &$form_state)
+{
   $_SESSION['coupon_filters'] = $form_state['values'];
 }
 
@@ -1011,7 +1016,8 @@ function coupon_admin_coupon_filter_form_submit($form, &$form_state) {
  * Implementation of coupon_list.
  * @return string
  */
-function coupon_coupon_list() {
+function coupon_coupon_list()
+{
   $status_names = array('1' => '已发放', '2' => '冻结中', '3' => '已使用', '4' => '已过期');
   $header = array(
     'nid' => array(
@@ -1102,7 +1108,8 @@ function coupon_coupon_list() {
   return $form;
 }
 
-function coupon_cron() {
+function coupon_cron()
+{
   $query = new EntityFieldQuery();
   $query->fieldCondition('field_status', 'value', 1);
   $query->entityCondition('entity_type', 'node')
@@ -1134,7 +1141,8 @@ function coupon_cron() {
  * @param $path
  * @return array
  */
-function coupon_theme($existing, $type, $theme, $path) {
+function coupon_theme($existing, $type, $theme, $path)
+{
   return array(
     'lucky_draw_result' => array(
       'variables' => array(
