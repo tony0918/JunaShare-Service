@@ -1,0 +1,178 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Shawn
+ * Date: 2016/11/14
+ * Time: 9:52
+ */
+function orders_install() {
+
+
+}
+
+function orders_schema() {
+  $schema['product_order'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+
+      'nid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '商品id'
+      ),
+      'product_type' => array(
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => TRUE,
+        'description' => '商品类型'
+      ),
+
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '加入时间'
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '用户id',
+        'unsigned' => TRUE
+      ),
+      'amount' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '购买商品数量',
+        'default' => 0
+      ),
+      'price' => array(
+        'type' => 'numberic',
+        'not null' => TRUE,
+        'description' => '购买商品价格',
+        'default' => 0,
+        'precision' => 8,
+        'scale' => 2
+      ),
+      'total_price' => array(
+        'type' => 'numberic',
+        'not null' => TRUE,
+        'description' => '订单价格',
+        'default' => 0,
+        'precision' => 8,
+        'scale' => 2
+      ),
+      'alipay_order_id' => array('type' => 'varchar', 'length' => 32, 'description' => '支付宝订单编号'),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => '订单状态，0为已提交待付款，1为已付款，2,待发货，3为待收货，4为已评价,5为交易完成，6为支付超时'
+      ),
+      'express_id' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => '物流编号'),
+      'payment_type' => array('type' => 'int', 'not null' => TRUE, 'default' => 0, 'description' => '付款方式，1为支付宝，2为微信'),
+      'sorderid' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'description' => '订单编号'
+      ),
+      'weixin_order_id' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'description' => '微信订单编号'
+      ),
+
+    ),
+    'primary key' => array('id'),
+  );
+  $schema['user_amount_log'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+
+      'nid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '商品id'
+      ),
+      'total_fee' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '金额为分'
+      ),
+
+      'paytime' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '支付时间'
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '用户id',
+        'unsigned' => TRUE
+      ),
+      'paytype' => array(
+        'type' => 'varchar',
+        'length' => '16',
+        'not null' => TRUE,
+        'description' => '支付方式',
+      ),
+      'status' => array(
+        'type' => 'int',
+        'description' => '支付状态',
+      ),
+      'type' => array(
+        'type' => 'varchar',
+        'length' => 16,
+        'description' => '消费状态，rechare为充值，consume为消费',
+      ),
+      'sthirdorderno' => array('type' => 'varchar', 'length' => 32, 'description' => '支付宝或者微信支付订单号'),
+      'sorderid' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'description' => '订单编号'
+      ),
+
+
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
+
+function orders_update_7001() {
+  $table = 'product_order';
+  if (!db_field_exists($table, 'sorderid')) {
+    db_add_field($table, 'sorderid', array('type' => 'varchar', 'length' => 32, 'description' => '订单编号'));
+  }
+
+}
+
+function orders_update_7002() {
+  if (!db_table_exists('user_amount_log')) {
+    db_create_table('user_amount_log', drupal_get_schema_unprocessed('orders', 'user_amount_log'));
+  }
+}
+
+function orders_update_7003() {
+  $table = 'product_order';
+  if (!db_field_exists($table, 'weixin_order_id')) {
+    db_add_field($table, 'weixin_order_id', array('type' => 'varchar', 'length' => 32, 'description' => '微信订单编号'));
+  }
+}
+
+function orders_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE 'alipay_%'");
+  db_query("DELETE FROM {variable} WHERE name LIKE 'weixin_%'");
+  cache_clear_all('variables', 'cache');
+}
+
