@@ -68,10 +68,14 @@ function orders_schema() {
         'description' => '订单状态，0为已提交待付款，1为已付款，2,待发货，3为待收货，4为已评价,5为交易完成，6为支付超时'
       ),
       'express_id' => array(
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
+        'type' => 'varchar',
+        'length' => 255,
         'description' => '物流编号'
+      ),
+      'express_provider' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => '物流公司'
       ),
       'payment_type' => array(
         'type' => 'int',
@@ -90,6 +94,11 @@ function orders_schema() {
         'length' => 32,
         'not null' => TRUE,
         'description' => '微信订单编号'
+      ),
+      'updated' => array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => '订单更新时间'
       ),
     ),
     'primary key' => array('id'),
@@ -205,8 +214,42 @@ function orders_update_7004() {
  */
 function orders_update_7005() {
   $table = 'product_order';
-  if (db_table_exists($table)) {
+  if (!db_table_exists($table)) {
     db_add_index($table, 'idx_product_type', array('product_type'));
+  }
+}
+
+/**
+ * Adding new field express_provider to product_order.
+ */
+function orders_update_7006() {
+  $table = 'product_order';
+  if (!db_field_exists($table, 'express_provider')) {
+    db_add_field($table, 'express_provider', array('type' => 'varchar', 'length' => 255, 'description' => '物流公司'));
+  }
+}
+
+/**
+ * Adding new field updated to product_order.
+ */
+function orders_update_7007() {
+  $table = 'product_order';
+  if (!db_field_exists($table, 'updated')) {
+    db_add_field($table, 'updated', array('type' => 'int', 'default' => 0, 'description' => '订单更新时间'));
+  }
+}
+
+/**
+ * Changing field type of express_id to varchar.
+ */
+function orders_update_7008() {
+  $table = 'product_order';
+  if (db_field_exists($table, 'express_id')) {
+    db_change_field($table, 'express_id', 'express_id', array(
+      'type' => 'varchar',
+      'length' => 255,
+      'description' => '物流编号'
+    ));
   }
 }
 
