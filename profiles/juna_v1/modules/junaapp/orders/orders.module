@@ -353,7 +353,7 @@ function orders_payementweixin($order) {
   if ($now > $newtime) {
     $orderobj = new stdClass();
     $orderobj->id = $order->id;
-    $orderobj->status = 6;//已取消
+    $orderobj->status = 7;//已取消
     drupal_write_record('product_order', $orderobj, 'id');
     $node = node_load($order->nid);
     $node->field_remain_num['und'][0]['value'] = $node->field_remain_num['und'][0]['value'] + 1;
@@ -1258,9 +1258,9 @@ function orders_lists($pages = 1, $status = NULL) {
             $data[$k]->status = '交易完成';
             break;
           case 6:
-            $data[$k]->status = '已取消';
-          case 7:
             $data[$k]->status = '待评价';
+          case 7:
+            $data[$k]->status = '已取消';
             break;
           default:
             $data[$k]->status = '待付款';
