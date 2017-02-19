@@ -88,15 +88,23 @@ function users_admin_list($form, &$form_state) {
     'name' => array('data' => t('手机号'), 'field' => 'u.name', 'sort' => 'desc'),
     'status' => array('data' => t('用户状态'), 'field' => 'u.status'),
     'created' => array('data' => t('注册时间'), 'field' => 'u.created'),
-    'field_certed_value' => array('data' => t('是否认证'), 'field' => 'rz.field_certed_value'),
+    'field_certed_value' => array(
+      'data' => t('是否认证'),
+      'field' => 'rz.field_certed_value'
+    ),
     'operations' => t('操作')
   );
-  $query = db_select('users', 'u')->extend('PagerDefault')->extend('TableSort')->fields('u', array(
-    'uid',
-    'name',
-    'status',
-    'created'
-  ))->fields('rz', array('field_certed_value'))->orderByHeader($header);
+  $query = db_select('users', 'u')
+    ->extend('PagerDefault')
+    ->extend('TableSort')
+    ->fields('u', array(
+      'uid',
+      'name',
+      'status',
+      'created'
+    ))
+    ->fields('rz', array('field_certed_value'))
+    ->orderByHeader($header);
   $filters = [];
   if (!empty($_SESSION['users_admin_list_filter'])) {
     $filters = $_SESSION['users_admin_list_filter'];
@@ -1323,7 +1331,10 @@ function _users_resource_request_new_password($name) {
   $account = reset($users);
   if (!$account) {
     // No success, try to load by name.
-    $users = user_load_multiple(array(), array('name' => $name, 'status' => '1'));
+    $users = user_load_multiple(array(), array(
+      'name' => $name,
+      'status' => '1'
+    ));
     $account = reset($users);
   }
   if (!isset($account->uid)) {
@@ -1353,8 +1364,7 @@ function _users_resource_users_pass_reset_login($uid, $timestamp, $hashed_pass) 
     // The existing user is already logged in.
     if ($user->uid == $uid) {
       return services_error(t('You are logged in as %user. Please edit your profile to update your password.', array('%user' => $user->name)), 403);
-    }
-    // A different user is already logged in on the computer.
+    } // A different user is already logged in on the computer.
     else {
       $reset_link_account = user_load($uid);
       if (!empty($reset_link_account)) {
@@ -1859,18 +1869,29 @@ function users_mobilecode($mobile, $type) {
       return services_error(t($mobile . '用户已存在'), 406);
     }
   }
-
+  $starttime = mktime(0, 0, 0, date("m"), date("d"), date("Y"));
+  $endtime = mktime(23, 59, 59, date("m"), date("d"), date("Y"));
   $query = db_select('users_mobile_verifycode', 'g');
   $query->fields('g');
   $query->condition('g.smobile', $mobile);
   $query->condition('g.type', $type);
+  $query->condition('g.created', $starttime, '>=');
+  $query->condition('g.created', $endtime, '<=');
   $query->orderBy('g.id', 'DESC');
   $result = $query->execute();
-  $record = $result->fetchAssoc();
+  $records = $result->fetchAll();
+  $num = count($records);
+
+  if ($num >= 5) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, "手机验证码");
+    return services_error(t($mobile . '发送验证码次数超过5次'), 406);
+  }
+  $record = array($records[0]);
   $code = $record['scode'];
   $codetime = $record['created'];
   $now = time();
-  if ($now - $codetime < 900) {
+  if ($now - $codetime < 60) {
 
     //发送验证码
     $ends = microtime_float();
@@ -1895,8 +1916,7 @@ function users_mobilecode($mobile, $type) {
     $record->created = time();
     $record->type = $type;
     $succ = drupal_write_record('users_mobile_verifycode', $record);
-    $succ = 1;
-    if ($succ) {
+    if ($succ !== FALSE) {
       //发送手机验证码
       $ends = microtime_float();
       calcrequesttime($starts, $ends, "手机验证码");
@@ -1989,8 +2009,15 @@ function users_certedinfo($uid) {
 }
 
 function users_cron() {
-  $time = REQUEST_TIME - 15 * 60;
-  db_delete('users_mobile_verifycode')->condition('created', $time, '<')->execute();
+  $tomorrow = mktime(0, 0, 0, date("m"), date("d") + 1, date("Y"));
+  $res = db_query('select * from users_mobile_verifycode')->fetchAll();
+  $today = mktime(0, 0, 0, date("m"), date("d"), date("Y"));
+  foreach ($res as $k => $v) {
+    $tmp = mktime(0, 0, 0, date("m", $v->created), date("d", $v->created), date("Y", $v->created));
+    if ($today - $tmp >= 86400) {
+      db_delete('users_mobile_verifycode')->condition('id', $v->id)->execute();
+    }
+  }
 }
 
 
