@@ -1,0 +1,59 @@
+<?php
+
+function users_schema() {
+  $schema['users_mobile_verifycode'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'scode' => array(
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 16,
+        'description' => '验证码'
+      ),
+      'smobile' => array(
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => TRUE,
+        'description' => '手机号'
+      ),
+
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => '验证码创建时间'
+      ),
+      'isused' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'description' => '是否使用',
+        'default' => 0,
+        'unsigned' => TRUE
+      ),
+      'type' => array('type' => 'varchar', 'length' => 32, 'description' => '类型,有register和forgot_password')
+
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+function users_update_7001() {
+  $table = 'users_mobile_verifycode';
+  if (!db_field_exists($table, 'type')) {
+    db_add_field($table, 'type', array(
+      'type' => 'varchar',
+      'length' => 32,
+      'description' => '类型,有register和forgot_password'
+    ));
+  }
+}
+
+
+
+

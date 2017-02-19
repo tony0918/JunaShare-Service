@@ -1,0 +1,7 @@
+name = orders
+description = juna订单管理
+core = 7.x
+package = Juna
+version = 7.x-1.0
+dependencies[] = date
+dependencies[] = date_popup

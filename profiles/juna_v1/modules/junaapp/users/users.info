@@ -1,0 +1,5 @@
+name = users
+description = juna用户注册登陆
+core = 7.x
+package = Juna
+project = 7.x

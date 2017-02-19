@@ -1,0 +1,1997 @@
+<?php
+
+function users_permission() {
+  $perms = array(
+    'administer users list' => array(
+      'title' => t('用户列表'),
+    ),
+
+  );
+
+  return $perms;
+}
+
+function users_admin_list($form, &$form_state) {
+  $form['uid'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('用户id'),
+
+    '#default_value' => empty($_SESSION['users_admin_list_filter']['uid']) ? '' : $_SESSION['users_admin_list_filter']['uid'],
+
+    '#size' => 60,
+
+    '#maxlength' => 128,
+
+  );
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => '手机号',
+    '#default_value' => empty($_SESSION['users_admin_list_filter']['name']) ? '' : $_SESSION['users_admin_list_filter']['name'],
+
+    '#size' => 60,
+
+    '#maxlength' => 128,
+
+  );
+  $form['starttime'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('注册开始时间'),
+
+    '#default_value' => empty($_SESSION['users_admin_list_filter']['starttime']) ? '' : $_SESSION['users_admin_list_filter']['starttime'],
+
+    '#size' => 60,
+
+    '#maxlength' => 128,
+
+    '#description' => '日期格式为1990-02-01'
+
+  );
+  $form['endtime'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('注册结束时间'),
+
+    '#default_value' => empty($_SESSION['users_admin_list_filter']['endtime']) ? '' : $_SESSION['users_admin_list_filter']['endtime'],
+
+    '#size' => 60,
+
+    '#maxlength' => 128,
+
+    '#description' => '日期格式为1990-02-01'
+
+  );
+  $form['certed'] = array(
+
+    '#type' => 'select',
+
+    '#title' => t('认证状态'),
+    '#options' => array(
+      0 => t('未认证'),
+      1 => t('已认证'),
+      2 => t('认证中')
+    ),
+    '#empty_value' => '请选择',
+    '#default_value' => empty($_SESSION['users_admin_list_filter']['certed']) ? '' : $_SESSION['users_admin_list_filter']['certed'],
+
+
+  );
+
+
+  $form['submit'] = array('#type' => 'submit', '#value' => t('搜索'));
+  $header = array(
+    'uid' => array('data' => t('id'), 'field' => 'u.uid', 'sort' => 'desc'),
+    'name' => array('data' => t('手机号'), 'field' => 'u.name', 'sort' => 'desc'),
+    'status' => array('data' => t('用户状态'), 'field' => 'u.status'),
+    'created' => array('data' => t('注册时间'), 'field' => 'u.created'),
+    'field_certed_value' => array('data' => t('是否认证'), 'field' => 'rz.field_certed_value'),
+    'operations' => t('操作')
+  );
+  $query = db_select('users', 'u')->extend('PagerDefault')->extend('TableSort')->fields('u', array(
+    'uid',
+    'name',
+    'status',
+    'created'
+  ))->fields('rz', array('field_certed_value'))->orderByHeader($header);
+  $filters = [];
+  if (!empty($_SESSION['users_admin_list_filter'])) {
+    $filters = $_SESSION['users_admin_list_filter'];
+
+  }
+  $query->leftJoin('field_data_field_certed', ' rz', 'rz.entity_id = u.uid');
+  //$query -> condition('rz.field_certed_value',1);
+  $query->condition('rz.bundle', "user");
+  $valid = ['starttime', 'endtime', 'uid', 'certed', 'name'];
+
+  foreach ($filters as $k => $v) {
+    if (in_array($k, $valid)) {
+      $v = trim($v);
+      if ($v !== "") {
+        if ($k == 'starttime') {
+          $query->condition('u.created', strtotime($v), '>=');
+        }
+        if ($k == 'endtime') {
+          $query->condition('u.created', strtotime($v), '<=');
+        }
+        if ($k == 'certed' && $v != "请选择") {
+          $query->condition('rz.field_certed_value', $v);
+        }
+        if ($k != 'starttime' && $k != 'endtime' && $k != 'certed') {
+          $query->condition('u.' . $k, $v);
+        }
+      }
+
+    }
+
+  }
+  //echo "<pre>";
+  $result = $query->execute();
+  //print_r($result);exit;
+  $rows = [];
+  $destination = drupal_get_destination();
+  while ($record = $result->fetchAssoc()) {
+    switch ($record['status']) {
+      case 0:
+        $record['status'] = '非活跃';
+        break;
+      case 1:
+        $record['status'] = '活跃';
+        break;
+    }
+    $record['created'] = date('Y-m-d H:i:s', $record['created']);
+    if (empty($record['field_certed_value'])) {
+      $record['field_certed_value'] = '未认证';
+    }
+    elseif ($record['field_certed_value'] == 1) {
+      $record['field_certed_value'] = '已认证';
+    }
+    else {
+      $record['field_certed_value'] = '认证中';
+    }
+    $record['operations'] = array(
+      'data' => array(
+        '#type' => 'link',
+        '#title' => t('编辑'),
+        '#href' => '/user/' . $record['uid'] . '/edit',
+        '#options' => array('query' => $destination),
+        //'#query' => $,
+      )
+    );
+    $record['name'] = array(
+      'data' => array(
+        '#type' => 'link',
+        '#title' => $record['name'],
+        '#href' => '/user/' . $record['uid'],
+        '#options' => array('query' => $destination),
+        //'#query' => $,
+      )
+    );
+    $rows[] = $record;
+  }
+  //print_r($rows);exit;
+  $form['nodes'] = array(
+    '#theme' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#empty' => t('暂无用户.'),
+  );
+  $form['pager'] = array('#markup' => theme('pager'));
+  return $form;
+}
+
+function users_admin_list_submit($form, &$form_state) {
+  switch ($form_state['values']['op']) {
+    case '搜索':
+      foreach ($form_state['values'] as $k => $v) {
+        if (trim($v) != "") {
+          $_SESSION['users_admin_list_filter'][$k] = $v;
+        }
+        else {
+          unset($_SESSION['users_admin_list_filter'][$k]);
+        }
+      }
+      break;
+    case '发布当日中奖名单':
+      return coupon_create_swingshare_lottery_list();
+      break;
+    default:
+      foreach ($form_state['values'] as $k => $v) {
+        if (trim($v) != "") {
+          $_SESSION['users_admin_list_filter'][$k] = $v;
+        }
+      }
+      break;
+  }
+
+
+}
+
+function users_services_resources() {
+  $define = array(
+    'user_interface' => array(
+      'actions' => array(
+        'add_mobilecode' => array(
+          'help' => t('创建手机验证码'),
+          'callback' => 'users_mobilecode',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'name',
+              'optional' => FALSE,
+              'source' => array('data' => 'name'),
+              'description' => t('手机号'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'type',
+              'optional' => TRUE,
+              'source' => array('data' => 'type'),
+              'description' => t('类型'),
+              'type' => 'string',
+            ),
+
+          ),
+        ),
+        'user_cert' => array(
+          'help' => t('用户信息认证'),
+          'callback' => 'users_user_cert',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'username',
+              'optional' => FALSE,
+              'source' => array('data' => 'username'),
+              'description' => t('姓名'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'companyname',
+              'optional' => FALSE,
+              'source' => array('data' => 'companyname'),
+              'description' => t('公司名称'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'companyaddress',
+              'optional' => FALSE,
+              'source' => array('data' => 'companyaddress'),
+              'description' => t('公司地址'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'certtype',
+              'optional' => FALSE,
+              'source' => array('data' => 'certtype'),
+              'description' => t('认证类型'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'position',
+              'optional' => TRUE,
+              'source' => array('data' => 'position'),
+              'description' => t('职位'),
+              'type' => 'string',
+            ),
+            array(
+              'name' => 'floor',
+              'optional' => TRUE,
+              'source' => array('data' => 'floor'),
+              'description' => t('楼宇'),
+              'type' => 'string',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'junausers' => array(
+      'operations' => array(
+        'retrieve' => array(
+          'help' => 'Retrieve a user',
+          'callback' => '_users_resource_retrieve',
+          'access callback' => '_users_resource_access',
+          'access arguments' => array('view'),
+          'access arguments append' => TRUE,
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'type' => 'int',
+              'description' => 'The uid of the user to retrieve.',
+              'source' => array('path' => 0),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+
+        'create' => array(
+          'help' => 'Create a user',
+          'callback' => '_users_resource_create',
+          'access callback' => '_users_resource_access',
+          'access arguments' => array('create'),
+          'access arguments append' => FALSE,
+          'args' => array(
+            array(
+              'name' => 'account',
+              'type' => 'array',
+              'description' => 'The user object',
+              'source' => 'data',
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+
+        'update' => array(
+          'help' => 'Update a user',
+          'callback' => '_users_resource_update',
+          'access callback' => '_users_resource_access',
+          'access arguments' => array('update'),
+          'access arguments append' => TRUE,
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'type' => 'int',
+              'description' => 'Unique identifier for this user',
+              'source' => array('path' => 0),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'data',
+              'type' => 'array',
+              'description' => 'The user object with updated information',
+              'source' => 'data',
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+
+        'delete' => array(
+          'help' => 'Delete a user',
+          'callback' => '_users_resource_delete',
+          'access callback' => '_users_resource_access',
+          'access arguments' => array('delete'),
+          'access arguments append' => TRUE,
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'type' => 'int',
+              'description' => 'The id of the user to delete',
+              'source' => array('path' => 0),
+              'optional' => FALSE,
+            ),
+          ),
+        ),
+        'index' => array(
+          'help' => 'List all users',
+          'callback' => '_users_resource_index',
+          'args' => array(
+            array(
+              'name' => 'page',
+              'optional' => TRUE,
+              'type' => 'int',
+              'description' => 'The zero-based index of the page to get, defaults to 0.',
+              'default value' => 0,
+              'source' => array('param' => 'page'),
+            ),
+            array(
+              'name' => 'fields',
+              'optional' => TRUE,
+              'type' => 'string',
+              'description' => 'The fields to get.',
+              'default value' => '*',
+              'source' => array('param' => 'fields'),
+            ),
+            array(
+              'name' => 'parameters',
+              'optional' => TRUE,
+              'type' => 'array',
+              'description' => 'Parameters',
+              'default value' => array(),
+              'source' => array('param' => 'parameters'),
+            ),
+            array(
+              'name' => 'pagesize',
+              'optional' => TRUE,
+              'type' => 'int',
+              'description' => 'Number of records to get per page.',
+              'default value' => variable_get('services_user_index_page_size', 20),
+              'source' => array('param' => 'pagesize'),
+            ),
+            array(
+              'name' => 'options',
+              'optional' => TRUE,
+              'type' => 'array',
+              'description' => 'Additional query options.',
+              'default value' => array(
+                'orderby' => array(
+                  'created' => 'DESC'
+                )
+              ),
+              'source' => array('param' => 'options'),
+            ),
+          ),
+          'access arguments' => array('access user profiles'),
+          'access arguments append' => FALSE,
+        ),
+      ),
+      'actions' => array(
+        'login' => array(
+          'help' => 'Login a user for a new session',
+          'callback' => '_users_resource_login',
+          'args' => array(
+            array(
+              'name' => 'username',
+              'type' => 'string',
+              'description' => 'A valid username',
+              'source' => array('data' => 'username'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'password',
+              'type' => 'string',
+              'description' => 'A valid password',
+              'source' => array('data' => 'password'),
+              'optional' => FALSE,
+            ),
+          ),
+          'access callback' => 'services_access_menu',
+        ),
+        'logout' => array(
+          'help' => 'Logout a user session',
+          'callback' => '_users_resource_logout',
+          'access callback' => 'services_access_menu',
+        ),
+        'token' => array(
+          'callback' => '_users_resource_get_token',
+          'access callback' => 'services_access_menu',
+          'help' => t('Returns the CSRF token.'),
+        ),
+        'forgot_password' => array(
+          'help' => '忘记密码',
+          'callback' => 'users_forgot_password',
+          'args' => array(
+            array(
+              'name' => 'name',
+              'type' => 'string',
+              'description' => '用户名',
+              'source' => array('data' => 'name'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'pass',
+              'type' => 'string',
+              'description' => '密码',
+              'source' => array('data' => 'pass'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'code',
+              'type' => 'string',
+              'description' => '验证码',
+              'source' => array('data' => 'code'),
+              'optional' => FALSE,
+            ),
+          ),
+          'access arguments' => array('access content'),
+        ),
+        'change_password' => array(
+          'help' => '修改密码',
+          'callback' => 'users_change_password',
+          'args' => array(
+            array(
+              'name' => 'name',
+              'type' => 'string',
+              'description' => '用户名',
+              'source' => array('data' => 'name'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'pass',
+              'type' => 'string',
+              'description' => '密码',
+              'source' => array('data' => 'pass'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'code',
+              'type' => 'string',
+              'description' => '验证码',
+              'source' => array('data' => 'code'),
+              'optional' => FALSE,
+            ),
+          ),
+          'access arguments' => array('access content'),
+        ),
+        'request_new_password' => array(
+          'help' => 'Request a new password, given a user name or e-mail address',
+          'callback' => '_users_resource_request_new_password',
+          'args' => array(
+            array(
+              'name' => 'name',
+              'type' => 'string',
+              'description' => 'A valid user name or e-mail address',
+              'source' => array('data' => 'name'),
+              'optional' => FALSE,
+            ),
+          ),
+          'access callback' => 'services_access_menu',
+        ),
+        'user_pass_reset' => array(
+          'help' => 'Process one time login link and return the pass_reset_{uid} token to be used on user update operation',
+          'callback' => '_users_resource_user_pass_reset_login',
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'optional' => FALSE,
+              'type' => 'int',
+              'description' => 'The uid of the user in the operation.',
+              'source' => array('data' => 'uid'),
+            ),
+            array(
+              'name' => 'timestamp',
+              'optional' => FALSE,
+              'type' => 'int',
+              'description' => 'The timestamp value from the reset password link.',
+              'source' => array('data' => 'timestamp'),
+            ),
+            array(
+              'name' => 'hashed_pass',
+              'optional' => FALSE,
+              'type' => 'string',
+              'description' => 'The hashed pass value from the reset password link.',
+              'source' => array('data' => 'hashed_pass'),
+            ),
+          ),
+          'access callback' => 'services_access_menu',
+        ),
+        'userinfo' => array(
+          'help' => '获取用户认证信息',
+          'callback' => 'users_certedinfo',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'optional' => FALSE,
+              'type' => 'int',
+              'description' => 'The uid of the user in the operation.',
+              'source' => array('data' => 'uid'),
+            ),
+          ),
+        ),
+      ),
+      'targeted_actions' => array(
+        'cancel' => array(
+          'help' => 'Cancel a user',
+          'callback' => '_users_resource_cancel',
+          'access callback' => '_users_resource_access',
+          'access arguments' => array('cancel'),
+          'access arguments append' => TRUE,
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'optional' => FALSE,
+              'source' => array('path' => 0),
+              'type' => 'int',
+              'description' => 'The id of the user to cancel.',
+            ),
+          ),
+        ),
+        'password_reset' => array(
+          'access callback' => '_users_resource_access',
+          'access arguments' => array('password_reset'),
+          'access arguments append' => TRUE,
+          'callback' => '_users_resource_password_reset',
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'optional' => FALSE,
+              'source' => array('path' => 0),
+              'type' => 'int',
+              'description' => 'The id of the user whose password to reset.',
+            ),
+          ),
+        ),
+        'resend_welcome_email' => array(
+          'access callback' => '_users_resource_access',
+          'access arguments' => array('resend_welcome_email'),
+          'access arguments append' => TRUE,
+          'callback' => '_users_resource_resend_welcome_email',
+          'args' => array(
+            array(
+              'name' => 'uid',
+              'optional' => FALSE,
+              'source' => array('path' => 0),
+              'type' => 'int',
+              'description' => 'The id of the user whose welcome email to resend.',
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  $define['junausers']['actions']['register'] = array_merge($define['junausers']['operations']['create'], array(
+    'help' => 'Register a user',
+  ));
+  return $define;
+}
+
+function users_menu() {
+  $items['admin/config/content/juna/settings/sms'] = array(
+    'title' => '短信配置',
+    'description' => '短信配置',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('users_sms_settings_form'),
+    'access arguments' => array('administer payment'),
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/users'] = array(
+    'title' => '用户认证查询',
+    'description' => '用户认证查询',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('users_admin_list'),
+    'access arguments' => array('administer user list'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+function users_forgot_password($mobile, $pass, $code) {
+  global $user;
+  if ($user->uid) {
+    return services_error(t('您已登录'), 406);
+  }
+  $users = user_load_by_name($mobile);
+  if (!$users) {
+    return services_error(t('用户不存在'), 406);
+  }
+  if ($users->status != 1) {
+    return services_error(t('用户无权找回密码'), 406);
+  }
+  if (strlen($pass) < 6) {
+    return services_error(t('密码至少6位'), 406);
+  }
+  elseif (strlen($pass) > 25) {
+    return services_error(t('密码最多25位'), 406);
+  }
+  $query = db_select('users_mobile_verifycode', 'g');
+  $query->fields('g', array('scode', 'id', 'isused', 'created'));
+  $query->condition('g.smobile', $_POST['name']);
+  $query->condition('g.type', 'forgot_password');
+  $query->orderBy('g.id', 'DESC');
+  $result = $query->execute();
+  $record = $result->fetchAssoc();
+  if (!$record) {
+    services_error(t('手机号码错误.'), 406);
+  }
+  if ($record['isused']) {
+    services_error(t('手机验证码已使用，请重新获取.'), 406);
+  }
+  $scode = $record['scode'];
+  $codetime = $record['created'];
+  $now = time();
+  if ($now - $codetime > 900) {
+    services_error(t('验证码已失效.'), 406);
+  }
+  //获取数据库中的验证码
+  if ($scode != $code) {
+    services_error(t('错误的验证码.'), 406);
+  }
+  $account = user_load($users->uid);
+  $edit['pass'] = $pass;
+  //print_r($account);exit;
+  user_save($account, $edit);
+  $records = new stdClass();
+  $records->isused = 1;
+  $records->id = $record['id'];
+  drupal_write_record('users_mobile_verifycode', $records, 'id');
+  return ['data' => '密码修改成功'];
+}
+
+function users_change_password($mobile, $pass, $code) {
+  global $user;
+  $users = user_load_by_name($mobile);
+  if (!$users) {
+    return services_error(t('用户不存在'), 406);
+  }
+  if ($users->status != 1) {
+    return services_error(t('用户无权修改密码'), 406);
+  }
+  if (strlen($pass) < 6) {
+    return services_error(t('密码至少6位'), 406);
+  }
+  elseif (strlen($pass) > 25) {
+    return services_error(t('密码最多25位'), 406);
+  }
+  $query = db_select('users_mobile_verifycode', 'g');
+  $query->fields('g', array('scode', 'id', 'isused', 'created'));
+  $query->condition('g.smobile', $_POST['name']);
+  $query->condition('g.type', 'forgot_password');
+  $query->orderBy('g.id', 'DESC');
+  $result = $query->execute();
+  $record = $result->fetchAssoc();
+  if (!$record) {
+    services_error(t('手机号码错误.'), 406);
+  }
+  if ($record['isused']) {
+    services_error(t('手机验证码已使用，请重新获取.'), 406);
+  }
+  $scode = $record['scode'];
+  $codetime = $record['created'];
+  $now = time();
+  if ($now - $codetime > 900) {
+    services_error(t('验证码已失效.'), 406);
+  }
+  //获取数据库中的验证码
+  if ($scode != $code) {
+    services_error(t('错误的验证码.'), 406);
+  }
+  $account = user_load($users->uid);
+  $edit['pass'] = $pass;
+  //print_r($account);exit;
+  user_save($account, $edit);
+  $records = new stdClass();
+  $records->isused = 1;
+  $records->id = $record['id'];
+  drupal_write_record('users_mobile_verifycode', $records, 'id');
+  return ['data' => '密码修改成功'];
+}
+
+function users_sms_settings_form($form, &$form_state) {
+  $smssettings = unserialize(variable_get('smssettings'));
+  $form['appkey'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('应用appkey'),
+
+    '#default_value' => (!empty($smssettings)) ? $smssettings['appkey'] : '',
+
+    '#size' => 60,
+
+    '#maxlength' => 128,
+
+    '#required' => TRUE,
+
+  );
+
+  $form['secret'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('secret'),
+
+    '#default_value' => (!empty($smssettings)) ? $smssettings['secret'] : '',
+
+    '#size' => 60,
+
+    '#maxlength' => 1000,
+
+    '#required' => TRUE,
+
+  );
+  $form['sign'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('签名'),
+
+    '#default_value' => (!empty($smssettings)) ? $smssettings['sign'] : '',
+
+    '#size' => 60,
+
+    '#maxlength' => 1000,
+
+    '#required' => TRUE,
+
+  );
+  $form['templateid'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('模板id'),
+
+    '#default_value' => (!empty($smssettings)) ? $smssettings['templateid'] : '',
+
+    '#size' => 60,
+
+    '#maxlength' => 1000,
+
+    '#required' => TRUE,
+
+  );
+  $form['product'] = array(
+
+    '#type' => 'textfield',
+
+    '#title' => t('产品名称'),
+
+    '#default_value' => (!empty($smssettings)) ? $smssettings['product'] : '',
+
+    '#size' => 60,
+
+    '#maxlength' => 128,
+
+    '#required' => TRUE,
+
+  );
+
+
+  $form['submit'] = array('#type' => 'submit', '#value' => t('保存配置'));
+  return $form;
+}
+
+function users_sms_settings_form_submit($form, &$form_state) {
+  $values = serialize($form_state['values']);
+  variable_set('smssettings', $values);
+  drupal_set_message('短信配置保存成功');
+}
+
+/**
+ * Get user details.
+ *
+ * @param $uid
+ *   UID of the user to be loaded.
+ *
+ * @return
+ *   A user object.
+ *
+ * @see user_load()
+ */
+function _users_resource_retrieve($uid) {
+  $account = user_load($uid);
+  if (empty($account)) {
+    return services_error(t('There is no user with ID @uid.', array('@uid' => $uid)), 404);
+  }
+
+  services_remove_user_data($account);
+
+  //Lets check field_permissions
+  $account = services_field_permissions_clean('view', 'user', $account);
+
+  // Everything went right.
+  return $account;
+}
+
+/**
+ * Create a new user.
+ *
+ * This function uses drupal_form_submit() and as such expects all input to match
+ * the submitting form in question.
+ *
+ * @param $account
+ *   A object containing account information. The $account object should
+ *   contain, at minimum, the following properties:
+ *     - name (user name)
+ *     - mail (email address)
+ *     - pass (plain text unencrypted password)
+ *
+ *   These properties can be passed but are optional
+ *     - status (0 for blocked, otherwise will be active by default)
+ *     - notify (1 to notify user of new account, will not notify by default)
+ *
+ *  Roles can be passed in a roles property which is an associative
+ *  array formatted with '<role id>' => '<role id>', not including
+ *  the authenticated user role, which is given by default.
+ *
+ * @return
+ *   The user object of the newly created user.
+ */
+function _users_resource_create($account) {
+  // Adds backwards compatability with regression fixed in #1083242
+  $account = _services_arg_value($account, 'account');
+  if (strlen($account['pass']) < 6) {
+    return services_error(t('密码不能少于6位'), 406);
+  }
+  elseif (strlen($account['pass']) > 25) {
+    return services_error(t('密码最多25位'), 406);
+  }
+  // Load the required includes for saving profile information
+  // with drupal_form_submit().
+  module_load_include('inc', 'user', 'user.pages');
+
+  // Register a new user.
+  $form_state['values'] = $account;
+
+  // Determine the password(s). Passwords may not be available as this callback
+  // is used for registration as well.
+  $pass1 = '';
+  $pass2 = '';
+  if (isset($account['pass'])) {
+    // For legacy usage, passwords come in as a single string. To match the
+    // actual form state value keys used by Drupal, we also can collect two
+    // passwords via an array.
+    if (is_array($account['pass'])) {
+      $pass1 = $account['pass']['pass1'];
+      $pass2 = $account['pass']['pass2'];
+    }
+    else {
+      $pass1 = $account['pass'];
+      $pass2 = $account['pass'];
+    }
+  }
+  $form_state['values']['pass'] = array(
+    'pass1' => $pass1,
+    'pass2' => $pass2
+  );
+  $query = db_select('users_mobile_verifycode', 'g');
+  $query->fields('g', array('scode', 'id', 'isused', 'created'));
+  $query->condition('g.smobile', $_POST['name']);
+  $query->orderBy('g.id', 'DESC');
+  $result = $query->execute();
+  $record = $result->fetchAssoc();
+  //var_dump($result);
+  if (!$record) {
+    services_error(t('手机号码错误.'), 406);
+  }
+  if ($record['isused']) {
+    services_error(t('手机验证码已使用，请重新获取.'), 406);
+  }
+  $code = $record['scode'];
+  $codetime = $record['created'];
+  $now = time();
+  if (empty($_POST['code'])) {
+    services_error(t('手机验证码不能为空.'), 406);
+  }
+  /*if($now - $codetime > 900){
+      services_error(t('验证码已失效.'), 406);
+  }*/
+  //获取数据库中的验证码
+  if ($_POST['code'] != $code) {
+    services_error(t('错误的验证码.'), 406);
+  }
+
+
+  // Set the form state op.
+  $form_state['values']['op'] = variable_get('services_users_create_button_resource_create', t('Create new account'));
+
+  // Execute the register form.
+  $form_state['programmed_bypass_access_check'] = FALSE;
+
+  drupal_form_submit('user_register_form', $form_state);
+  watchdog('def', print_r($_COOKIE, TRUE));
+  // find and store the new user into the form_state
+  if (isset($form_state['values']['uid'])) {
+    $form_state['user'] = user_load($form_state['values']['uid']);
+  }
+
+  // Error if needed.
+  if ($errors = form_get_errors()) {
+    return services_error(implode(" ", $errors), 406, array('form_errors' => $errors));
+  }
+  else {
+    $records = new stdClass();
+    $records->isused = 1;
+    $records->id = $record['id'];
+    drupal_write_record('users_mobile_verifycode', $records, 'id');
+    $user = array('uid' => $form_state['user']->uid);
+    if ($uri = services_resource_uri(array('user', $user['uid']))) {
+      $user['uri'] = $uri;
+    }
+    $current_user = $form_state['user'];
+    //user_login_finalize();
+    unset($current_user->pass);
+    unset($current_user->mail);
+    unset($current_user->init);
+    //services_remove_users_data($current_user);
+    $current_user->sessid = session_id();
+    $current_user->session_name = session_name();
+    $current_user->token = drupal_get_token('services');
+    _users_resource_update_services_users($user['uid'], time());
+    watchdog('newusers', print_r($current_user, TRUE));
+    watchdog('abc', print_R($_SERVER, TRUE));
+    $tuser = $current_user;
+    return $tuser;
+  }
+}
+
+/**
+ * Update an existing user.
+ *
+ * This function uses drupal_form_submit() and as such expects all input to match
+ * the submitting form in question.
+ *
+ * @param $uid
+ *   Unique identifier for this user
+ * @param $account
+ *   Fields to modify for this user.
+ *
+ * @return
+ *   The modified user object.
+ */
+function _users_resource_update($uid, $account) {
+  // Adds backwards compatability with regression fixed in #1083242
+  $account = _services_arg_value($account, 'data');
+
+  $account['uid'] = $uid;
+
+  $account_loaded = user_load($uid);
+
+  // Load the required includes for saving profile information
+  // with drupal_form_submit().
+  module_load_include('inc', 'user', 'user.pages');
+
+  // If a profile category was passed in, use it. Otherwise default
+  // to 'account' (for saving core user data.)
+  $category = 'account';
+  if (isset($account['category'])) {
+    $category = $account['category'];
+    unset($account['category']);
+  }
+
+  // Prepare values for the user profile image.
+  if (array_key_exists('picture_upload', $account)) {
+    if (is_array($account['picture_upload'])) {
+      // Check if it's an array and convert to object.
+      $account['picture_upload'] = (object) $account['picture_upload'];
+    }
+    elseif (is_int($account['picture_upload'])) {
+      // Check if it's an integer and get the file object.
+      $file_validate = file_validate_is_image($file = file_load($account['picture_upload']));
+      if (empty($file_validate)) {
+        $account['picture_upload'] = $file;
+      }
+    }
+    elseif (is_string($account['picture_upload'])) {
+      // Check if it's an string and get the file object.
+      $file_validate = file_validate_is_image($file = file_load((int) $account['picture_upload']));
+      if (empty($file_validate)) {
+        $account['picture_upload'] = $file;
+      }
+    }
+  }
+
+  // Drop any passed in values into the $account var. Anything
+  // unused by the form just gets ignored. We handle roles and
+  // password separately.
+  foreach ($account as $key => $value) {
+    if ($key != 'pass' && $key != 'roles') {
+      $form_state['values'][$key] = $value;
+    }
+  }
+
+  // Prepare values of roles. Check user's permission before allowing changes to roles.
+  if (!isset($account['roles']) || !user_access('administer users')) {
+    $account['roles'] = $account_loaded->roles;
+  }
+  foreach ($account['roles'] as $key => $value) {
+    if (!empty($value)) {
+      $form_state['values']['roles'][$key] = $key;
+    }
+  }
+  unset($form_state['values']['roles'][2]);
+
+  // Prepare values for password.
+  if (isset($account['pass'])) {
+    $form_state['values']['pass']['pass1'] = $account['pass'];
+    $form_state['values']['pass']['pass2'] = $account['pass'];
+  }
+
+  // If user is changing name, make sure they have permission.
+  if (isset($account['name']) && $account['name'] != $account_loaded->name && !(user_access('change own username') || user_access('administer users'))) {
+    return services_error(t('You are not allowed to change your username.'), 406);
+  }
+
+  $form_state['values']['op'] = variable_get('services_users_save_button_resource_update', t('Save'));
+  $form_state['values']['#user_category'] = $category;
+  $form_state['values']['#account'] = $account_loaded;
+  $form_state['programmed_bypass_access_check'] = FALSE;
+  $ret = drupal_form_submit('user_profile_form', $form_state, $account_loaded, $category);
+
+  // Error if needed.
+  if ($errors = form_get_errors()) {
+    return services_error(implode(" ", $errors), 406, array('form_errors' => $errors));
+  }
+  else {
+    module_load_include('module', 'services');
+    $account = (object) $account;
+    services_remove_users_data($account);
+    $account = (array) $account;
+    _users_resource_update_services_users($uid, time());
+    return $account;
+  }
+}
+
+function _users_resource_update_services_users($uid, $time) {
+  //Determine if a row exists, if not that means we are creating the user,
+  //If so that means we are updating it.
+  $result = db_select('services_user', 'su')
+    ->fields('su')
+    ->condition('uid', $uid, '=')
+    ->execute()
+    ->fetchAssoc();
+  //check the result
+  if (!$result) {
+    $id = db_insert('services_user')
+      ->fields(array(
+        'uid' => $uid,
+        'created' => $time,
+        'changed' => $time,
+      ))
+      ->execute();
+  }
+  else {
+    db_update('services_user')
+      ->fields(array(
+          'uid' => $uid,
+          'changed' => $time,
+        )
+      )
+      ->execute();
+  }
+}
+
+
+/**
+ * Delete a user.
+ *
+ * @param $uid
+ *   UID of the user to be deleted.
+ *
+ * @see user_delete()
+ */
+function _users_resource_delete($uid) {
+  if ($uid == 1) {
+    return services_error(t('The admin user cannot be deleted.'), 403);
+  }
+
+  $account = user_load($uid);
+  if (empty($account)) {
+    return services_error(t('There is no user with ID @uid.', array('@uid' => $uid)), 404);
+  }
+  user_delete($uid);
+
+  // Everything went right.
+  return TRUE;
+}
+
+/**
+ * Cancel a user.
+ *
+ * @param $uid
+ *   UID of the user to be canceled.
+ *
+ * @see user_cancel()
+ */
+function _users_resource_cancel($uid) {
+  if ($uid == 1) {
+    return services_error(t('The admin user cannot be canceled.'), 403);
+  }
+  $account = user_load($uid);
+  if (empty($account)) {
+    return services_error(t('There is no user with ID @uid.', array('@uid' => $uid)), 404);
+  }
+  $edit = array(
+    'user_cancel_notify' => isset($account->data['user_cancel_notify']) ? $account->data['user_cancel_notify'] : variable_get('user_mail_status_canceled_notify', FALSE),
+  );
+  // This defult setting is defined under "admin/config/people/accounts".
+  $default_method = variable_get('user_cancel_method', 'user_cancel_block');
+
+  // Modules use hook_users_delete() to respond to deletion.
+  if ($default_method != 'user_cancel_delete') {
+    // Allow modules to add further sets to this batch.
+    module_invoke_all('user_cancel', $edit, $account, $default_method);
+  }
+
+  _users_cancel($edit, $account, $default_method);
+
+  // Everything went right.
+  return TRUE;
+}
+
+/**
+ * Login a user using the specified credentials.
+ *
+ * Note this will transfer a plaintext password.
+ *
+ * @param $username
+ *   Username to be logged in.
+ * @param $password
+ *   Password, must be plain text and not hashed.
+ *
+ * @return
+ *   A valid session object.
+ */
+function _users_resource_login($username, $password) {
+  global $user;
+
+  if ($user->uid) {
+    // user is already logged in
+    return services_error(t('Already logged in as @user.', array('@user' => $user->name)), 406);
+  }
+
+  // Check if account is active.
+  if (user_is_blocked($username)) {
+    return services_error(t('The username %name has not been activated or is blocked.', array('%name' => $username)), 403);
+  }
+
+  // Emulate drupal native flood control: check for flood condition.
+  $flood_state = array();
+  if (variable_get('services_flood_control_enabled', TRUE)) {
+    $flood_state = _users_resource_flood_control_precheck($username);
+  }
+
+  // Only authenticate if a flood condition was not detected.
+  if (empty($flood_state['flood_control_triggered'])) {
+    $uid = user_authenticate($username, $password);
+  }
+  else {
+    $uid = FALSE;
+  }
+
+  // Emulate drupal native flood control: register flood event, and throw error
+  // if a flood condition was previously detected
+  if (variable_get('services_flood_control_enabled', TRUE)) {
+    $flood_state['uid'] = $uid;
+    _users_resource_flood_control_postcheck($flood_state);
+  }
+
+  if ($uid) {
+    $user = user_load($uid);
+    if ($user->uid) {
+      user_login_finalize();
+
+      $return = new stdClass();
+      $return->sessid = session_id();
+      $return->session_name = session_name();
+      $return->token = drupal_get_token('services');
+
+      $account = clone $user;
+
+      services_remove_users_data($account);
+
+      $return->user = $account;
+
+      return $return;
+    }
+  }
+  watchdog('user', 'Invalid login attempt for %username.', array('%username' => $username));
+  return services_error(t('Wrong username or password.'), 401);
+}
+
+/**
+ * Logout the current user.
+ */
+function _users_resource_logout() {
+  global $user;
+
+  if (!$user->uid) {
+    // User is not logged in
+    return services_error(t('User is not logged in.'), 406);
+  }
+
+  watchdog('user', 'Session closed for %name.', array('%name' => $user->name));
+
+  // Destroy the current session.
+  module_invoke_all('user_logout', $user);
+  session_destroy();
+
+  // Load the anonymous user.
+  $user = drupal_anonymous_users();
+
+  return TRUE;
+}
+
+/**
+ *  Update the current user logout callback to the new callback with a better return value.
+ */
+function _users_resource_logout_update_1_1() {
+  $new_set = array(
+    'callback' => '_users_resource_logout_1_1',
+  );
+  return $new_set;
+}
+
+/**
+ * Logs out the currently logged in user and returns the new user object.
+ */
+function _users_resource_logout_1_1() {
+  global $user;
+
+  if (!$user->uid) {
+    // User is not logged in
+    return services_error(t('User is not logged in.'), 406);
+  }
+
+  watchdog('user', 'Session closed for %name.', array('%name' => $user->name));
+
+  // Destroy the current session.
+  module_invoke_all('user_logout', $user);
+  session_destroy();
+
+  // Load the anonymous user.
+  $user = drupal_anonymous_users();
+
+  return $user;
+}
+
+/**
+ * Request a new password given a user name or e-mail address.
+ *
+ * @param $name
+ *   The username or e-mail address of the requesting account.
+ *
+ * @see https://api.drupal.org/api/drupal/modules!user!user.pages.inc/function/user_pass_validate/7
+ * @see https://api.drupal.org/api/drupal/modules!user!user.pages.inc/function/user_pass_submit/7
+ */
+function _users_resource_request_new_password($name) {
+  $name = trim($name);
+  // Try to load by email.
+  $users = user_load_multiple(array(), array('mail' => $name, 'status' => '1'));
+  $account = reset($users);
+  if (!$account) {
+    // No success, try to load by name.
+    $users = user_load_multiple(array(), array('name' => $name, 'status' => '1'));
+    $account = reset($users);
+  }
+  if (!isset($account->uid)) {
+    return services_error(t('Sorry, %name is not recognized as a user name or an e-mail address.', array('%name' => $name)), 406);
+  }
+  // Mail one time login URL and instructions using current language.
+  global $language;
+  $mail = _users_mail_notify('password_reset', $account, $language);
+  if (!empty($mail)) {
+    watchdog('user', 'Password reset instructions mailed to %name at %email.', array(
+      '%name' => $account->name,
+      '%email' => $account->mail
+    ));
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+function _users_resource_users_pass_reset_login($uid, $timestamp, $hashed_pass) {
+  global $user;
+
+  // When processing the one-time login link, we have to make sure that a user
+  // isn't already logged in.
+  if ($user->uid) {
+    // The existing user is already logged in.
+    if ($user->uid == $uid) {
+      return services_error(t('You are logged in as %user. Please edit your profile to update your password.', array('%user' => $user->name)), 403);
+    }
+    // A different user is already logged in on the computer.
+    else {
+      $reset_link_account = user_load($uid);
+      if (!empty($reset_link_account)) {
+        return services_error(t('Another user (%other_users) is already logged into the site on this computer, but you tried to use a one-time link for user %resetting_users. Please logout and try using the link again.', array(
+          '%other_users' => $user->name,
+          '%resetting_users' => $reset_link_account->name
+        )), 405);
+      }
+      else {
+        // Invalid one-time link specifies an unknown user.
+        return services_error(t('The one-time login link you clicked is invalid.'), 406);
+      }
+    }
+  }
+  else {
+    // Time out, in seconds, until login URL expires. Defaults to 24 hours =
+    // 86400 seconds.
+    $timeout = variable_get('user_password_reset_timeout', 86400);
+    $current = REQUEST_TIME;
+    // Some redundant checks for extra security ?
+    $users = user_load_multiple(array($uid), array('status' => '1'));
+    if ($timestamp <= $current && $account = reset($users)) {
+      // No time out for first time login.
+      if ($account->login && $current - $timestamp > $timeout) {
+        return services_error(t('You have tried to use a one-time login link that has expired. Please request a new one.'), 406);
+      }
+      elseif ($account->uid && $timestamp >= $account->login && $timestamp <= $current && $hashed_pass == user_pass_rehash($account->pass, $timestamp, $account->login, $account->uid)) {
+        // Set the new user.
+        $user = $account;
+        // user_login_finalize() also updates the login timestamp of the
+        // user, which invalidates further use of the one-time login link.
+        user_login_finalize();
+        watchdog('user', 'User %name used one-time login link at time %timestamp.', array(
+          '%name' => $account->name,
+          '%timestamp' => $timestamp
+        ));
+        // Let the user's password be changed without the current password check.
+        $token = drupal_random_key();
+        $_SESSION ['pass_reset_' . $user->uid] = $token;
+        return array(
+          'pass_reset_token' => $token,
+          'message' => t('You have just used your one-time login link. It is no longer necessary to use this link to log in. <strong>Please change your password</strong>.')
+        );
+      }
+      else {
+        return services_error(t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one.'), 406);
+      }
+    }
+    else {
+      // Deny access, no more clues.
+      // Everything will be in the watchdog's URL for the administrator to check.
+      return services_error(t('Access denied.'), 403);
+    }
+  }
+}
+
+/**
+ * Send a password reset email for the specified user.
+ */
+function _users_resource_password_reset($uid) {
+  global $language;
+
+  $account = user_load($uid);
+  if (empty($account)) {
+    return services_error(t('There is no user with ID @uid.', array('@uid' => $uid)), 404);
+  }
+
+  // Mail one time login URL and instructions using current language.
+  $mail = _users_mail_notify('password_reset', $account, $language);
+  if (!empty($mail)) {
+    watchdog('user', 'Password reset instructions mailed to %name at %email.', array(
+      '%name' => $account->name,
+      '%email' => $account->mail
+    ));
+  }
+  else {
+    watchdog('user', 'There was an error re-sending password reset instructions mailed to %name at %email', array(
+      '%name' => $account->name,
+      '%email' => $account->mail
+    ));
+  }
+  // Everything went right.
+  return TRUE;
+}
+
+/**
+ * Send a welcome email for the specified user.
+ */
+function _users_resource_resend_welcome_email($uid) {
+  global $language;
+
+  $account = user_load($uid);
+  if (empty($account)) {
+    return services_error(t('There is no user with ID @uid.', array('@uid' => $uid)), 404);
+  }
+
+  $user_register = variable_get('user_register', 2);
+  switch ($user_register) {
+    case USER_REGISTER_ADMINISTRATORS_ONLY:
+      $op = 'register_admin_created';
+      break;
+    case USER_REGISTER_VISITORS:
+      $op = 'register_no_approval_required';
+      break;
+    case USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL:
+      $op = 'register_pending_approval';
+  }
+
+  // Mail the welcome emaiil using current language.
+  $mail = _users_mail_notify($op, $account, $language);
+  if (!empty($mail)) {
+    watchdog('user', 'Welcome message has been re-sent to %name at %email.', array(
+      '%name' => $account->name,
+      '%email' => $account->mail
+    ));
+  }
+  else {
+    watchdog('user', 'There was an error re-sending welcome message to %name at %email', array(
+      '%name' => $account->name,
+      '%email' => $account->mail
+    ));
+  }
+  // Everything went right.
+  return TRUE;
+}
+
+/**
+ * Return an array of optionally paged uids baed on a set of criteria.
+ *
+ * An example request might look like
+ *
+ * http://domain/endpoint/user?fields=uid,name,mail&parameters[uid]=1
+ *
+ * This would return an array of objects with only uid, name and mail defined,
+ * where uid = 1.
+ *
+ * @param $page
+ *   Page number of results to return (in pages of 20).
+ * @param $fields
+ *   The fields you want returned.
+ * @param $parameters
+ *   An array containing fields and values used to build a sql WHERE clause
+ *   indicating items to retrieve.
+ * @param $page_size
+ *   Integer number of items to be returned.
+ * @return
+ *   An array of user objects.
+ *
+ * @see _node_resource_index() for more notes
+ */
+function _users_resource_index($page, $fields, $parameters, $page_size, $options = array()) {
+  $user_select = db_select('users', 't');
+
+  services_resource_build_index_query($user_select, $page, $fields, $parameters, $page_size, 'user', $options);
+
+  $results = services_resource_execute_index_query($user_select);
+
+  return services_resource_build_index_list($results, 'user', 'uid');
+}
+
+/**
+ * Access check callback for user resource.
+ */
+function _users_resource_access($op = 'view', $args = array()) {
+  // Adds backwards compatability with regression fixed in #1083242
+  if (isset($args[0])) {
+    $args[0] = _services_access_value($args[0], array('account', 'data'));
+  }
+
+  // Check if the user exists if appropriate.
+  if ($op != 'create' && $op != 'register') {
+    $account = user_load($args[0]);
+    if (!$account) {
+      return services_error(t('There is no user with ID @uid.', array('@uid' => $args[0])), 404);
+    }
+  }
+
+  global $user;
+  switch ($op) {
+    case 'view':
+      return user_view_access($account);
+    case 'update':
+      return ($user->uid == $account->uid || user_access('administer users'));
+    case 'create':
+    case 'register':
+      if (!$user->uid && variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL) != USER_REGISTER_ADMINISTRATORS_ONLY) {
+        return TRUE;
+      }
+      else {
+        return user_access('administer users');
+      }
+    case 'password_reset':
+      return TRUE;
+    case 'delete':
+    case 'cancel':
+    case 'resend_welcome_email':
+      return user_access('administer users');
+  }
+}
+
+/**
+ * Changes the user/login endpoint to accept the same parameters as the user/register endpoint, namely
+ * "name" instead of "username" and "pass" instead of "password"
+ */
+function _users_resource_login_update_1_1() {
+  $new_set = array(
+    'args' => array(
+      array(
+        'name' => 'name',
+        'type' => 'string',
+        'description' => 'A valid username',
+        'source' => array('data' => 'name'),
+        'optional' => FALSE,
+      ),
+      array(
+        'name' => 'pass',
+        'type' => 'string',
+        'description' => 'A valid password',
+        'source' => array('data' => 'pass'),
+        'optional' => FALSE,
+      ),
+    ),
+  );
+  return $new_set;
+}
+
+function _users_resource_get_token() {
+  return array('token' => drupal_get_token('services'));
+}
+
+
+/**
+ * Emulate native Drupal flood control, phase 1.
+ *
+ * This function checks for a flood condition, and determines the identifier
+ * for user based flood checks. This is done prior to user authentication.
+ *
+ * @param string $username
+ *   The name of the user who is attempting to log in.
+ * @return array
+ *   An array containing zero or more of the following keys:
+ *   - flood_control_triggered: either 'user' or 'ip' if a flood condition
+ *     was detected.
+ *   - flood_control_users_identifier: the identifier to use to register
+ *     user-based flood events.
+ *
+ * @see _users_resource_flood_control_postcheck().
+ * @see user_login_authenticate_validate().
+ */
+function _users_resource_flood_control_precheck($username) {
+  $flood_state = array();
+  // Do not allow any login from the current user's IP if the limit has been
+  // reached. Default is 50 failed attempts allowed in one hour. This is
+  // independent of the per-user limit to catch attempts from one IP to log
+  // in to many different user accounts.  We have a reasonably high limit
+  // since there may be only one apparent IP for all users at an institution.
+  if (!flood_is_allowed('failed_login_attempt_ip', variable_get('user_failed_login_ip_limit', 50), variable_get('user_failed_login_ip_window', 3600))) {
+    $flood_state['flood_control_triggered'] = 'ip';
+  }
+  else {
+    $account = db_query("SELECT * FROM {users} WHERE name = :name AND status = 1", array(':name' => $username))->fetchObject();
+    if ($account) {
+      if (variable_get('user_failed_login_identifier_uid_only', FALSE)) {
+        // Register flood events based on the uid only, so they apply for any
+        // IP address. This is the most secure option.
+        $identifier = $account->uid;
+      }
+      else {
+        // The default identifier is a combination of uid and IP address. This
+        // is less secure but more resistant to denial-of-service attacks that
+        // could lock out all users with public user names.
+        $identifier = $account->uid . '-' . ip_address();
+      }
+      $flood_state['flood_control_users_identifier'] = $identifier;
+
+      // Don't allow login if the limit for this user has been reached.
+      // Default is to allow 5 failed attempts every 6 hours.
+      if (!flood_is_allowed('failed_login_attempt_users', variable_get('user_failed_login_users_limit', 5), variable_get('user_failed_login_users_window', 21600), $identifier)) {
+        $flood_state['flood_control_triggered'] = 'user';
+      }
+    }
+  }
+  return $flood_state;
+}
+
+/**
+ * + * Emulate native Drupal flood control, phase 2.
+ * + *
+ * + * This function records a failed login attempt, and triggers an error if a
+ * + * flood condition was previously detected.
+ * + *
+ * + * @param array $flood_state
+ * + *   An array of flood information as returned by
+ * + *   _users_resource_flood_control_precheck().
+ * + *
+ * + * @throws ServicesException
+ * + *   If a flood condition was previously detected.
+ * + *
+ * + * @see _users_resource_flood_control_precheck().
+ * + * @see user_login_final_validate().
+ * + */
+function _users_resource_flood_control_postcheck($flood_state) {
+  if (empty($flood_state['uid'])) {
+    // Always register an IP-based failed login event.
+    flood_register_event('failed_login_attempt_ip', variable_get('user_failed_login_ip_window', 3600));
+    // Register a per-user failed login event.
+    if (isset($flood_state['flood_control_users_identifier'])) {
+      flood_register_event('failed_login_attempt_users', variable_get('user_failed_login_users_window', 21600), $flood_state['flood_control_users_identifier']);
+    }
+    if (isset($flood_state['flood_control_triggered'])) {
+      if ($flood_state['flood_control_triggered'] == 'user') {
+        services_error(t('Account is temporarily blocked.'), 406);
+      }
+      else {
+        // We did not find a uid, so the limit is IP-based.
+        services_error(t('This IP address is temporarily blocked.'), 406);
+      }
+    }
+  }
+  elseif (isset($flood_state['flood_control_users_identifier'])) {
+    // Clear past failures for this user so as not to block a user who might
+    // log in and out more than once in an hour.
+    flood_clear_event('failed_login_attempt_users', $flood_state['flood_control_users_identifier']);
+  }
+}
+
+function _junausers_file_check_name_extension($name) {
+  //Fetch the file extensions set in the variable at the time module is enabled
+  $extensions = 'jpg jpeg gif png';
+
+  // Get the part of the name after the last period (".").
+  $name = explode('.', $name);
+  $last = array_pop($name);
+
+  // Make it lowercase for consistency as much as security.
+  $extension = strtolower($last);
+
+  // Is this a whitelisted extension?
+  if (!in_array($extension, explode(' ', $extensions))) {
+    // No.  Restore it to the name and use the default extension, 'txt'.
+    services_error(t('只能上传图片'), 406);
+    exit;
+  }
+
+  // Sanitize the name, apart from the extension.
+  $name = _junausers_file_check_name(implode('.', $name));
+  global $user;
+  $uid = $user->uid;
+  $name = $uid . $name . date('Y-m-d-H-i-s');
+
+  //echo $extension;exit;
+  // Munge the non-whitelisted secondary file extensions.
+  return file_munge_filename($name . "." . $extension, $extensions);
+}
+
+function _junausers_file_check_name($name) {
+  // Punctuation characters that are allowed, but not as first/last character.
+  $punctuation = '-_. ';
+
+  $map = array(
+    // Replace (groups of) whitespace characters.
+    '!\s+!' => ' ',
+    // Replace multiple dots.
+    '!\.+!' => '.',
+    // Remove characters that are not alphanumeric or the allowed punctuation.
+    "![^0-9A-Za-z$punctuation]!" => '',
+  );
+
+  // Apply the regex replacements. Remove any leading or hanging punctuation.
+  return trim(preg_replace(array_keys($map), array_values($map), $name), $punctuation);
+}
+
+function _junausers_upload_file() {
+  global $user;
+  $files = array();
+  //foreach ($_FILES['cert']['name'] as $field_name => $file_name) {
+  // Sanitize the user-input file name before saving to the file system.
+  $filename = _junausers_file_check_name_extension($_FILES['cert']['name']);
+  // file_save_upload() validates the file extension and name's length. File
+  // size is limited by the upload_max_filesize directive in php.ini.
+  $scheme = file_default_scheme();
+  // Set file validators: allowed extension
+  $validators = array();
+  if ($extensions = 'jpg jpeg gif png') {
+    $validators['file_validate_extensions'] = $extensions;
+  }
+  $imagedata = file_get_contents($_FILES['cert']["tmp_name"]);
+  $maxsize = 512 * 1024;
+  $size = $_FILES['cert']['size'];
+  if ($size > $maxsize) {
+    services_error(t('文件超过512K'), 403);
+  }
+  //public://ueditor/1/upload/image/20161107/1478526691331898.jpg
+  //var_dump(file_unmanaged_save_data($imagedata, $scheme."://".$filename));
+  if ($uri = file_unmanaged_save_data($imagedata, 'public://certs/' . $filename, FILE_EXISTS_REPLACE)) {
+    // Create a file object.
+    $file = new stdClass();
+    $file->fid = NULL;
+    $file->uri = $uri;
+    $file->filename = drupal_basename($uri);
+    $file->filemime = file_get_mimetype($file->uri);
+    $file->uid = $user->uid;
+    $file->status = 0;
+    $filedata = file_save($file);
+  }
+
+  if (!empty($file->fid)) {
+    // Change the file status from temporary to permanent.
+    $file->status = FILE_STATUS_PERMANENT;
+    file_save($file);
+    // Required to be able to reference this file.
+    file_usage_add($file, 'juna_userss', 'user', $user->uid);
+
+  }
+  else {
+    services_error(t('未知错误'), 500);
+    exit;
+  }
+  //}
+  return $file;
+}
+
+function users_user_cert($username, $companyname, $companyaddress, $cert_type, $postion, $floor) {
+  $starts = microtime_float();
+  global $user;
+  if (empty($user->uid)) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, "用户认证");
+    return services_error(t("用户未登录"), 403);
+  }
+  if (empty(trim($username))) {
+    return services_error(t("姓名必填"), 403);
+  }
+  if (empty(trim($companyname))) {
+    return services_error(t("公司名称必填"), 403);
+  }
+  if (empty(trim($companyaddress))) {
+    return services_error(t("公司地址必填"), 403);
+  }
+  if (empty(trim($cert_type))) {
+    return services_error(t("认证类型必填"), 403);
+  }
+
+  watchdog('用户认证', print_r($_FILES, TRUE));
+  if (empty($_FILES['cert'])) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, $user->uid . "用户认证");
+    return services_error(t('认证图片不能为空'), 406);
+  }
+  $validcerttype = [1, 2, 3];
+  if (!in_array($cert_type, $validcerttype)) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, $user->uid . "用户认证");
+    return services_error(t('认证类型错误'), 406);
+  }
+  $account = user_load($user->uid);
+  $tmp = _junausers_upload_file();
+  $account->field_username['und']['0']['value'] = $username;
+  $account->field_company_name['und'][0]['value'] = $companyname;
+  $account->field_company_address['und'][0]['value'] = $companyaddress;
+  $account->field_cert['und'][0] = (array) $tmp;
+  $account->field_cert_type['und'][0]['value'] = $cert_type;
+  $account->field_certed['und'][0]['value'] = 2;
+  $account->field_position['und'][0]['value'] = $postion;
+  $account->field_floor['und'][0]['value'] = $floor;
+  user_save($account);
+  $userobj = user_load($user->uid);
+  unset($userobj->rdf_mapping);
+  if (isset($userobj->field_cert['und'][0]['uri'])) {
+    $userobj->field_cert['und'][0]['uri'] = file_create_url($userobj->field_cert['und'][0]['uri']);
+  }
+  $ends = microtime_float();
+  calcrequesttime($starts, $ends, $user->uid . "用户认证");
+  return ['success' => 1, 'data' => $userobj];
+}
+
+function users_mobilecode($mobile, $type) {
+  if (!isset($type)) {
+    $type = "register";
+  }
+  if (!in_array($type, array('register', 'forgot_password'))) {
+    watchdog('t', $type);
+    return services_error(t('非法请求'), 406);
+  }
+  $starts = microtime_float();
+  if (empty($mobile)) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, "手机验证码");
+    services_error(t('手机号码不能为空.'), 406);
+  }
+  if (!preg_match("/^13[0-9]{1}[0-9]{8}$|15[0189]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}$|17[012678]{1}[0-9]{8}$/", $mobile)) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, "手机验证码");
+    services_error(t('手机号错误.'), 406);
+
+  }
+  if ($type == 'register') {
+    $user = user_load_by_name($mobile);
+    if ($user) {
+      $ends = microtime_float();
+      calcrequesttime($starts, $ends, "手机验证码");
+      return services_error(t($mobile . '用户已存在'), 406);
+    }
+  }
+
+  $query = db_select('users_mobile_verifycode', 'g');
+  $query->fields('g');
+  $query->condition('g.smobile', $mobile);
+  $query->condition('g.type', $type);
+  $query->orderBy('g.id', 'DESC');
+  $result = $query->execute();
+  $record = $result->fetchAssoc();
+  $code = $record['scode'];
+  $codetime = $record['created'];
+  $now = time();
+  if ($now - $codetime < 900) {
+
+    //发送验证码
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, "手机验证码");
+    return array('success' => 1, 'msg' => '验证码发送成功');
+  }
+  else {
+    //发送验证码
+    module_load_include('inc', 'users', 'includes/sms');
+    $code = generateCode();
+    $data['mobile'] = $mobile;
+    $data['code'] = $code;
+    $r = sendsms($data);
+    if (!isset($r->result)) {
+      watchdog('用户短信发送失败', print_r($r, TRUE));
+      return services_error(t('短信发送失败'), 406);
+    }
+    $code = $code;//123456;//generateCode();//123456;//创建验证码rand(100000,999999);
+    $record = new stdClass();
+    $record->smobile = $mobile;
+    $record->scode = $code;
+    $record->created = time();
+    $record->type = $type;
+    $succ = drupal_write_record('users_mobile_verifycode', $record);
+    $succ = 1;
+    if ($succ) {
+      //发送手机验证码
+      $ends = microtime_float();
+      calcrequesttime($starts, $ends, "手机验证码");
+      return array('success' => 1, 'msg' => '验证码发送成功');
+    }
+    else {
+      $ends = microtime_float();
+      calcrequesttime($starts, $ends, "手机验证码");
+      services_error(t('验证码发送失败.'), 406);
+    }
+    //发送手机验证码
+  }
+
+}
+
+function generateCode() {
+  $str = '0123456789';
+  $num = "";
+  for ($i = 1; $i <= 6; $i++) {
+    $rand = mt_rand(0, 9);
+    $num .= $str[$rand];
+  }
+  return $num;
+}
+
+function users_user_insert(&$edit, $account, $category) {
+  $url = $_SERVER['REQUEST_URI'];
+  $url_arr = explode('.', $url);
+  $ext = end($url_arr);
+  if (strtolower($ext) == 'json') {
+    if (strlen($_POST['pass']) < 6) {
+      services_error(t('密码至少6位.'), 406);
+    }
+    elseif (strlen($_POST['pass']) > 25) {
+      services_error(t('密码最多25位.'), 406);
+    }
+//_services_arg_value
+    $query = db_select('users_mobile_verifycode', 'g');
+    $query->fields('g', array('scode', 'id', 'isused', 'created'));
+    $query->condition('g.smobile', $_POST['name']);
+    $query->orderBy('g.id', 'DESC');
+    $result = $query->execute();
+    $record = $result->fetchAssoc();
+    if (!$record) {
+      services_error(t('手机号码错误.'), 406);
+    }
+    if ($record['isused']) {
+      services_error(t('手机验证码已使用，请重新获取.'), 406);
+    }
+    $code = $record['scode'];
+    $codetime = $record['created'];
+    $now = time();
+    if (empty($_POST['code'])) {
+      services_error(t('手机验证码不能为空.'), 406);
+    }
+    if ($now - $codetime > 900) {
+      services_error(t('验证码已失效.'), 406);
+    }
+    //获取数据库中的验证码
+    if ($_POST['code'] != $code) {
+      services_error(t('错误的验证码.'), 406);
+    }
+    $records = new stdClass();
+    $records->isused = 1;
+    $records->id = $record['id'];
+    drupal_write_record('users_mobile_verifycode', $records, 'id');
+  }
+
+
+}
+
+/**
+ * 用户认证信息
+ */
+function users_certedinfo($uid) {
+  if (isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+    $csrf_token = $_SERVER['HTTP_X_CSRF_TOKEN'];
+  }
+  elseif (isset($_REQUEST['services_token'])) {
+    $csrf_token = $_REQUEST['services_token'];
+  }
+  if (!drupal_valid_token($csrf_token, 'services')) {
+    return services_error('token错误', 403);
+  }
+  if (empty($uid)) {
+    return services_error('用户id不能为空', 406);
+  }
+  $user = user_load($uid);
+  return ['success', 'data' => $user];
+}
+
+function users_cron() {
+  $time = REQUEST_TIME - 15 * 60;
+  db_delete('users_mobile_verifycode')->condition('created', $time, '<')->execute();
+}
+
+
+
