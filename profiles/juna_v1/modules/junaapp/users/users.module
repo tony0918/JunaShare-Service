@@ -1713,7 +1713,7 @@ function _junausers_file_check_name_extension($name) {
   $name = _junausers_file_check_name(implode('.', $name));
   global $user;
   $uid = $user->uid;
-  $name = $uid . $name . date('Y-m-d-H-i-s');
+  $name = md5($uid . $name . REQUEST_TIME);
 
   //echo $extension;exit;
   // Munge the non-whitelisted secondary file extensions.
@@ -1754,6 +1754,9 @@ function _junausers_upload_file() {
   $imagedata = file_get_contents($_FILES['cert']["tmp_name"]);
   $maxsize = 512 * 1024;
   $size = $_FILES['cert']['size'];
+  if($size == 0){
+    services_error(t('进制上传空文件'), 403);
+  }
   if ($size > $maxsize) {
     services_error(t('文件超过512K'), 403);
   }

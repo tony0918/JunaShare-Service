@@ -545,21 +545,36 @@ function coupon_swingshare_lottery($id) {
   $record->status = 1;
   drupal_write_record('user_wingshare_log', $record, 'id');
   $couponid = $query['couponid'];
-  $node = node_load($couponid);
-  $node->field_status['und'][0]['value'] = 3;
-  node_save($node);
-  $unprized = db_query('SELECT * FROM {user_wingshare_log} WHERE nid=:nid AND id!=:id', array(
-    ':nid' => $query['nid'],
-    ':id' => $id
-  ))->fetchAll();
-  foreach ($unprized as $k => $v) {
-    $n = node_load($v->couponid);
-    if ($n) {
-      $n->field_status['und'][0]['value'] = 1;
-      node_save($n);
-    }
+  $nodes = node_load($couponid);
+  $nodes->field_status['und'][0]['value'] = 3;
+  node_save($nodes);
+  if($count['total'] == ($num-1)){
+    $unprized = db_query('SELECT * FROM {user_wingshare_log} WHERE nid=:nid AND id!=:id', array(
+      ':nid' => $query['nid'],
+      ':id' => $id
+    ))->fetchAll();
+    foreach ($unprized as $k => $v) {
+      $n = node_load($v->couponid);
+      if ($n) {
+        $n->field_status['und'][0]['value'] = 1;
+        node_save($n);
+      }
 
+    }
   }
+
+  $order = new stdClass();
+  $order -> nid = $query['nid'];
+  $order -> product_type = 'swingshare';
+  $order -> created = REQUEST_TIME;
+  $order -> uid = $query['uid'];
+  $order -> amount = 1;
+  $order -> price = $node -> field_price['und'][0]['value'];
+  $order -> total_price = $node -> field_price['und'][0]['value'];
+  $order -> sorderid = date('YmdHis').mt_rand(10000,99999999);
+  $order -> status = 2;
+  drupal_write_record('product_order',$order);
+
   $rec = new stdClass();
   $rec->couponid = $couponid;
   $rec->nid = $query['nid'];
@@ -567,6 +582,7 @@ function coupon_swingshare_lottery($id) {
   $rec->created = REQUEST_TIME;
   $rec->uid = $query['uid'];
   $rec->type = "摇享";
+  $rec -> sorderid = $order -> sorderid;
   drupal_write_record('coupon_usage', $rec);
   return '设置中奖成功';
 }
