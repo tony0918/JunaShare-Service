@@ -1755,10 +1755,10 @@ function _junausers_upload_file() {
   $maxsize = 512 * 1024;
   $size = $_FILES['cert']['size'];
   if($size == 0){
-    services_error(t('进制上传空文件'), 403);
+    return services_error(t('禁止上传空文件'), 403);
   }
   if ($size > $maxsize) {
-    services_error(t('文件超过512K'), 403);
+    return services_error(t('文件超过512K'), 403);
   }
   //public://ueditor/1/upload/image/20161107/1478526691331898.jpg
   //var_dump(file_unmanaged_save_data($imagedata, $scheme."://".$filename));
