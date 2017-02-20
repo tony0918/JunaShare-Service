@@ -1713,7 +1713,7 @@ function _junausers_file_check_name_extension($name) {
   $name = _junausers_file_check_name(implode('.', $name));
   global $user;
   $uid = $user->uid;
-  $name = md5($uid . $name . REQUEST_TIME);
+  $name = $uid.'-'.md5($uid . $name . REQUEST_TIME);
 
   //echo $extension;exit;
   // Munge the non-whitelisted secondary file extensions.
