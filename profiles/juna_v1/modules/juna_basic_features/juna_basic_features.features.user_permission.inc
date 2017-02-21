@@ -61,6 +61,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['access coupon creation form'] = array(
     'name' => 'access coupon creation form',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'coupon',
@@ -80,6 +81,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['access coupon portal'] = array(
     'name' => 'access coupon portal',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'coupon',
@@ -444,7 +446,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'create page content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -644,6 +645,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit any ad_banner content'] = array(
     'name' => 'edit any ad_banner content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -664,7 +666,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit any page content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -741,7 +742,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit own page content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );

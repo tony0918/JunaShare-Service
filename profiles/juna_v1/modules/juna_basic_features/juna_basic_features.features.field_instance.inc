@@ -383,7 +383,7 @@ function juna_basic_features_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => -4,
+      'weight' => 7,
     ),
   );
 
@@ -410,8 +410,8 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_addr',
-    'label' => '地址',
-    'required' => 1,
+    'label' => 'Address',
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -423,7 +423,65 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -1,
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-seller-field_company_logo'.
+  $field_instances['node-seller-field_company_logo'] = array(
+    'bundle' => 'seller',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_company_logo',
+    'label' => 'Company Logo',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => 'company_logo',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '300 KB',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'media',
+      'settings' => array(
+        'allowed_schemes' => array(
+          'public' => 'public',
+        ),
+        'allowed_types' => array(
+          'audio' => 0,
+          'default' => 0,
+          'image' => 'image',
+          'video' => 0,
+        ),
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'media_generic',
+      'weight' => 2,
     ),
   );
 
@@ -469,7 +527,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => -3,
+      'weight' => 3,
     ),
   );
 
@@ -478,7 +536,7 @@ function juna_basic_features_field_default_field_instances() {
     'bundle' => 'seller',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '商家介绍，为外网连接',
+    'description' => '商家介绍',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -496,7 +554,7 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_intro',
-    'label' => 'intro',
+    'label' => 'Introduce',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -509,7 +567,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -2,
+      'weight' => 1,
     ),
   );
 
@@ -549,7 +607,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 1,
+      'weight' => 6,
     ),
   );
 
@@ -589,7 +647,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 0,
+      'weight' => 5,
     ),
   );
 
@@ -1529,11 +1587,14 @@ function juna_basic_features_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Address');
   t('Banner Image');
   t('Body');
   t('Columns');
+  t('Company Logo');
   t('Info Item');
   t('Info Item Category');
+  t('Introduce');
   t('Parameter for Target');
   t('Product Brand');
   t('Product Brand Link');
@@ -1554,7 +1615,6 @@ function juna_basic_features_field_default_field_instances() {
   t('SKU Product Item');
   t('Target Type');
   t('favorite_num');
-  t('intro');
   t('lat');
   t('lnt');
   t('一条条罗列类型的信息或者规则页面的内容');
@@ -1567,8 +1627,7 @@ function juna_basic_features_field_default_field_instances() {
   t('产品详细界面中产品信息部分，一段html结构');
   t('商品在享什么列表页面中展示的图片');
   t('商品详细页面中的商品大图');
-  t('商家介绍，为外网连接');
-  t('地址');
+  t('商家介绍');
   t('收藏数量');
   t('改商品的总库存数');
   t('点击地图获取经纬度');
