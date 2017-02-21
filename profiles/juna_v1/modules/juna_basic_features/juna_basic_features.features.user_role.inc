@@ -13,7 +13,7 @@ function juna_basic_features_user_default_roles() {
   // Exported role: editor.
   $roles['editor'] = array(
     'name' => 'editor',
-    'weight' => 3,
+    'weight' => 2,
   );
 
   return $roles;

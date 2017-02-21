@@ -9,10 +9,8 @@ theme = junashare_v1
 
 ; Core
 dependencies[] = comment
-dependencies[] = translation
 dependencies[] = dblog
 dependencies[] = path
-dependencies[] = php
 dependencies[] = syslog
 
 ; Vendor

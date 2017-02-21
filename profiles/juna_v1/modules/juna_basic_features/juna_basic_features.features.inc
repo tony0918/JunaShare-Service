@@ -60,9 +60,9 @@ function juna_basic_features_node_info() {
       'help' => '',
     ),
     'seller' => array(
-      'name' => t('seller'),
+      'name' => t('Seller'),
       'base' => 'node_content',
-      'description' => t('商家'),
+      'description' => t('商家实体'),
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

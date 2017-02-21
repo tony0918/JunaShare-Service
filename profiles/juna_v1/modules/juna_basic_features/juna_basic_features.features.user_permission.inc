@@ -10,6 +10,15 @@
 function juna_basic_features_user_default_permissions() {
   $permissions = array();
 
+  // Exported permission: 'access administration pages'.
+  $permissions['access administration pages'] = array(
+    'name' => 'access administration pages',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
+  );
+
   // Exported permission: 'access comments'.
   $permissions['access comments'] = array(
     'name' => 'access comments',
@@ -85,6 +94,24 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'dashboard',
   );
 
+  // Exported permission: 'access site in maintenance mode'.
+  $permissions['access site in maintenance mode'] = array(
+    'name' => 'access site in maintenance mode',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
+  );
+
+  // Exported permission: 'access site reports'.
+  $permissions['access site reports'] = array(
+    'name' => 'access site reports',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
+  );
+
   // Exported permission: 'access toolbar'.
   $permissions['access toolbar'] = array(
     'name' => 'access toolbar',
@@ -103,6 +130,15 @@ function juna_basic_features_user_default_permissions() {
       'editor' => 'editor',
     ),
     'module' => 'user',
+  );
+
+  // Exported permission: 'administer actions'.
+  $permissions['administer actions'] = array(
+    'name' => 'administer actions',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
   );
 
   // Exported permission: 'administer blocks'.
@@ -195,6 +231,15 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'menu',
   );
 
+  // Exported permission: 'administer modules'.
+  $permissions['administer modules'] = array(
+    'name' => 'administer modules',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
+  );
+
   // Exported permission: 'administer nodes'.
   $permissions['administer nodes'] = array(
     'name' => 'administer nodes',
@@ -231,6 +276,33 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'shortcut',
   );
 
+  // Exported permission: 'administer site configuration'.
+  $permissions['administer site configuration'] = array(
+    'name' => 'administer site configuration',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
+  );
+
+  // Exported permission: 'administer software updates'.
+  $permissions['administer software updates'] = array(
+    'name' => 'administer software updates',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
+  );
+
+  // Exported permission: 'administer taxonomy'.
+  $permissions['administer taxonomy'] = array(
+    'name' => 'administer taxonomy',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'taxonomy',
+  );
+
   // Exported permission: 'administer theme assignments'.
   $permissions['administer theme assignments'] = array(
     'name' => 'administer theme assignments',
@@ -247,6 +319,15 @@ function juna_basic_features_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'themekey',
+  );
+
+  // Exported permission: 'administer themes'.
+  $permissions['administer themes'] = array(
+    'name' => 'administer themes',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
   );
 
   // Exported permission: 'administer url aliases'.
@@ -303,6 +384,15 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'themekey_ui',
   );
 
+  // Exported permission: 'block IP addresses'.
+  $permissions['block IP addresses'] = array(
+    'name' => 'block IP addresses',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'system',
+  );
+
   // Exported permission: 'bypass node access'.
   $permissions['bypass node access'] = array(
     'name' => 'bypass node access',
@@ -334,6 +424,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['create ad_banner content'] = array(
     'name' => 'create ad_banner content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -342,7 +433,9 @@ function juna_basic_features_user_default_permissions() {
   // Exported permission: 'create info_page content'.
   $permissions['create info_page content'] = array(
     'name' => 'create info_page content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
@@ -359,7 +452,9 @@ function juna_basic_features_user_default_permissions() {
   // Exported permission: 'create seller content'.
   $permissions['create seller content'] = array(
     'name' => 'create seller content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
@@ -367,6 +462,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['create sku_product content'] = array(
     'name' => 'create sku_product content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -385,6 +481,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['create yaoxiang_product content'] = array(
     'name' => 'create yaoxiang_product content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -402,14 +499,18 @@ function juna_basic_features_user_default_permissions() {
   // Exported permission: 'delete any ad_banner content'.
   $permissions['delete any ad_banner content'] = array(
     'name' => 'delete any ad_banner content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete any info_page content'.
   $permissions['delete any info_page content'] = array(
     'name' => 'delete any info_page content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
@@ -425,35 +526,45 @@ function juna_basic_features_user_default_permissions() {
   // Exported permission: 'delete any seller content'.
   $permissions['delete any seller content'] = array(
     'name' => 'delete any seller content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete any sku_product content'.
   $permissions['delete any sku_product content'] = array(
     'name' => 'delete any sku_product content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete any yaoxiang_product content'.
   $permissions['delete any yaoxiang_product content'] = array(
     'name' => 'delete any yaoxiang_product content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete own ad_banner content'.
   $permissions['delete own ad_banner content'] = array(
     'name' => 'delete own ad_banner content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete own info_page content'.
   $permissions['delete own info_page content'] = array(
     'name' => 'delete own info_page content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
@@ -469,21 +580,27 @@ function juna_basic_features_user_default_permissions() {
   // Exported permission: 'delete own seller content'.
   $permissions['delete own seller content'] = array(
     'name' => 'delete own seller content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete own sku_product content'.
   $permissions['delete own sku_product content'] = array(
     'name' => 'delete own sku_product content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
   // Exported permission: 'delete own yaoxiang_product content'.
   $permissions['delete own yaoxiang_product content'] = array(
     'name' => 'delete own yaoxiang_product content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
@@ -505,6 +622,24 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'delete terms in columns'.
+  $permissions['delete terms in columns'] = array(
+    'name' => 'delete terms in columns',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'taxonomy',
+  );
+
+  // Exported permission: 'delete terms in info_category'.
+  $permissions['delete terms in info_category'] = array(
+    'name' => 'delete terms in info_category',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'taxonomy',
+  );
+
   // Exported permission: 'edit any ad_banner content'.
   $permissions['edit any ad_banner content'] = array(
     'name' => 'edit any ad_banner content',
@@ -518,6 +653,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit any info_page content'] = array(
     'name' => 'edit any info_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -536,7 +672,9 @@ function juna_basic_features_user_default_permissions() {
   // Exported permission: 'edit any seller content'.
   $permissions['edit any seller content'] = array(
     'name' => 'edit any seller content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
@@ -544,6 +682,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit any sku_product content'] = array(
     'name' => 'edit any sku_product content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -553,6 +692,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit any yaoxiang_product content'] = array(
     'name' => 'edit any yaoxiang_product content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -571,6 +711,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit own ad_banner content'] = array(
     'name' => 'edit own ad_banner content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -589,6 +730,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit own info_page content'] = array(
     'name' => 'edit own info_page content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -607,7 +749,9 @@ function juna_basic_features_user_default_permissions() {
   // Exported permission: 'edit own seller content'.
   $permissions['edit own seller content'] = array(
     'name' => 'edit own seller content',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'node',
   );
 
@@ -615,6 +759,7 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit own sku_product content'] = array(
     'name' => 'edit own sku_product content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
@@ -624,9 +769,28 @@ function juna_basic_features_user_default_permissions() {
   $permissions['edit own yaoxiang_product content'] = array(
     'name' => 'edit own yaoxiang_product content',
     'roles' => array(
+      'administrator' => 'administrator',
       'editor' => 'editor',
     ),
     'module' => 'node',
+  );
+
+  // Exported permission: 'edit terms in columns'.
+  $permissions['edit terms in columns'] = array(
+    'name' => 'edit terms in columns',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'taxonomy',
+  );
+
+  // Exported permission: 'edit terms in info_category'.
+  $permissions['edit terms in info_category'] = array(
+    'name' => 'edit terms in info_category',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'taxonomy',
   );
 
   // Exported permission: 'generate features'.
@@ -747,6 +911,15 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'shortcut',
   );
 
+  // Exported permission: 'translate content'.
+  $permissions['translate content'] = array(
+    'name' => 'translate content',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'translation',
+  );
+
   // Exported permission: 'translate interface'.
   $permissions['translate interface'] = array(
     'name' => 'translate interface',
@@ -754,6 +927,15 @@ function juna_basic_features_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'locale',
+  );
+
+  // Exported permission: 'use PHP for settings'.
+  $permissions['use PHP for settings'] = array(
+    'name' => 'use PHP for settings',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'php',
   );
 
   // Exported permission: 'use ctools import'.
