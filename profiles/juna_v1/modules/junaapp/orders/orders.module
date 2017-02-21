@@ -1658,14 +1658,14 @@ function orders_form_alter(&$form, &$form_state, $form_id) {
      placeSearch.search(e.poi.name);  //关键字查询查询
  }
 </script>*/
-    $form['contact_information'] = array(
-
-      '#markup' => '',
-      '#prefix' => '<div id="maps" style="height:500px;">',
-      '#suffix' => '</div>',
-      '#weight' => 10
-
-    );
+//    $form['contact_information'] = array(
+//
+//      '#markup' => '',
+//      '#prefix' => '<div id="maps" style="height:500px;">',
+//      '#suffix' => '</div>',
+//      '#weight' => 10
+//
+//    );
     /*
     <script>
         var marker, map = new AMap.Map("container", {
@@ -1719,32 +1719,32 @@ function orders_form_alter(&$form, &$form_state, $form_id) {
         }
     </script>
     05ffecae96c4cc9b02d31186fe67d5e0*/
-    drupal_add_js('http://webapi.amap.com/maps?v=1.3&key=73d66e3914afe6e65a55602ae48c9b65&plugin=AMap.Autocomplete,AMap.PlaceSearch', array(
-      'type' => 'external',
-      'scope' => 'footer'
-    ));
-    drupal_add_js('http://cache.amap.com/lbs/static/addToolbar.js', array('type' => 'external', 'scope' => 'footer'));
-    if (!empty($form_state['node']->nid)) {
-      drupal_add_js('var mark,map = new AMap.Map("maps", {resizeEnable: true,center: [' . $form_state['node']->field_lnt['und'][0]['value'] . ', ' . $form_state['node']->field_lat['und'][0]['value'] . '],zoom:13});', array(
-        'type' => 'inline',
-        'scope' => 'footer'
-      ));
-      drupal_add_js('new AMap.Marker({map: map,position: [' . $form_state['node']->field_lnt['und'][0]['value'] . ', ' . $form_state['node']->field_lat['und'][0]['value'] . '],icon: new AMap.Icon({size: new AMap.Size(40, 50), image: "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png",imageOffset: new AMap.Pixel(0, -60)})});', array(
-        'type' => 'inline',
-        'scope' => 'footer'
-      ));
-    }
-    else {
-      drupal_add_js('var map = new AMap.Map("maps", {resizeEnable: true,zoom:9,center: [121.29, 31.14],});', array(
-        'type' => 'inline',
-        'scope' => 'footer'
-      ));
-    }
-
-    drupal_add_js(' var clickEventListener = map.on("click", function(e) {document.getElementById("edit-field-lnt-und-0-value").value = e.lnglat.getLng(); document.getElementById("edit-field-lat-und-0-value").value=e.lnglat.getLat()});var auto = new AMap.Autocomplete({input: "edit-field-addr-und-0-value"});AMap.event.addListener(auto, "select", select);function select(e) {if (e.poi && e.poi.location) {map.setZoom(15);map.setCenter(e.poi.location);}}', array(
-      'type' => 'inline',
-      'scope' => 'footer'
-    ));
+//    drupal_add_js('http://webapi.amap.com/maps?v=1.3&key=73d66e3914afe6e65a55602ae48c9b65&plugin=AMap.Autocomplete,AMap.PlaceSearch', array(
+//      'type' => 'external',
+//      'scope' => 'footer'
+//    ));
+//    drupal_add_js('http://cache.amap.com/lbs/static/addToolbar.js', array('type' => 'external', 'scope' => 'footer'));
+//    if (!empty($form_state['node']->nid)) {
+//      drupal_add_js('var mark,map = new AMap.Map("maps", {resizeEnable: true,center: [' . $form_state['node']->field_lnt['und'][0]['value'] . ', ' . $form_state['node']->field_lat['und'][0]['value'] . '],zoom:13});', array(
+//        'type' => 'inline',
+//        'scope' => 'footer'
+//      ));
+//      drupal_add_js('new AMap.Marker({map: map,position: [' . $form_state['node']->field_lnt['und'][0]['value'] . ', ' . $form_state['node']->field_lat['und'][0]['value'] . '],icon: new AMap.Icon({size: new AMap.Size(40, 50), image: "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png",imageOffset: new AMap.Pixel(0, -60)})});', array(
+//        'type' => 'inline',
+//        'scope' => 'footer'
+//      ));
+//    }
+//    else {
+//      drupal_add_js('var map = new AMap.Map("maps", {resizeEnable: true,zoom:9,center: [121.29, 31.14],});', array(
+//        'type' => 'inline',
+//        'scope' => 'footer'
+//      ));
+//    }
+//
+//    drupal_add_js(' var clickEventListener = map.on("click", function(e) {document.getElementById("edit-field-lnt-und-0-value").value = e.lnglat.getLng(); document.getElementById("edit-field-lat-und-0-value").value=e.lnglat.getLat()});var auto = new AMap.Autocomplete({input: "edit-field-addr-und-0-value"});AMap.event.addListener(auto, "select", select);function select(e) {if (e.poi && e.poi.location) {map.setZoom(15);map.setCenter(e.poi.location);}}', array(
+//      'type' => 'inline',
+//      'scope' => 'footer'
+//    ));
 
   }
 }
