@@ -13,6 +13,13 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'admin_theme';
+  $strongarm->value = 'seven';
+  $export['admin_theme'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'comment_ad_banner';
   $strongarm->value = '1';
   $export['comment_ad_banner'] = $strongarm;
@@ -30,6 +37,13 @@ function juna_basic_features_strongarm() {
   $strongarm->name = 'comment_anonymous_info_page';
   $strongarm->value = 0;
   $export['comment_anonymous_info_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_anonymous_seller';
+  $strongarm->value = 0;
+  $export['comment_anonymous_seller'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -62,6 +76,13 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_mode_seller';
+  $strongarm->value = 0;
+  $export['comment_default_mode_seller'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'comment_default_mode_sku_product';
   $strongarm->value = 1;
   $export['comment_default_mode_sku_product'] = $strongarm;
@@ -90,6 +111,13 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_per_page_seller';
+  $strongarm->value = '50';
+  $export['comment_default_per_page_seller'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'comment_default_per_page_sku_product';
   $strongarm->value = '50';
   $export['comment_default_per_page_sku_product'] = $strongarm;
@@ -114,6 +142,13 @@ function juna_basic_features_strongarm() {
   $strongarm->name = 'comment_form_location_info_page';
   $strongarm->value = 1;
   $export['comment_form_location_info_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_form_location_seller';
+  $strongarm->value = 0;
+  $export['comment_form_location_seller'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -153,6 +188,13 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_seller';
+  $strongarm->value = '0';
+  $export['comment_preview_seller'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'comment_preview_sku_product';
   $strongarm->value = '1';
   $export['comment_preview_sku_product'] = $strongarm;
@@ -163,6 +205,13 @@ function juna_basic_features_strongarm() {
   $strongarm->name = 'comment_preview_yaoxiang_product';
   $strongarm->value = '0';
   $export['comment_preview_yaoxiang_product'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_seller';
+  $strongarm->value = '1';
+  $export['comment_seller'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -184,6 +233,13 @@ function juna_basic_features_strongarm() {
   $strongarm->name = 'comment_subject_field_info_page';
   $strongarm->value = 1;
   $export['comment_subject_field_info_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_subject_field_seller';
+  $strongarm->value = 0;
+  $export['comment_subject_field_seller'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -243,6 +299,23 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'field_bundle_settings_node__seller';
+  $strongarm->value = array(
+    'view_modes' => array(),
+    'extra_fields' => array(
+      'form' => array(
+        'title' => array(
+          'weight' => '-5',
+        ),
+      ),
+      'display' => array(),
+    ),
+  );
+  $export['field_bundle_settings_node__seller'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__sku_product';
   $strongarm->value = array(
     'view_modes' => array(),
@@ -293,6 +366,13 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'language_content_type_seller';
+  $strongarm->value = '0';
+  $export['language_content_type_seller'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'menu_options_ad_banner';
   $strongarm->value = array();
   $export['menu_options_ad_banner'] = $strongarm;
@@ -303,6 +383,15 @@ function juna_basic_features_strongarm() {
   $strongarm->name = 'menu_options_info_page';
   $strongarm->value = array();
   $export['menu_options_info_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'menu_options_seller';
+  $strongarm->value = array(
+    0 => 'main-menu',
+  );
+  $export['menu_options_seller'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -331,6 +420,13 @@ function juna_basic_features_strongarm() {
   $strongarm->name = 'menu_parent_info_page';
   $strongarm->value = 'main-menu:0';
   $export['menu_parent_info_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'menu_parent_seller';
+  $strongarm->value = 'main-menu:0';
+  $export['menu_parent_seller'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -367,6 +463,16 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'node_options_seller';
+  $strongarm->value = array(
+    0 => 'status',
+    1 => 'promote',
+  );
+  $export['node_options_seller'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'node_options_sku_product';
   $strongarm->value = array(
     0 => 'status',
@@ -399,6 +505,13 @@ function juna_basic_features_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'node_preview_seller';
+  $strongarm->value = '1';
+  $export['node_preview_seller'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'node_preview_sku_product';
   $strongarm->value = '0';
   $export['node_preview_sku_product'] = $strongarm;
@@ -423,6 +536,13 @@ function juna_basic_features_strongarm() {
   $strongarm->name = 'node_submitted_info_page';
   $strongarm->value = 0;
   $export['node_submitted_info_page'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'node_submitted_seller';
+  $strongarm->value = 1;
+  $export['node_submitted_seller'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

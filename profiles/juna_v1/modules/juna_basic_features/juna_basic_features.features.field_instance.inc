@@ -343,6 +343,256 @@ function juna_basic_features_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-seller-body'.
+  $field_instances['node-seller-body'] = array(
+    'bundle' => 'seller',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(
+          'trim_length' => 600,
+        ),
+        'type' => 'text_summary_or_trimmed',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'body',
+    'label' => 'Body',
+    'required' => FALSE,
+    'settings' => array(
+      'display_summary' => TRUE,
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => -4,
+    ),
+  );
+
+  // Exported field_instance: 'node-seller-field_addr'.
+  $field_instances['node-seller-field_addr'] = array(
+    'bundle' => 'seller',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_addr',
+    'label' => '地址',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => -1,
+    ),
+  );
+
+  // Exported field_instance: 'node-seller-field_favorite_num'.
+  $field_instances['node-seller-field_favorite_num'] = array(
+    'bundle' => 'seller',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '收藏数量',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_favorite_num',
+    'label' => 'favorite_num',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => 0,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => -3,
+    ),
+  );
+
+  // Exported field_instance: 'node-seller-field_intro'.
+  $field_instances['node-seller-field_intro'] = array(
+    'bundle' => 'seller',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '商家介绍，为外网连接',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_intro',
+    'label' => 'intro',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => -2,
+    ),
+  );
+
+  // Exported field_instance: 'node-seller-field_lat'.
+  $field_instances['node-seller-field_lat'] = array(
+    'bundle' => 'seller',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '点击地图获取经纬度',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_lat',
+    'label' => 'lat',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'node-seller-field_lnt'.
+  $field_instances['node-seller-field_lnt'] = array(
+    'bundle' => 'seller',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '点击地图获取经纬度',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_lnt',
+    'label' => 'lnt',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 0,
+    ),
+  );
+
   // Exported field_instance: 'node-sku_product-body'.
   $field_instances['node-sku_product-body'] = array(
     'bundle' => 'sku_product',
@@ -1303,6 +1553,10 @@ function juna_basic_features_field_default_field_instances() {
   t('Product Yaoxiang Price');
   t('SKU Product Item');
   t('Target Type');
+  t('favorite_num');
+  t('intro');
+  t('lat');
+  t('lnt');
   t('一条条罗列类型的信息或者规则页面的内容');
   t('产品在壹购列表上展示的图片');
   t('产品在我的盒子里的展示图');
@@ -1313,7 +1567,11 @@ function juna_basic_features_field_default_field_instances() {
   t('产品详细界面中产品信息部分，一段html结构');
   t('商品在享什么列表页面中展示的图片');
   t('商品详细页面中的商品大图');
+  t('商家介绍，为外网连接');
+  t('地址');
+  t('收藏数量');
   t('改商品的总库存数');
+  t('点击地图获取经纬度');
   t('该产品的摇享显示价格');
   t('该商品的上架生效日期');
 

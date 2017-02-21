@@ -59,6 +59,14 @@ function juna_basic_features_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
+    'seller' => array(
+      'name' => t('seller'),
+      'base' => 'node_content',
+      'description' => t('商家'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
     'sku_product' => array(
       'name' => t('SKU Product'),
       'base' => 'node_content',
