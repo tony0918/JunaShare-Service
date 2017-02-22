@@ -1,0 +1,28 @@
+name = Juna V1
+description = Juna V1 profile
+core = 7.x
+theme = junashare_v1
+
+; -----------------------------------------------------------------------------
+;                                  Modules
+; -----------------------------------------------------------------------------
+
+; Core
+dependencies[] = comment
+dependencies[] = dblog
+dependencies[] = path
+dependencies[] = syslog
+
+; Vendor
+dependencies[] = entitycache
+dependencies[] = field_ui
+dependencies[] = jquery_update
+dependencies[] = rest_server
+dependencies[] = themekey_ui
+dependencies[] = module_filter
+
+; Custom
+dependencies[] = juna_coupon_feature
+dependencies[] = junashare_service
+dependencies[] = orders
+dependencies[] = users
