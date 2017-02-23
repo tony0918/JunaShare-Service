@@ -6,23 +6,29 @@ HOST: http://api.junashare.com/
 
 # Data Structures
 
+## Link (object)
++ url (string): `http://www.tmall.com` - 链接的URL
++ title (string): `tmall` - 用户显示连接的文字，在商家展示的部分作为图标区分标识符
+
+## Image (object)
++ fid: 1 - 图片文件id
++ self: `http://drupal7.local/sites/default/files/banner_image/pic2-003%403x.jpg` - 图片的URL
++ filemime: `image/jpeg` - 图片类型
++ filesize: 55573 - 图片大小
++ width: 750 - 图片宽度
++ height: 690 - 图片高度
++ styles (object) - 其他大小的图片，例如hdpi和hhdpi
+
 ## Banner (object)
 + type (enum[string]) - Banner所属的类型
-    
+
     + `0` - 表示普通图片Banner，只需要展示
     + `1` - 表示白领商品Banner，点击后进入白领商品
     + `2` - 表示壹购商品Banner，点击后进入壹购商品
     + `3` - 表示URL Banner，点击后展示URL内容
-        
+
 + parameter (string) - 当type为1或者2时，该值为商品id，当type为3时是URL地址，其他为null
-+ images (object)
-    + fid: 1 - 图片文件id
-    + self: `http://drupal7.local/sites/default/files/banner_image/pic2-003%403x.jpg` - 图片的URL
-    + filemime: `image/jpeg` - 图片类型
-    + filesize: 55573 - 图片大小
-    + width: 750 - 图片宽度
-    + height: 690 - 图片高度
-    + styles (object) - 其他大小的图片，例如hdpi和hhdpi
++ images (Image)
 
 ## Column (object)
 + id (string) - id
@@ -32,6 +38,34 @@ HOST: http://api.junashare.com/
 ## InfoCategory (Column)
 + label (string) - 信息或者规则页面所属的分类
 
+## Seller (object)
++ introduce (string) - 商家的介绍
++ logo (Image) - 商家的logo
+
+## SkuProduct (object)
++ display_name (string): `拓普克林 轻柔丝滑洗发水 60ml` - 显示的名字
++ market_price (string): 10 - 商品市场价格
++ short_desc (string): null - 商品简短描述（已弃用）
++ detail_desc (string) - 商品的详细描述
++ main_kv (array[Image]) - 商品详细界面大KV
++ image_for_share_list (Image) - 商品在享什么列表上展示的图片
++ image_on_item_in_box (Image) - 商品在被收录到盒子中展示的图片
++ image_on_coupon (Image) - 商品在白领券上展示的图片
++ image_on_order (Image) - 商品在订单上展示的图片
++ image_for_yigou_list (Image) - 商品在壹购列表上展示的图片
++ brand_links (array[Link]) - 商品商家的外链
+
+## YigouProduct (object)
++ nid (string): `9` - 商品id
++ price (string): `7.9` - 商品壹购价格
++ stock (string): `100` - 商品总库存
++ remaining (string): `30` - 商品剩余数量
++ num_in_box (string): `10` - 商品被收纳入盒子的数量
++ sku_product (SkuProduct) - 壹购商品对应的SKU商品，包含必要的素材
++ provider (Seller) - 供应商信息
++ time_remaining (string): `24861` - 距离下一场壹购开始还剩余的秒数，不与产品相关，每个商品中的字段都相同。（后期会向上提取一层，减少重复数据）
+
+
 # Group Banner
 
 ## Banner List [/api/v1.0/banner{?fields,filter}]
@@ -39,9 +73,9 @@ HOST: http://api.junashare.com/
 ### Retrieve All Banners [GET]
 + Parameters
     + fields (enum[string]) - 接口可以获取到的所有的字段都能单独获取，
-    
+
         例如：fields=type,parameter,images.self
-    
+
         + Members
             + `type`
             + `parameter`
@@ -49,14 +83,14 @@ HOST: http://api.junashare.com/
             + `...`
 
     + filter (enum[string]) - 接口可以通过字段来筛选数据，
-    
+
         例如：filter[column]=1 则表示获取所有column=1的数据。
         column的可选值是：_1_ 表示享什么板块，_2_ 表示壹购板块
-        
+
         + Members
             + `column`
             + `...`
-        
+
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[Banner])
@@ -70,21 +104,21 @@ HOST: http://api.junashare.com/
 ### Retrieve All Info Pages [GET]
 + Parameters
     + fields (enum[string]): `items` - 接口可以获取到的所有的字段都能单独获取，
-    
+
         例如：fields=items
-    
+
         + Members
             + `items`
 
     + filter (enum[string]) - 接口可以通过字段来筛选数据，
-    
+
         例如：filter[category.label]=认证须知 则表示获取所有category.label为认证须知的数据。
         category.label的可选值是：
-        
+
         + Members
             + `认证须知`
             + `为何需要认证`
-        
+
 + Response 200 (application/json)
     + Attributes (object)
         + items (array[string])
@@ -95,3 +129,22 @@ HOST: http://api.junashare.com/
         + count: 1 - 数据库中对象的总个数
         + category (InfoCategory)
             + label: `认证须知`
+
+# Group Product
+
+## Yigou Product List [/api/v1.0/yigou/{id}]
+
+### Retrieve Yigou Product List [GET]
++ Parameters
+    + id (required, string): `9` - 商品id，不传递id，获取整个列表
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array[YigouProduct])
+
+
+
+
+
+
+

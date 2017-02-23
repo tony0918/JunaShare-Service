@@ -35,26 +35,56 @@ class SkuProduct__1_0 extends ResourceNode {
     $public_fields = parent::publicFields();
     $utility = JunashareServiceUtilities::getInstance();
 
-    $public_fields['sku'] = array('property' => 'field_product_sku');
-    $public_fields['displayName'] = array('property' => 'field_product_display_name');
-    $public_fields['marketPrice'] = array('property' => 'field_product_display_name');
-    $public_fields['shortDesc'] = array('property' => 'field_product_short_description');
-    $public_fields['detailDesc'] = array(
+    $public_fields['display_name'] = array('property' => 'field_product_display_name');
+    $public_fields['market_price'] = array('property' => 'field_product_price');
+    $public_fields['short_desc'] = array('property' => 'field_product_short_description');
+    $public_fields['detail_desc'] = array(
       'property' => 'field_product_description',
       'sub_property' => 'value'
     );
-    $public_fields['mainKv'] = array(
+    $public_fields['main_kv'] = array(
       'property' => 'field_product_main_kv',
       'process_callbacks' => array(
         array($utility, 'imageProcess')
       )
     );
-    $public_fields['imageForXiangshenme'] = array(
+    $public_fields['image_for_share_list'] = array(
       'property' => 'field_product_share_list_image',
       'process_callbacks' => array(
         array($utility, 'imageProcess')
       )
     );
+    $public_fields['image_on_item_in_box'] = array(
+      'property' => 'field_product_image_in_box',
+      'process_callbacks' => array(
+        array($utility, 'imageProcess')
+      )
+    );
+    $public_fields['image_on_coupon'] = array(
+      'property' => 'field_product_image_on_coupon',
+      'process_callbacks' => array(
+        array($utility, 'imageProcess')
+      )
+    );
+    $public_fields['image_on_order'] = array(
+      'property' => 'field_product_image_on_order',
+      'process_callbacks' => array(
+        array($utility, 'imageProcess')
+      )
+    );
+    $public_fields['image_for_yigou_list'] = array(
+      'property' => 'field_product_image_on_order',
+      'process_callbacks' => array(
+        array($utility, 'imageProcess')
+      )
+    );
+    $public_fields['brand_links'] = array(
+      'property' => 'field_product_brand_link',
+    );
+
+    // Clean up some fields.
+    unset($public_fields['label'], $public_fields['self']);
+    $public_fields['id']['methods'] = array();
 
     return $public_fields;
   }

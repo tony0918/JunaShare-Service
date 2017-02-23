@@ -844,6 +844,61 @@ function juna_basic_features_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-product-field_product_valid_period'.
+  $field_instances['node-product-field_product_valid_period'] = array(
+    'bundle' => 'product',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+        ),
+        'type' => 'date_default',
+        'weight' => 16,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_product_valid_period',
+    'label' => 'Product Valid Period',
+    'required' => 1,
+    'settings' => array(
+      'default_value' => 'now',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'increment' => 15,
+        'input_format' => 'm/d/Y - H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'no_fieldset' => 0,
+        'text_parts' => array(),
+        'year_range' => '-3:+3',
+      ),
+      'type' => 'date_popup',
+      'weight' => 18,
+    ),
+  );
+
   // Exported field_instance: 'node-product-field_reference_link'.
   $field_instances['node-product-field_reference_link'] = array(
     'bundle' => 'product',
@@ -952,7 +1007,7 @@ function juna_basic_features_field_default_field_instances() {
     'bundle' => 'product',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '剩余数量',
+    'description' => '商品剩余数量',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -975,7 +1030,7 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_remain_num',
-    'label' => '一购商品剩余数量',
+    'label' => 'Remaining Number',
     'required' => 1,
     'settings' => array(
       'max' => '',
@@ -2978,6 +3033,7 @@ function juna_basic_features_field_default_field_instances() {
   t('Reference Link');
   t('Related Provider');
   t('Related SKU Product');
+  t('Remaining Number');
   t('SKU Product Item');
   t('Target Type');
   t('favorite_num');
@@ -2986,7 +3042,6 @@ function juna_basic_features_field_default_field_instances() {
   t('一条条罗列类型的信息或者规则页面的内容');
   t('一购商品价格');
   t('一购商品列表使用图片');
-  t('一购商品剩余数量');
   t('一购商品加入盒子数量');
   t('一购商品图片');
   t('一购商品市场价');
@@ -3020,6 +3075,7 @@ function juna_basic_features_field_default_field_instances() {
   t('享什么商品限时销售结束时间');
   t('剩余数量');
   t('加入盒子数量');
+  t('商品剩余数量');
   t('商品在享什么列表页面中展示的图片');
   t('商品库存');
   t('商品详细页面中的商品大图');
