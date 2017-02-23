@@ -1,472 +1,472 @@
 <?php
 function product_services_resources() {
-	return array(
-		'banner' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('易购广告列表'),
-					'callback' => 'product_banner',
-					'access arguments' => array('access content'),
-						'args' => array(
-						array(
-							'name' => 'btype',
-							'optional' => TRUE,
-							'source' => array('param' => 'btype'),
-							'description' => t('banner类型'),
-							'type' => 'int',
-						),
+  return array(
+    'banner' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('易购广告列表'),
+          'callback' => 'product_banner',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'btype',
+              'optional' => TRUE,
+              'source' => array('param' => 'btype'),
+              'description' => t('banner类型'),
+              'type' => 'int',
+            ),
 
-					),
-				),
-			)),
-			'prizelist' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('摇享中奖列表'),
-					'callback' => 'product_swingshare_prizelist',
-					'access arguments' => array('access content'),
-						'args' => array(
-						array(
-							'name' => 'pdate',
-							'optional' => TRUE,
-							'source' => array('param' => 'pdate'),
-							'description' => t('摇享期号'),
-							'type' => 'string',
-						),
+          ),
+        ),
+      )),
+    'prizelist' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('摇享中奖列表'),
+          'callback' => 'product_swingshare_prizelist',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'pdate',
+              'optional' => TRUE,
+              'source' => array('param' => 'pdate'),
+              'description' => t('摇享期号'),
+              'type' => 'string',
+            ),
 
-					),
-				),
-			)),
-		'order' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('我的订单'),
-					'callback' => 'product_orderlist',
-					'access arguments' => array('access content'),
-					'args' => array(
-						array(
-							'name' => 'page',
-							'optional' => TRUE,
-							'source' => array('param' => 'page'),
-							'description' => t('页码'),
-							'type' => 'int',
-						),
+          ),
+        ),
+      )),
+    'order' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('我的订单'),
+          'callback' => 'product_orderlist',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'page',
+              'optional' => TRUE,
+              'source' => array('param' => 'page'),
+              'description' => t('页码'),
+              'type' => 'int',
+            ),
 
-					),
-				),
-			)),
-		'boxlist' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('盒子列表'),
-					'callback' => 'product_boxlist',
-					'access arguments' => array('access content'),
+          ),
+        ),
+      )),
+    'boxlist' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('盒子列表'),
+          'callback' => 'product_boxlist',
+          'access arguments' => array('access content'),
 
-				),
-			)),
-		'swingsharedetail' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('摇享商品详情'),
-					'callback' => 'product_swingsahredetail',
-					'access arguments' => array('access content'),
+        ),
+      )),
+    'swingsharedetail' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('摇享商品详情'),
+          'callback' => 'product_swingsahredetail',
+          'access arguments' => array('access content'),
 
-				),
-			)),
-		'share_product' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('享什么商品'),
-					'callback' => 'product_share',
-					'access arguments' => array('access content'),
-					'args' => array(
-						array(
-							'name' => 'page',
-							'optional' => FALSE,
-							'source' => array('param' => 'page'),
-							'description' => t('页码'),
-							'type' => 'int',
-						),
-						array(
-							'name' => 'time',
-							'optional' => TRUE,
-							'source' => array('param' => 'time'),
-							'description' => t('时间'),
-							'type' => 'int',
-						),
+        ),
+      )),
+    'share_product' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('享什么商品'),
+          'callback' => 'product_share',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'page',
+              'optional' => FALSE,
+              'source' => array('param' => 'page'),
+              'description' => t('页码'),
+              'type' => 'int',
+            ),
+            array(
+              'name' => 'time',
+              'optional' => TRUE,
+              'source' => array('param' => 'time'),
+              'description' => t('时间'),
+              'type' => 'int',
+            ),
 
-					),
-				),
-			)),
-		'swingshare' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('摇享商品'),
-					'callback' => 'product_swingshare',
-					'access arguments' => array('access content'),
-				),
-			)),
-		'product' => array(
-			'operations' => array(
-				'index' => array(
-					'help' => t('一购商品'),
-					'callback' => 'product_list',
-					'access arguments' => array('access content'),
-					'args' => array(
-						array(
-							'name' => 'page',
-							'optional' => FALSE,
-							'source' => array('param' => 'page'),
-							'description' => t('页码'),
-							'type' => 'int',
-						),
+          ),
+        ),
+      )),
+    'swingshare' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('摇享商品'),
+          'callback' => 'product_swingshare',
+          'access arguments' => array('access content'),
+        ),
+      )),
+    'product' => array(
+      'operations' => array(
+        'index' => array(
+          'help' => t('一购商品'),
+          'callback' => 'product_list',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'page',
+              'optional' => FALSE,
+              'source' => array('param' => 'page'),
+              'description' => t('页码'),
+              'type' => 'int',
+            ),
 
 
-					),
-				),
-			),
+          ),
+        ),
+      ),
 
-			'relationships' => array(
-				'detail' => array(
-					'help' => t('商品详情'),
-					'callback' => 'product_detail',
-					'access arguments' => array('access content'),
-					'args' => array(
-						array(
-							'name' => 'nid',
-							'optional' => FALSE,
-							'source' => array('path' => 0),
-							'description' => t('商品id'),
-							'type' => 'int',
-						),
+      'relationships' => array(
+        'detail' => array(
+          'help' => t('商品详情'),
+          'callback' => 'product_detail',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('path' => 0),
+              'description' => t('商品id'),
+              'type' => 'int',
+            ),
 
-					),
-				),
+          ),
+        ),
 
-			),
-			'actions' => array(
-				'addtobox' => array(
-					'help' => t('加入盒子'),
-					'callback' => 'product_tobox',
-					'access arguments' => array('access content'),
-					'args' => array(
-						array(
-							'name' => 'nid',
-							'optional' => FALSE,
-							'source' => array('data' => 'nid'),
-							'description' => t('商品id'),
-							'type' => 'int',
-						),
+      ),
+      'actions' => array(
+        'addtobox' => array(
+          'help' => t('加入盒子'),
+          'callback' => 'product_tobox',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'description' => t('商品id'),
+              'type' => 'int',
+            ),
 
-					),
-				),
-				'buy' => array(
-					'help' => t('购买商品'),
-					'callback' => 'product_buy',
-					'access arguments' => array('access content'),
-					'args' => array(
-						array(
-							'name' => 'nid',
-							'optional' => FALSE,
-							'source' => array('data' => 'nid'),
-							'description' => t('商品id'),
-							'type' => 'int',
-						),
+          ),
+        ),
+        'buy' => array(
+          'help' => t('购买商品'),
+          'callback' => 'product_buy',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'description' => t('商品id'),
+              'type' => 'int',
+            ),
 
-					),
-				),
-				'removefrombox' => array(
-					'help' => t('移除盒子商品'),
-					'callback' => 'product_removefrombox',
-					'access arguments' => array('access content'),
-					'args' => array(
-						array(
-							'name' => 'nid',
-							'optional' => FALSE,
-							'source' => array('data' => 'nid'),
-							'description' => t('商品id'),
-							'type' => 'int',
-						),
+          ),
+        ),
+        'removefrombox' => array(
+          'help' => t('移除盒子商品'),
+          'callback' => 'product_removefrombox',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'description' => t('商品id'),
+              'type' => 'int',
+            ),
 
-					),
-				),
-				'swingshare' => array(
-					'help' => t('参与摇享'),
-					'callback' => 'product_swingshare_accept',
-					'access arguments' => array('access content'),
-				),
-			),
-		),
-	);
+          ),
+        ),
+        'swingshare' => array(
+          'help' => t('参与摇享'),
+          'callback' => 'product_swingshare_accept',
+          'access arguments' => array('access content'),
+        ),
+      ),
+    ),
+  );
 }
 
 function product_menu(){
-	$items = array();
-	$items['admin/applylist'] = array(
-		'title' => '申领列表',
-		'access arguments' => array('administer apply list'),
-		'type' => MENU_NORMAL_ITEM,
-		'page callback' => 'drupal_get_form',
-		'page arguments' => array('product_applylist'),
-	);
-	return $items;
+  $items = array();
+  $items['admin/applylist'] = array(
+    'title' => '申领列表',
+    'access arguments' => array('administer apply list'),
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('product_applylist'),
+  );
+  return $items;
 }
 /**
-*摇享中奖列表
-*/
+ *摇享中奖列表
+ */
 function product_swingshare_prizelist($date){
-	$starts = microtime_float();
-	if(!isset($date)){
-		$hours = date('G');
-		if($hours <22){
-			$pdate = date('Y-n-j',strtotime('-1 day'));
-		}else{
-			$pdate = date('Y-n-j');
-		}
-	}else{
-		$pdate = $date;
-	}
-	$result = db_query('SELECT user.name mobile,fdfu.field_username_value username FROM {user_wingshare_log} uwl LEFT JOIN users user ON uwl.uid = user.uid LEFT JOIN field_data_field_username fdfu ON fdfu.entity_id = uwl.uid WHERE uwl.pdate=:pdate and uwl.status=:status',array(':pdate'=>$pdate,':status' => 1))->fetchAll();
-	$ends = microtime_float();
-	calcrequesttime($starts, $ends,$pdate."中奖列表");
-	return ['date' => $result];
+  $starts = microtime_float();
+  if(!isset($date)){
+    $hours = date('G');
+    if($hours <22){
+      $pdate = date('Y-n-j',strtotime('-1 day'));
+    }else{
+      $pdate = date('Y-n-j');
+    }
+  }else{
+    $pdate = $date;
+  }
+  $result = db_query('SELECT user.name mobile,fdfu.field_username_value username FROM {user_wingshare_log} uwl LEFT JOIN users user ON uwl.uid = user.uid LEFT JOIN field_data_field_username fdfu ON fdfu.entity_id = uwl.uid WHERE uwl.pdate=:pdate and uwl.status=:status',array(':pdate'=>$pdate,':status' => 1))->fetchAll();
+  $ends = microtime_float();
+  calcrequesttime($starts, $ends,$pdate."中奖列表");
+  return ['date' => $result];
 }
 /**
-*摇享商品
-*/
+ *摇享商品
+ */
 function product_swingshare(){
-	$hour = date('G');
-	if($hour<8){
-		return ['data' => [],'remaintime' =>0];
-	}
-	$starts = microtime_float();
-	$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node');
-	$query->propertyCondition('status', NODE_PUBLISHED);
-	$query->entityCondition('bundle', array('swingshare'));
-	$query -> fieldCondition('field_starttime','value',date('Y-m-d :i:s'),'<=');
-	$query -> fieldCondition('field_endtime','value',date('Y-m-d H:i:s'),'>=');
-	$nids = [];
-	$node = [];
-	$remaintime = 0;
-	$result = $query -> execute();
-	//echo date('Y-n-j');
-	//print_r($result);exit;
-	if(!empty($result['node'])){
-		$nids = array_keys($result['node']);
-		$node = node_load($nids[0]);
-	}
-	$nodeField = usedField()['node'];
-	foreach ($node as $kk => $vv) {
-		if (!in_array($kk, $nodeField)) {
-			unset($node->$kk);
-		}
-	}
-		if (!empty($node->field_image_for_list['und'])) {
-				foreach ($node->field_image_for_list['und'] as $kkk => $vvv) {
-					$uri = $vvv['uri'];
-					$derivative_uri = image_style_path('750_0', $uri);
+  $hour = date('G');
+  if($hour<8){
+    return ['data' => [],'remaintime' =>0];
+  }
+  $starts = microtime_float();
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node');
+  $query->propertyCondition('status', NODE_PUBLISHED);
+  $query->entityCondition('bundle', array('swingshare'));
+  $query -> fieldCondition('field_starttime','value',date('Y-m-d :i:s'),'<=');
+  $query -> fieldCondition('field_endtime','value',date('Y-m-d H:i:s'),'>=');
+  $nids = [];
+  $node = [];
+  $remaintime = 0;
+  $result = $query -> execute();
+  //echo date('Y-n-j');
+  //print_r($result);exit;
+  if(!empty($result['node'])){
+    $nids = array_keys($result['node']);
+    $node = node_load($nids[0]);
+  }
+  $nodeField = usedField()['node'];
+  foreach ($node as $kk => $vv) {
+    if (!in_array($kk, $nodeField)) {
+      unset($node->$kk);
+    }
+  }
+  if (!empty($node->field_image_for_list['und'])) {
+    foreach ($node->field_image_for_list['und'] as $kkk => $vvv) {
+      $uri = $vvv['uri'];
+      $derivative_uri = image_style_path('750_0', $uri);
 
-					$success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $uri, $derivative_uri);
+      $success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $uri, $derivative_uri);
 
-					$turi  = file_create_url($derivative_uri);
-					//echo $turi;
-					$node->field_image_for_list['und'][$kkk]['uri'] = $turi;
+      $turi  = file_create_url($derivative_uri);
+      //echo $turi;
+      $node->field_image_for_list['und'][$kkk]['uri'] = $turi;
 
-					//print_r($box[$k]);
-					/*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
-						//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						@file_get_contents(image_style_url('345_140', $vv['uri']));
-					} else {
+      //print_r($box[$k]);
+      /*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
+          //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+          @file_get_contents(image_style_url('345_140', $vv['uri']));
+      } else {
 
-					}
-					$boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
-				}
+      }
+      $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
+    }
 
-			}
-	if (!empty($node->field_pictures['und'])) {
-				foreach ($node->field_pictures['und'] as $kkk => $vvv) {
-					$uri = $vvv['uri'];
-					$derivative_uri = image_style_path('750_0', $uri);
+  }
+  if (!empty($node->field_pictures['und'])) {
+    foreach ($node->field_pictures['und'] as $kkk => $vvv) {
+      $uri = $vvv['uri'];
+      $derivative_uri = image_style_path('750_0', $uri);
 
-					$success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $uri, $derivative_uri);
+      $success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $uri, $derivative_uri);
 
-					$turi  = file_create_url($derivative_uri);
-					//echo $turi;
-					$node->field_pictures['und'][$kkk]['uri'] = $turi;
+      $turi  = file_create_url($derivative_uri);
+      //echo $turi;
+      $node->field_pictures['und'][$kkk]['uri'] = $turi;
 
 
-				}
+    }
 
-			}
-	$hour = date('G');
-	if($node){
-		$endtime = strtotime($node -> field_endtime['und'][0]['value']);
-	if($hour<22){
-		$remaintime = $endtime - REQUEST_TIME;
-	}else{
-		$remaintime = -1;
-	}
-	}
+  }
+  $hour = date('G');
+  if($node){
+    $endtime = strtotime($node -> field_endtime['und'][0]['value']);
+    if($hour<22){
+      $remaintime = $endtime - REQUEST_TIME;
+    }else{
+      $remaintime = -1;
+    }
+  }
 
-	$ends = microtime_float();
-	calcrequesttime($starts, $ends, "摇享商品");
-	return ['data' => $node,'remaintime' =>$remaintime];
+  $ends = microtime_float();
+  calcrequesttime($starts, $ends, "摇享商品");
+  return ['data' => $node,'remaintime' =>$remaintime];
 }
 
 /**
-*摇享商品详情
-*/
+ *摇享商品详情
+ */
 function product_swingsahredetail(){
-	$hour = date('G');
-	if($hour<8){
-		return ['data' => [],'remaintime' =>0];
-	}
-	global $user;
-	$starts = microtime_float();
-	$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node');
-	$query->propertyCondition('status', NODE_PUBLISHED);
-	$query->entityCondition('bundle', array('swingshare'));
-	$query -> fieldCondition('field_starttime','value',date('Y-m-d H:i:s'),'<=');
-	$query -> fieldCondition('field_endtime','value',date('Y-m-d H:i:s'),'>=');
-	$nids = [];
-	$node = [];
-	$result = $query -> execute();
-	//echo date('Y-n-j');
-	//print_r($result);exit;
-	if(!empty($result['node'])){
-		$nids = array_keys($result['node']);
-		$node = node_load($nids[0]);
-	}
-	$nodeField = usedField()['node'];
-	foreach ($node as $kk => $vv) {
-		if (!in_array($kk, $nodeField)) {
-			unset($node->$kk);
-		}
-		if (!empty($node->field_pictures['und'])) {
-				foreach ($node->field_pictures['und'] as $kk => $vv) {
-					$node->field_pictures['und'][$kk]['uri'] = file_create_url($vv['uri']);
-					//print_r($box[$k]);
-					/*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
-						//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						@file_get_contents(image_style_url('345_140', $vv['uri']));
-					} else {
+  $hour = date('G');
+  if($hour<8){
+    return ['data' => [],'remaintime' =>0];
+  }
+  global $user;
+  $starts = microtime_float();
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node');
+  $query->propertyCondition('status', NODE_PUBLISHED);
+  $query->entityCondition('bundle', array('swingshare'));
+  $query -> fieldCondition('field_starttime','value',date('Y-m-d H:i:s'),'<=');
+  $query -> fieldCondition('field_endtime','value',date('Y-m-d H:i:s'),'>=');
+  $nids = [];
+  $node = [];
+  $result = $query -> execute();
+  //echo date('Y-n-j');
+  //print_r($result);exit;
+  if(!empty($result['node'])){
+    $nids = array_keys($result['node']);
+    $node = node_load($nids[0]);
+  }
+  $nodeField = usedField()['node'];
+  foreach ($node as $kk => $vv) {
+    if (!in_array($kk, $nodeField)) {
+      unset($node->$kk);
+    }
+    if (!empty($node->field_pictures['und'])) {
+      foreach ($node->field_pictures['und'] as $kk => $vv) {
+        $node->field_pictures['und'][$kk]['uri'] = file_create_url($vv['uri']);
+        //print_r($box[$k]);
+        /*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
+            //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+            //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+            //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+            @file_get_contents(image_style_url('345_140', $vv['uri']));
+        } else {
 
-					}
-					$boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
-				}
+        }
+        $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
+      }
 
-			}
-	}
-	$hour = date('G');
-	$endtime = strtotime($node -> field_endtime['und'][0]['value']);
-	$pdate = date('Y-n-j');
-	$participatenum = db_query('SELECT count(*) as total FROM {user_wingshare_log} WHERE pdate=:pdate',array(':pdate' => $pdate))->fetchAssoc();
-	if($hour<22){
-		$remaintime = $endtime - REQUEST_TIME;
-	}else{
-		$remaintime = -1;
-	}
-	$node ->participatenum = $participatenum['total'];
-	$ends = microtime_float();
-	$isparticipate = db_query('SELECT count(*) as total FROM {user_wingshare_log} WHERE uid=:uid and pdate=:pdate',array(':uid'=>$user->uid,':pdate' => $pdate))->fetchAssoc()['total'];
+    }
+  }
+  $hour = date('G');
+  $endtime = strtotime($node -> field_endtime['und'][0]['value']);
+  $pdate = date('Y-n-j');
+  $participatenum = db_query('SELECT count(*) as total FROM {user_wingshare_log} WHERE pdate=:pdate',array(':pdate' => $pdate))->fetchAssoc();
+  if($hour<22){
+    $remaintime = $endtime - REQUEST_TIME;
+  }else{
+    $remaintime = -1;
+  }
+  $node ->participatenum = $participatenum['total'];
+  $ends = microtime_float();
+  $isparticipate = db_query('SELECT count(*) as total FROM {user_wingshare_log} WHERE uid=:uid and pdate=:pdate',array(':uid'=>$user->uid,':pdate' => $pdate))->fetchAssoc()['total'];
 
-	$node->isparticipate = $isparticipate;
-	calcrequesttime($starts, $ends, "摇享商品详情");
+  $node->isparticipate = $isparticipate;
+  calcrequesttime($starts, $ends, "摇享商品详情");
 
-	return ['data' => $node,'remaintime' =>$remaintime];
+  return ['data' => $node,'remaintime' =>$remaintime];
 }
 
 /**
-*参与摇享
-*/
+ *参与摇享
+ */
 function product_swingshare_accept(){
-	$starts = microtime_float();
-	global $user;
-	if(!$user -> uid){
-		return services_error(t('用户未登录'),403);
-	}
-	$u = user_load($user->uid);
-	/*if(empty($u -> field_certed) || (empty($u -> field_certed['und'][0]['value']))){
-		return services_error(t('请先进行用户认证'),406);
-	}*/
-	$now = REQUEST_TIME;
-	$hour = date('G',$now);
-	if($hour<8 || $hour>22){
-		return services_error(t('只能在8-22点参与摇享'),406);
-	}
-	//判断用户是否有可用白领券
-	$query = new EntityFieldQuery();
-  		$result = $query->entityCondition('entity_type', 'node')
-			    ->entityCondition('bundle', 'coupon')
-			    ->fieldCondition('field_status', 'value', 1, '=')
-			    ->fieldCondition('field_uid', 'uid', $user -> uid, '=')
-			    ->propertyCondition('status', NODE_PUBLISHED)
-			    ->fieldCondition('field_starttime','value',date('Y-m-d',$now),'<=')
-			    ->fieldCondition('field_endtime','value',date('Y-m-t'),'<=')
-			    ->fieldOrderBy('field_endtime','value','DESC')
-			    ->execute();
-			    $couponids = [];
-			    //print_r($result);exit;
-		if(empty($result)){
-			return services_error(t('您暂无白领券不能参加摇享'),406);
-		}else{
-			$couponids = array_keys($result['node']);
-		}
-		//print_r(node_load_multiple($couponids));exit;
-		//exit;
-	$date = date('Y-n-j');
-	$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node');
-	$query->propertyCondition('status', NODE_PUBLISHED);
-	$query->entityCondition('bundle', array('swingshare'));
-	$query->fieldCondition('field_starttime', 'value', date('Y-m-d H:i:s'), '<=');
-	$query->fieldCondition('field_endtime', 'value', date('Y-m-d H:i:s'), '>=');
-	$results = $query->execute();
-	$nids = [];
-	if(!empty($results)){
-		$nids = array_keys($results['node']);
-	}
-	if(empty($nids)){
-		return services_error(t('暂无摇享商品'),406);
-	}
-	$data = node_load($nids[0]);
-	$isexist = db_query('SELECT * FROM {user_wingshare_log} WHERE uid=:uid and nid=:nid and pdate=:pdate',array(':uid' =>$user -> uid,':nid' =>$nids[0],':pdate'=>$date)) -> fetchAll();
-	if(!empty($isexist)){
-		return services_error(t('您今天已参加'),406);
-	}
-	$r = db_query('SELECT count(id) as maxid FROM {user_wingshare_log} WHERE pdate=:pdate',array(':pdate'=>$date)) -> fetch();
-	if($r->maxid){
-		$rid = $r -> maxid+1;
-	}else{
-		$rid = 1;
-	}
-	$record = new stdClass();
-	$record -> uid = $user -> uid;
-	$record -> nid = $nids[0];
-	$record -> swingnum = 'NO.'.$rid;
-	$record -> created = REQUEST_TIME;
-	$record -> pdate = $date;
-	$record -> title = $data -> title;
-	$record -> status = 0;
-	$record -> couponid = $couponids[0];
-	drupal_write_record('user_wingshare_log',$record);
-	$coupons = node_load($couponids[0]);
-	$coupons -> field_status['und'][0]['value'] = 2;
-	node_save($coupons);
+  $starts = microtime_float();
+  global $user;
+  if(!$user -> uid){
+    return services_error(t('用户未登录'),403);
+  }
+  $u = user_load($user->uid);
+  /*if(empty($u -> field_certed) || (empty($u -> field_certed['und'][0]['value']))){
+      return services_error(t('请先进行用户认证'),406);
+  }*/
+  $now = REQUEST_TIME;
+  $hour = date('G',$now);
+  if($hour<8 || $hour>22){
+    return services_error(t('只能在8-22点参与摇享'),406);
+  }
+  //判断用户是否有可用白领券
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'coupon')
+    ->fieldCondition('field_status', 'value', 1, '=')
+    ->fieldCondition('field_uid', 'uid', $user -> uid, '=')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_starttime','value',date('Y-m-d',$now),'<=')
+    ->fieldCondition('field_endtime','value',date('Y-m-t'),'<=')
+    ->fieldOrderBy('field_endtime','value','DESC')
+    ->execute();
+  $couponids = [];
+  //print_r($result);exit;
+  if(empty($result)){
+    return services_error(t('您暂无白领券不能参加摇享'),406);
+  }else{
+    $couponids = array_keys($result['node']);
+  }
+  //print_r(node_load_multiple($couponids));exit;
+  //exit;
+  $date = date('Y-n-j');
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node');
+  $query->propertyCondition('status', NODE_PUBLISHED);
+  $query->entityCondition('bundle', array('swingshare'));
+  $query->fieldCondition('field_starttime', 'value', date('Y-m-d H:i:s'), '<=');
+  $query->fieldCondition('field_endtime', 'value', date('Y-m-d H:i:s'), '>=');
+  $results = $query->execute();
+  $nids = [];
+  if(!empty($results)){
+    $nids = array_keys($results['node']);
+  }
+  if(empty($nids)){
+    return services_error(t('暂无摇享商品'),406);
+  }
+  $data = node_load($nids[0]);
+  $isexist = db_query('SELECT * FROM {user_wingshare_log} WHERE uid=:uid and nid=:nid and pdate=:pdate',array(':uid' =>$user -> uid,':nid' =>$nids[0],':pdate'=>$date)) -> fetchAll();
+  if(!empty($isexist)){
+    return services_error(t('您今天已参加'),406);
+  }
+  $r = db_query('SELECT count(id) as maxid FROM {user_wingshare_log} WHERE pdate=:pdate',array(':pdate'=>$date)) -> fetch();
+  if($r->maxid){
+    $rid = $r -> maxid+1;
+  }else{
+    $rid = 1;
+  }
+  $record = new stdClass();
+  $record -> uid = $user -> uid;
+  $record -> nid = $nids[0];
+  $record -> swingnum = 'NO.'.$rid;
+  $record -> created = REQUEST_TIME;
+  $record -> pdate = $date;
+  $record -> title = $data -> title;
+  $record -> status = 0;
+  $record -> couponid = $couponids[0];
+  drupal_write_record('user_wingshare_log',$record);
+  $coupons = node_load($couponids[0]);
+  $coupons -> field_status['und'][0]['value'] = 2;
+  node_save($coupons);
 
-	$ends = microtime_float();
-	calcrequesttime($starts, $ends, "参与摇享，人员{$user->uid}");
-	return ['data' => $record];
+  $ends = microtime_float();
+  calcrequesttime($starts, $ends, "参与摇享，人员{$user->uid}");
+  return ['data' => $record];
 }
 
 function product_theme(){
-	return array(
+  return array(
     'help_info' => array(
       'variables' => array('message' => NULL),
       'template' => 'page-help-info',
@@ -474,786 +474,772 @@ function product_theme(){
     'users_agreement' => array(
       'template' => 'user-agreement',
     )
-    );
+  );
 }
 /**
-*我的订单
-*/
+ *我的订单
+ */
 function product_orderlist($page) {
-	$starts = microtime_float();
-	global $user;
-	if (!user_is_logged_in()) {
-		return services_error(t('用户未登录'), 406);
-	}
-	$uid = $user->uid;
-	$limit = 10;
-	if (empty($page)) {
-		$page = 1;
-	}
-	$offset = ($page - 1) * $limit;
-	$r = db_query_range("SELECT p.*,n.title FROM {product_order} p LEFT JOIN {node} n ON p.nid=n.nid where :uid=uid", $offset, $limit, array(":uid" => $uid));
-	$results = $r->fetchAll();
-	foreach($results as $k =>$v){
-		switch ($v -> status) {
-			case 0:
-				$results[$k] -> status = '待付款';
-				break;
-			case 1:
-				$results[$k] -> status = '已付款';
-				break;
-			case 2:
-				$results[$k] -> status = '待发货';
-				break;
-			case 3:
-				$results[$k] -> status = '待收货';
-				break;
-			case 4:
-				$results[$k] -> status = '已评价';
-				break;
-			case 5:
-				$results[$k] -> status = '交易完成';
-				break;
-			case 6:
-				$results[$k] -> status = '待评价';
-				break;
+  $starts = microtime_float();
+  global $user;
+  if (!user_is_logged_in()) {
+    return services_error(t('用户未登录'), 406);
+  }
+  $uid = $user->uid;
+  $limit = 10;
+  if (empty($page)) {
+    $page = 1;
+  }
+  $offset = ($page - 1) * $limit;
+  $r = db_query_range("SELECT p.*,n.title FROM {product_order} p LEFT JOIN {node} n ON p.nid=n.nid where :uid=uid", $offset, $limit, array(":uid" => $uid));
+  $results = $r->fetchAll();
+  foreach($results as $k =>$v){
+    switch ($v -> status) {
+      case 0:
+        $results[$k] -> status = '待付款';
+        break;
+      case 1:
+        $results[$k] -> status = '已付款';
+        break;
+      case 2:
+        $results[$k] -> status = '待发货';
+        break;
+      case 3:
+        $results[$k] -> status = '待收货';
+        break;
+      case 4:
+        $results[$k] -> status = '已评价';
+        break;
+      case 5:
+        $results[$k] -> status = '交易完成';
+        break;
+      case 6:
+        $results[$k] -> status = '待评价';
+        break;
 
-			default:
-				$results[$k] -> status = '待付款';
-				break;
-		}
-	}
-	$ends = microtime_float();
-	calcrequesttime($starts, $ends, "我的订单列表");
-	return ['data' => $results];
+      default:
+        $results[$k] -> status = '待付款';
+        break;
+    }
+  }
+  $ends = microtime_float();
+  calcrequesttime($starts, $ends, "我的订单列表");
+  return ['data' => $results];
 }
 function microtime_float() {
-	list($usec, $sec) = explode(" ", microtime());
-	return ((float) $usec + (float) $sec);
+  list($usec, $sec) = explode(" ", microtime());
+  return ((float) $usec + (float) $sec);
 }
 
 function usedField() {
-	$nodeField = array('nid', 'title', 'field_remain_num', 'field_pictures', 'field_price', 'type', 'status', 'created', 'body', 'field_origin_price', 'field_total_num', 'field_inbox_num', 'field_seller', 'field_image_for_list', 'field_description','field_image_for_box','field_brandinfo','field_image_for_order','field_image_for_share','field_starttime','field_endtime','field_reference_link');
-	$bannerField = ['nid','title','field_url','field_image','field_banner_btype'];
-	return ['node' => $nodeField,'banner' => $bannerField];
+  $nodeField = array('nid', 'title', 'field_remain_num', 'field_pictures', 'field_price', 'type', 'status', 'created', 'body', 'field_origin_price', 'field_total_num', 'field_inbox_num', 'field_seller', 'field_image_for_list', 'field_description','field_image_for_box','field_brandinfo','field_image_for_order','field_image_for_share','field_starttime','field_endtime');
+  $bannerField = ['nid','title','field_url','field_image','field_banner_btype'];
+  return ['node' => $nodeField,'banner' => $bannerField];
 }
 function calcrequesttime($start, $end, $type) {
-	$interval = $end - $start;
-	watchdog($type, "接口处理时间为" . $interval);
+  $interval = $end - $start;
+  watchdog($type, "接口处理时间为" . $interval);
 }
 /**
-*商品购买或领取
-*/
+ *商品购买或领取
+ */
 function product_buy($nid) {
-	global $user;
-	$starts = microtime_float();
-	if (empty($user->uid)) {
-		$ends = microtime_float();
-	calcrequesttime($starts, $ends,  "商品购买");
-		return services_error(t('用户未登录.'), 403);
-	}
-	$u = user_load($user -> uid);
-	if(empty($u->field_certed) ||(empty($u->field_certed['und'][0]['value']))){
-		return services_error(t('请先完成认证'),406);
-	}elseif($u -> field_certed['und'][0]['value'] == 2){
-		return services_error(t('认证资料审核中'),406);
-	}
-	$node = node_load($nid);
-	if (empty($node)) {
-		$ends = microtime_float();
-	calcrequesttime($starts, $ends, $node->type . "商品购买");
-		return services_error(t('商品不存在.'), 406);
-	}
-	if ($node->type != 'product' && $node->type != 'share_product') {
-		$ends = microtime_float();
-	calcrequesttime($starts, $ends, $node->type . "商品购买");
-		return services_error(t('不支持的商品类型.'), 406);
-	}
-	if ($node->status != NODE_PUBLISHED) {
-		$ends = microtime_float();
-	calcrequesttime($starts, $ends, $node->type . "商品购买");
-		return services_error(t('商品已下架.'), 406);
-	}
+  global $user;
+  $starts = microtime_float();
+  if (empty($user->uid)) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends,  "商品购买");
+    return services_error(t('用户未登录.'), 403);
+  }
+  $u = user_load($user -> uid);
+  if(empty($u->field_certed) ||(empty($u->field_certed['und'][0]['value']))){
+    return services_error(t('请先完成认证'),406);
+  }elseif($u -> field_certed['und'][0]['value'] == 2){
+    return services_error(t('认证资料审核中'),406);
+  }
+  $node = node_load($nid);
+  if (empty($node)) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, $node->type . "商品购买");
+    return services_error(t('商品不存在.'), 406);
+  }
+  if ($node->type != 'product' && $node->type != 'share_product') {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, $node->type . "商品购买");
+    return services_error(t('不支持的商品类型.'), 406);
+  }
+  if ($node->status != NODE_PUBLISHED) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, $node->type . "商品购买");
+    return services_error(t('商品已下架.'), 406);
+  }
 
-	//在盒子中的商品只有商品下架和商品买完才不能购买
-	$productisinbox = db_query('SELECT * FROM product_box WHERE  uid=:uid AND nid=:nid', array(":uid" => $user->uid, ":nid" => $nid))->fetch();
-	if(!$productisinbox){
-		if (strtotime($node->field_endtime['und'][0]['value']) <= REQUEST_TIME) {
-			$ends = microtime_float();
-	calcrequesttime($starts, $ends, $node->type . "商品购买");
-				return services_error(t('商品限时结束.'), 406);
-			}
-		}
+  //在盒子中的商品只有商品下架和商品买完才不能购买
+  $productisinbox = db_query('SELECT * FROM product_box WHERE  uid=:uid AND nid=:nid', array(":uid" => $user->uid, ":nid" => $nid))->fetch();
+  if(!$productisinbox){
+    if (strtotime($node->field_endtime['und'][0]['value']) <= REQUEST_TIME) {
+      $ends = microtime_float();
+      calcrequesttime($starts, $ends, $node->type . "商品购买");
+      return services_error(t('商品限时结束.'), 406);
+    }
+  }
 
-	if ($node->field_remain_num['und'][0]['value'] <= 0) {
-		$ends = microtime_float();
-	calcrequesttime($starts, $ends, $node->type . "商品购买");
-		return services_error(t('商品已售罄.'), 406);
-	}
+  if ($node->field_remain_num['und'][0]['value'] <= 0) {
+    $ends = microtime_float();
+    calcrequesttime($starts, $ends, $node->type . "商品购买");
+    return services_error(t('商品已售罄.'), 406);
+  }
 
-	$start = strtotime(date('Y-m-d'));
-	$end = strtotime(date('Y-m-d') . " 23:59:59");
-	$status = 0;
-	if($node -> type == 'product'){
-			$r = db_query('SELECT * FROM product_order WHERE created >=:start AND created<=:end AND uid=:uid AND nid=:nid', array(":start" => $start, ":end" => $end, ":uid" => $user->uid, ":nid" => $nid))->fetchAll();
-		if ($r) {
-			return services_error(t('商品今天已购买.'), 406);
-		}
-	}elseif($node -> type == 'share_product'){
-		$hour = date('G');
-		if($hour<8){
-			return services_error(t('8点之前白领商品不可领取'));
-		}
-		$r = db_query('SELECT * FROM product_order WHERE   uid=:uid AND nid=:nid', array(":uid" => $user->uid, ":nid" => $nid))->fetchAll();
-		if ($r) {
-			$ends = microtime_float();
-			calcrequesttime($starts, $ends, $node->type . "商品购买");
-			return services_error(t('您已领取过此商品.'), 406);
-		}
-		$now = REQUEST_TIME;
-		$query = new EntityFieldQuery();
-  		$result = $query->entityCondition('entity_type', 'node')
-			    ->entityCondition('bundle', 'coupon')
-			    ->fieldCondition('field_status', 'value', 1, '=')
-			    ->fieldCondition('field_uid', 'uid', $user -> uid, '=')
-			    ->propertyCondition('status', NODE_PUBLISHED)
-			    ->fieldCondition('field_starttime','value',date('Y-m-d',$now),'<=')
-			    ->fieldCondition('field_endtime','value',date('Y-m-t'),'<=')
-			    ->fieldOrderBy('field_endtime','value','DESC')
-			    ->execute();
-			    $couponids = [];
-		if(empty($result)){
-			$ends = microtime_float();
-			calcrequesttime($starts, $ends, $node->type . "商品购买");
-			return services_error(t('领取失败，您没有白领券'),406);
-		}else{
-			$status = 2;
+  $start = strtotime(date('Y-m-d'));
+  $end = strtotime(date('Y-m-d') . " 23:59:59");
+  $status = 0;
+  if($node -> type == 'product'){
+    $r = db_query('SELECT * FROM product_order WHERE created >=:start AND created<=:end AND uid=:uid', array(":start" => $start, ":end" => $end, ":uid" => $user->uid, ":nid" => $nid))->fetchAll();
+    if ($r) {
+      return services_error(t('今天已购买.'), 406);
+    }
+    $isbuy = db_query('SELECT * FROM product_order WHERE nid=:nid AND uid=:uid', array(":uid" => $user->uid, ":nid" => $nid))->fetchAll();
+    if ($r) {
+      return services_error(t('商品已购买.'), 406);
+    }
+  }elseif($node -> type == 'share_product'){
+    $hour = date('G');
+    if($hour<8){
+      return services_error(t('8点之前白领商品不可领取'));
+    }
+    $r = db_query('SELECT * FROM product_order WHERE   uid=:uid AND nid=:nid', array(":uid" => $user->uid, ":nid" => $nid))->fetchAll();
+    if ($r) {
+      $ends = microtime_float();
+      calcrequesttime($starts, $ends, $node->type . "商品购买");
+      return services_error(t('您已领取过此商品.'), 406);
+    }
+    $now = REQUEST_TIME;
+    $query = new EntityFieldQuery();
+    $result = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'coupon')
+      ->fieldCondition('field_status', 'value', 1, '=')
+      ->fieldCondition('field_uid', 'uid', $user -> uid, '=')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_starttime','value',date('Y-m-d',$now),'<=')
+      ->fieldCondition('field_endtime','value',date('Y-m-t'),'<=')
+      ->fieldOrderBy('field_endtime','value','DESC')
+      ->execute();
+    $couponids = [];
+    if(empty($result)){
+      $ends = microtime_float();
+      calcrequesttime($starts, $ends, $node->type . "商品购买");
+      return services_error(t('领取失败，您没有白领券'),406);
+    }else{
+      $status = 2;
 
-			$couponids = array_keys($result['node']);
-		}
+      $couponids = array_keys($result['node']);
+    }
 
-	}
+  }
 
-	$order = new stdClass();
-	$order->uid = $user->uid;
-	$order->created = REQUEST_TIME;
-	$order->nid = $nid;
-	$order->product_type = $node->type;
-	$order->amount = 1;
-	$order->price = $node->field_price['und'][0]['value'];
-	$order->total_price = $node->field_price['und'][0]['value'];
-	$order ->sorderid = date('YmdHis').mt_rand(10000,99999999);
-	$order -> status = $status;
-	drupal_write_record('product_order', $order);
-	$node->field_remain_num['und'][0]['value'] = $node->field_remain_num['und'][0]['value'] - 1;
-	node_save($node);
-	$ends = microtime_float();
-	if($node -> type == 'share_product'){
-		$coupon = node_load($couponids[0]);
-	$coupon -> field_status['und'][0]['value'] = 3;
-	node_save($coupon);
-	if($node -> type == "share_product"){
-		 $rec = new stdClass();
-		  $rec -> couponid = $couponids[0];
-		  $rec -> nid = $nid;
-		  $rec -> title = $node -> title;
-		  $rec -> created = REQUEST_TIME;
-		  $rec -> uid = $user -> uid;
-		  $rec -> type = "白领";
-		  $rec -> sorderid = $order->sorderid;
-		  drupal_write_record('coupon_usage',$rec);
+  $order = new stdClass();
+  $order->uid = $user->uid;
+  $order->created = REQUEST_TIME;
+  $order->nid = $nid;
+  $order->product_type = $node->type;
+  $order->amount = 1;
+  $order->price = $node->field_price['und'][0]['value'];
+  $order->total_price = $node->field_price['und'][0]['value'];
+  $order ->sorderid = date('YmdHis').mt_rand(10000,99999999);
+  $order -> status = $status;
+  drupal_write_record('product_order', $order);
+  $node->field_remain_num['und'][0]['value'] = $node->field_remain_num['und'][0]['value'] - 1;
+  node_save($node);
+  $ends = microtime_float();
+  if($node -> type == 'share_product'){
+    $coupon = node_load($couponids[0]);
+    $coupon -> field_status['und'][0]['value'] = 3;
+    node_save($coupon);
+    if($node -> type == "share_product"){
+      $rec = new stdClass();
+      $rec -> couponid = $couponids[0];
+      $rec -> nid = $nid;
+      $rec -> title = $node -> title;
+      $rec -> created = REQUEST_TIME;
+      $rec -> uid = $user -> uid;
+      $rec -> type = "白领";
+      $rec -> sorderid = $order->sorderid;
+      drupal_write_record('coupon_usage',$rec);
 
-	}
-	}
-	db_delete('product_box') -> condition('uid',$user->uid)->condition('nid',$nid)->execute();//购买商品，删除盒子中收藏的白领商品
-	calcrequesttime($starts, $ends, $node->type . "商品购买");
-	return ['message' => '购买成功', 'nid' => $nid,'data' => $order];
+    }
+  }
+  db_delete('product_box') -> condition('uid',$user->uid)->condition('nid',$nid)->execute();//购买商品，删除盒子中收藏的白领商品
+  calcrequesttime($starts, $ends, $node->type . "商品购买");
+  return ['message' => '购买成功', 'nid' => $nid,'data' => $order];
 }
 
 /**
-*移除盒子中的商品
-*/
+ *移除盒子中的商品
+ */
 function product_removefrombox($nid) {
-	$start = microtime_float();
-	global $user;
-	if (empty($user->uid)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, "移除盒子");
-		return services_error(t('用户未登录.'), 403);
-	}
-	if (empty($nid)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, "移除盒子");
-		return services_error(t('商品id都不能为空.'), 406);
-	}
-	$node = node_load($nid);
-	if (empty($node)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node->type . "移除盒子");
-		return services_error(t('商品不存在.'), 406);
-	}
+  $start = microtime_float();
+  global $user;
+  if (empty($user->uid)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, "移除盒子");
+    return services_error(t('用户未登录.'), 403);
+  }
+  if (empty($nid)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, "移除盒子");
+    return services_error(t('商品id都不能为空.'), 406);
+  }
+  $node = node_load($nid);
+  if (empty($node)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node->type . "移除盒子");
+    return services_error(t('商品不存在.'), 406);
+  }
 
-	$boxquery = db_query("SELECT * FROM {product_box} WHERE uid=:uid and nid=:nid", [':uid' => $user->uid, ':nid' => $nid]);
-	$boxdata = $boxquery->fetchAll();
-	$num = count($boxdata);
-	if ($num <= 0) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node->type . "移除盒子");
-		return services_error(t('你未收藏此商品.'), 406);
-	}
+  $boxquery = db_query("SELECT * FROM {product_box} WHERE uid=:uid and nid=:nid", [':uid' => $user->uid, ':nid' => $nid]);
+  $boxdata = $boxquery->fetchAll();
+  $num = count($boxdata);
+  if ($num <= 0) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node->type . "移除盒子");
+    return services_error(t('你未收藏此商品.'), 406);
+  }
 
-	db_delete('product_box')
-		->condition('nid', $nid)
-		->condition('uid', $user->uid)
-		->execute();
-	$node->field_inbox_num['und'][0]['value'] = $node->field_inbox_num['und'][0]['value'] - 1;
-	$r = node_save($node);
-	$end = microtime_float();
-	calcrequesttime($start, $end, $node->type . "移除盒子");
-	return ['message' => '移除盒子成功', 'nid' => $nid];
+  db_delete('product_box')
+    ->condition('nid', $nid)
+    ->condition('uid', $user->uid)
+    ->execute();
+  $node->field_inbox_num['und'][0]['value'] = $node->field_inbox_num['und'][0]['value'] - 1;
+  $r = node_save($node);
+  $end = microtime_float();
+  calcrequesttime($start, $end, $node->type . "移除盒子");
+  return ['message' => '移除盒子成功', 'nid' => $nid];
 }
 
 /**
-*我的盒子
-*/
+ *我的盒子
+ */
 function product_boxlist() {
-	$start = microtime_float();
-	global $user;
-	if (empty($user->uid)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, "我的盒子");
-		return services_error(t('用户未登录.'), 403);
-	}
-	$boxquery = db_query("SELECT p.*,n.title,fdffn.field_inbox_num_value inbox_num,fdfrn.field_remain_num_value remain_num FROM {product_box} p  left join {node} n on p.nid = n.nid left join {field_data_field_inbox_num} fdffn on fdffn.entity_id = n.nid left join {field_data_field_remain_num} fdfrn on fdfrn.entity_id = n.nid WHERE p.uid=:uid and n.type in('product','share_product') ORDER BY created DESC", [':uid' => $user->uid]);
-	$boxdata = $boxquery->fetchAll();
+  $start = microtime_float();
+  global $user;
+  if (empty($user->uid)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, "我的盒子");
+    return services_error(t('用户未登录.'), 403);
+  }
+  $boxquery = db_query("SELECT p.*,n.title,fdffn.field_inbox_num_value inbox_num,fdfrn.field_remain_num_value remain_num FROM {product_box} p  left join {node} n on p.nid = n.nid left join {field_data_field_inbox_num} fdffn on fdffn.entity_id = n.nid left join {field_data_field_remain_num} fdfrn on fdfrn.entity_id = n.nid WHERE p.uid=:uid and n.type in('product','share_product') ORDER BY created DESC", [':uid' => $user->uid]);
+  $boxdata = $boxquery->fetchAll();
 
-	$nodefiled = usedField()['node'];
-	foreach ($boxdata as $k => $v) {
-		$boxdata[$k] -> created = date('m月d日',$v->created);
-		$node = node_load($v->nid);
-		//print_r($v);
-		if ($node) {
+  $nodefiled = usedField()['node'];
+  foreach ($boxdata as $k => $v) {
+    $boxdata[$k] -> created = date('m月d日',$v->created);
+    $node = node_load($v->nid);
+    //print_r($v);
+    if ($node) {
 
-			foreach ($node as $kk => $vv) {
-				if (!in_array($kk, $nodefiled)) {
-					unset($node->$kk);
-				}
-			}
-			$boxdata[$k] -> field_price = $node -> field_price;
-			if($node -> type == 'product'){
-				$boxdata[$k] -> types = '壹购商品';
+      foreach ($node as $kk => $vv) {
+        if (!in_array($kk, $nodefiled)) {
+          unset($node->$kk);
+        }
+      }
+      $boxdata[$k] -> field_price = $node -> field_price;
+      if($node -> type == 'product'){
+        $boxdata[$k] -> types = '壹购商品';
 
-			}elseif($node->type == 'share_product'){
-				$boxdata[$k] -> types = '白领商品';
-			}
-			$boxdata[$k]->field_image_for_list = $node->field_image_for_list;
-			$boxdata[$k]->field_image_for_box = [];
-			if(!empty($node -> field_image_for_box)){
-				$boxdata[$k]->field_image_for_box = $node->field_image_for_box;
-			}
+      }elseif($node->type == 'share_product'){
+        $boxdata[$k] -> types = '白领商品';
+      }
+      $boxdata[$k]->field_image_for_list = $node->field_image_for_list;
+      $boxdata[$k]->field_image_for_box = [];
+      if(!empty($node -> field_image_for_box)){
+        $boxdata[$k]->field_image_for_box = $node->field_image_for_box;
+      }
 
-			if (!empty($node->field_image_for_box['und'])) {
+      if (!empty($node->field_image_for_box['und'])) {
 
-				foreach ($node->field_image_for_box['und'] as $kk => $vv) {
+        foreach ($node->field_image_for_box['und'] as $kk => $vv) {
 
-					$boxdata[$k]->field_image_for_box['und'][$kk]['uri'] = file_create_url($vv['uri']);
-					//print_r($box[$k]);
-					/*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
-						//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						@file_get_contents(image_style_url('345_140', $vv['uri']));
-					} else {
+          $boxdata[$k]->field_image_for_box['und'][$kk]['uri'] = file_create_url($vv['uri']);
+          //print_r($box[$k]);
+          /*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
+              //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              @file_get_contents(image_style_url('345_140', $vv['uri']));
+          } else {
 
-					}
-					$boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
-				}
+          }
+          $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
+        }
 
-			}
-			if (!empty($node->field_image_for_list['und'])) {
+      }
+      if (!empty($node->field_image_for_list['und'])) {
 
-				foreach ($node->field_image_for_list['und'] as $kk => $vv) {
+        foreach ($node->field_image_for_list['und'] as $kk => $vv) {
 
-					$boxdata[$k]->field_image_for_list['und'][$kk]['uri'] = file_create_url($vv['uri']);
-					//print_r($box[$k]);
-					/*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
-						//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						@file_get_contents(image_style_url('345_140', $vv['uri']));
-					} else {
+          $boxdata[$k]->field_image_for_list['und'][$kk]['uri'] = file_create_url($vv['uri']);
+          //print_r($box[$k]);
+          /*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
+              //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              @file_get_contents(image_style_url('345_140', $vv['uri']));
+          } else {
 
-					}
-					$boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
-				}
+          }
+          $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
+        }
 
-			}
-		} else {
+      }
+    } else {
 
-			$boxdata[$k]->field_image_for_box = array();
-			$boxdata[$k]->field_image_for_list = array();
-		}
-	}
-	$end = microtime_float();
-	calcrequesttime($start, $end, $user->uid . "我的盒子");
-	$num = count($boxdata);
-	$boxdata['remain_boxproduct_num'] = 5 - $num;
-	//345_140
-	return ['data' => $boxdata];
+      $boxdata[$k]->field_image_for_box = array();
+      $boxdata[$k]->field_image_for_list = array();
+    }
+  }
+  $end = microtime_float();
+  calcrequesttime($start, $end, $user->uid . "我的盒子");
+  $num = count($boxdata);
+  $boxdata['remain_boxproduct_num'] = 5 - $num;
+  //345_140
+  return ['data' => $boxdata];
 
 }
 
 /**
-*加入盒子
-*/
+ *加入盒子
+ */
 function product_tobox($nid) {
-	$start = microtime_float();
-	global $user;
-	if (empty($user->uid)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, "加入盒子");
-		return services_error(t('用户未登录.'), 403);
-	}
-	if (empty($nid)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, "加入盒子");
-		return services_error(t('商品id都不能为空.'), 406);
-	}
-	$node = node_load($nid);
-	if (empty($node)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node->type . "加入盒子");
-		return services_error(t('商品不存在.'), 406);
-	}
-	if ($node->status != NODE_PUBLISHED) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node->type . "加入盒子");
-		return services_error(t('商品已下架.'), 406);
-	}
-	if (strtotime($node->field_endtime['und'][0]['value']) <= REQUEST_TIME) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node->type . "加入盒子");
-		return services_error(t('商品限时结束.'), 406);
-	}
-	$boxquery = db_query("SELECT * FROM {product_box} WHERE uid=:uid", [':uid' => $user->uid]);
-	$boxdata = $boxquery->fetchAll();
-	$num = count($boxdata);
-	if ($num >= 5) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node->type . "加入盒子");
-		return services_error(t('盒子已满，请先从盒子中删除部分商品.'), 406);
-	}
-	foreach ($boxdata as $k => $v) {
-		if ($v->nid == $nid) {
-			$end = microtime_float();
-			calcrequesttime($start, $end, $node->type . "加入盒子");
-			return services_error(t('此商品已加入盒子，不能重复加入.'), 406);
-			break;
-		}
-	}
-	$box = new stdClass();
-	$box->nid = $nid;
-	$box->uid = $user->uid;
-	$box->product_type = $node->type;
-	$box->created = REQUEST_TIME;
-	drupal_write_record('product_box', $box);
-	$node->field_inbox_num['und'][0]['value'] = $node->field_inbox_num['und'][0]['value'] + 1;
-	$r = node_save($node);
-	$end = microtime_float();
-	calcrequesttime($start, $end, $node->type . "加入盒子");
-	return ['message' => '加入盒子成功', 'nid' => $nid];
+  $start = microtime_float();
+  global $user;
+  if (empty($user->uid)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, "加入盒子");
+    return services_error(t('用户未登录.'), 403);
+  }
+  if (empty($nid)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, "加入盒子");
+    return services_error(t('商品id都不能为空.'), 406);
+  }
+  $node = node_load($nid);
+  if (empty($node)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node->type . "加入盒子");
+    return services_error(t('商品不存在.'), 406);
+  }
+  if ($node->status != NODE_PUBLISHED) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node->type . "加入盒子");
+    return services_error(t('商品已下架.'), 406);
+  }
+  if (strtotime($node->field_endtime['und'][0]['value']) <= REQUEST_TIME) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node->type . "加入盒子");
+    return services_error(t('商品限时结束.'), 406);
+  }
+  $boxquery = db_query("SELECT * FROM {product_box} WHERE uid=:uid", [':uid' => $user->uid]);
+  $boxdata = $boxquery->fetchAll();
+  $num = count($boxdata);
+  if ($num >= 5) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node->type . "加入盒子");
+    return services_error(t('盒子已满，请先从盒子中删除部分商品.'), 406);
+  }
+  foreach ($boxdata as $k => $v) {
+    if ($v->nid == $nid) {
+      $end = microtime_float();
+      calcrequesttime($start, $end, $node->type . "加入盒子");
+      return services_error(t('此商品已加入盒子，不能重复加入.'), 406);
+      break;
+    }
+  }
+  $box = new stdClass();
+  $box->nid = $nid;
+  $box->uid = $user->uid;
+  $box->product_type = $node->type;
+  $box->created = REQUEST_TIME;
+  drupal_write_record('product_box', $box);
+  $node->field_inbox_num['und'][0]['value'] = $node->field_inbox_num['und'][0]['value'] + 1;
+  $r = node_save($node);
+  $end = microtime_float();
+  calcrequesttime($start, $end, $node->type . "加入盒子");
+  return ['message' => '加入盒子成功', 'nid' => $nid];
 }
 
 /**
-*广告列表
-*/
+ *广告列表
+ */
 function product_banner($btype) {
-	$validtype = [1,2];
-	$start = microtime_float();
+  $validtype = [1,2];
+  $start = microtime_float();
 
-	if(!in_array($btype, $validtype)){
-		$end = microtime_float();
-		calcrequesttime($start, $end, "banner");
-		return services_error(t('banner类型错误.'), 406);
-	}
-	$banner = cache_get('product_banner','cache');
-	if ((!empty($banner)) && $banner  -> expire > REQUEST_TIME) {
-		$data = $banner->data;
-	} else {
-		$query = new EntityFieldQuery();
-		$query->entityCondition('entity_type', 'node');
-		$query->propertyCondition('status', NODE_PUBLISHED);
-		$query->entityCondition('bundle', array('banner'));
-		$query->fieldCondition('field_banner_category', 'value', $btype, '=');
-		$results = $query->execute();
-		$data = [];
-		if(!empty($results)){
-			$data = node_load_multiple(array_keys($results['node']));
-		$bannerfield = usedField()['banner'];
-		foreach ($data as $k => $v) {
-				foreach ($v->field_image['und'] as $kk => $vv) {
+  if(!in_array($btype, $validtype)){
+    $end = microtime_float();
+    calcrequesttime($start, $end, "banner");
+    return services_error(t('banner类型错误.'), 406);
+  }
+  $banner = cache_get('product_banner','cache');
+  if ((!empty($banner)) && $banner  -> expire > REQUEST_TIME) {
+    $data = $banner->data;
+  } else {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node');
+    $query->propertyCondition('status', NODE_PUBLISHED);
+    $query->entityCondition('bundle', array('banner'));
+    $query->fieldCondition('field_banner_category', 'value', $btype, '=');
+    $results = $query->execute();
+    $data = [];
+    if(!empty($results)){
+      $data = node_load_multiple(array_keys($results['node']));
+      $bannerfield = usedField()['banner'];
+      foreach ($data as $k => $v) {
+        foreach ($v->field_image['und'] as $kk => $vv) {
 
-					$data[$k]->field_image['und'][$kk]['uri'] = file_create_url($vv['uri']);
-					//print_r($box[$k]);
-					/*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
-						//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-						@file_get_contents(image_style_url('345_140', $vv['uri']));
-					} else {
+          $data[$k]->field_image['und'][$kk]['uri'] = file_create_url($vv['uri']);
+          //print_r($box[$k]);
+          /*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
+              //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              @file_get_contents(image_style_url('345_140', $vv['uri']));
+          } else {
 
-					}
-					$boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
-				}
-			foreach($v as $kk =>$vv){
-				if(!in_array($kk,$bannerfield)){
-					unset($data[$k]->$kk);
-				}
-			}
-			if($v -> field_banner_btype['und'][0]['value'] == 1){
-				$data[$k]->field_nid = $v -> field_url['und'][0]['value'];
-				unset($data[$k] -> field_url);
+          }
+          $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
+        }
+        foreach($v as $kk =>$vv){
+          if(!in_array($kk,$bannerfield)){
+            unset($data[$k]->$kk);
+          }
+        }
+        if($v -> field_banner_btype['und'][0]['value'] == 1){
+          $data[$k]->field_nid = $v -> field_url['und'][0]['value'];
+          unset($data[$k] -> field_url);
 
-			}
-			unset($data[$k] -> field_banner_btype);
+        }
+        unset($data[$k] -> field_banner_btype);
 
-		}
-		cache_set('product_banner_'.$btype, $data, 'cache', REQUEST_TIME+variable_get('cache_lifetime'));
-		}
+      }
+      cache_set('product_banner_'.$btype, $data, 'cache', REQUEST_TIME+variable_get('cache_lifetime'));
+    }
 
-	}
+  }
 
-	$end = microtime_float();
-	calcrequesttime($start, $end, "banner");
-	return ['data' => $data];
+  $end = microtime_float();
+  calcrequesttime($start, $end, "banner");
+  return ['data' => $data];
 }
 
 /**
-*享什么商品列表
-*/
+ *享什么商品列表
+ */
 function product_share($page, $time) {
-	$yesterday = strtotime(date('Y-m-d',strtotime('-1 day')));
-	$timeperiod = [/*['start' =>$yesterday ,'end' =>$yesterday+86399],*/['start' => strtotime('08:00:00'),'end' => strtotime('11:59:59')],['start' => strtotime('12:00:00'),'end' => strtotime('15:59:59')],['start' => strtotime('16:00:00'),'end' => strtotime('19:59:59')],['start' => strtotime('20:00:00'),'end' => strtotime('23:59:59')]];//有效的时间段
-	$starts = microtime_float();
-	$limit = 10;
-	if ($page <= 1) {
-		$page = 1;
-	}
-	$page = $page-1;
-	$currentselected = 0;
-	$now = REQUEST_TIME;
-	if (!isset($time)) {
-		if($now < $timeperiod[0]['start']){//不到8点钟默认8点的时间段高亮，显示产品为0-8点的产品。
-			$start = $timeperiod[0]['start'] -3600*8+1;
-			$end = $timeperiod[0]['start']-1;
-			foreach($timeperiod as $k =>$v){
-				$timeperiod[$k]['remain'] = $v['end'] - $now;
-				$timeperiod[$k]['selected'] = 0;
-			}
-			$timeperiod[0]['selected'] = 1;
-		}else{
-			foreach($timeperiod as $k =>$v){
-					$timeperiod[$k]['selected'] = 0;
-				if($now >= $v['start'] && $now<=$v['end']){
-					$start = $v['start'];
-					$end = $v['end'];
-					$timeperiod[$k]['selected'] = 1;
-				}
-				$timeperiod[$k]['remain'] = $v['end'] - $now;//剩余时间
-			}
-		}
-
-	}else{
-		if(!in_array($time,[0,1,2,3,4])){
-			return services_error(t('.'), 406);
-		}
-		$start = $timeperiod[$time]['start'];
-		$end = $timeperiod[$time]['end'];
-		$currentselected = $time;
-		foreach($timeperiod as $k =>$v){
-				$timeperiod[$k]['remain'] = $v['end'] - $now;
-				$timeperiod[$k]['selected'] = 0;
-			}
-			$timeperiod[$time]['selected'] = 1;
-	}
-	$query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_starttime_value <= :stime) OR ((fdfe.field_endtime_value >= :stime AND fdfe.field_endtime_value <= :etime))) ",$page*$limit,$limit,[':type' => 'share_product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
-
-	$results = $query->fetchAll();
-	$nids = [];
-	foreach($results as $k =>$v){
-		$nids[] = $v-> nid;
-	}
-
-	$data = [];
-	$nodefiled = usedField()['node'];
-	$data = node_load_multiple($nids);//获取所有产品
-	foreach ($data as $k => $v) {
-		foreach ($v as $kk => $vv) {
-			if (!in_array($kk, $nodefiled)) {
-				unset($data[$k]->$kk);
-			}
-		}
-		foreach ($v->field_pictures['und'] as $kk => $vv) {
-			//$data[$k]->field_pictures['und'][$kk]['uri'] = file_create_url($vv['uri']);
-			$derivative_uri = image_style_path('750_0', $vv['uri']);
-					$success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
-
-					$data[$k]->field_pictures['und'][$kk]['uri']  = file_create_url($derivative_uri);
-			/*	if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
-					//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					@file_get_contents(image_style_url('750_0', $vv['uri']));
-				} else {
-
-				}
-			*/
-		}
-		foreach ($v->field_image_for_list['und'] as $kk => $vv) {
-			//$data[$k]->field_image_for_list['und'][$kk]['uri'] = file_create_url($vv['uri']);
-			$derivative_uri = image_style_path('750_0', $vv['uri']);
-					$success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
-
-					$data[$k]->field_image_for_list['und'][$kk]['uri']  = file_create_url($derivative_uri);
-
-			/*	if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
-					//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					@file_get_contents(image_style_url('750_0', $vv['uri']));
-				} else {
-
-				}
-			*/
-		}
-
-	}
-	//410_165
-	$ends = microtime_float();
-	calcrequesttime($starts, $ends, "享什么商品列表");
-	return ['data' => $data, 'timeperiod' => $timeperiod];
-}
-
-/**
-*一购商品列表
-*/
-function product_list($page) {
-	$timeperiod = ['start' => strtotime('08:00:00'),'end' => strtotime('23:59:59')];//有效的时间段
-	$now = REQUEST_TIME;
-	$starts = microtime_float();
-	$limit = 10;
-	if ($page <= 1) {
-		$page = 1;
-	}
-	$page = $page-1;
-	$currentselected = 0;
-	$remaintime = 0;
-	$now = REQUEST_TIME;
-
-	if($now < $timeperiod['start']){//不到8点钟默认8点的时间段高亮，显示产品为0-8点的产品。
-		$remaintime = $timeperiod['start']-$now;
-		$start = 1;
-		$end = 0;
-		$start = $timeperiod['start'];
-		$end = $start+86400-1;
-	}else{
-			$t = $timeperiod['start']+86400-1;
-			//if($now >= $timeperiod['start']){
-			$remaintime = $t-$now;
-			$start = $timeperiod['start'];
-			$end = $t;
-			//}
-			/*else{
-				$remaintime = -1;
-				$start = 1;$end = 0;
-				$start = $timeperiod['start'];
-				$end = $timeperiod['end'];
-			}*/
-
-	}
-
-	$query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_starttime_value <= :stime) OR (fdfe.field_endtime_value >= :stime AND fdfe.field_endtime_value <= :etime)) ",$page*$limit,$limit,[':type' => 'product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
-	/*$query = new EntityFieldQuery();
-	$query->entityCondition('entity_type', 'node');
-
-	$query->propertyCondition('status', NODE_PUBLISHED);
-	$query->entityCondition('bundle', array('product'));*/
-
-
-
-	$results = $query->fetchAll();
-	$nids = [];
-	foreach($results as $k =>$v){
-		$nids[] = $v-> nid;
-	}
-	$data = [];
-	$nodefiled = usedField()['node'];
-	if (!empty($results)) {
-		$data = node_load_multiple($nids);//获取所有产品
-		foreach ($data as $k => $v) {
-			foreach ($v as $kk => $vv) {
-				if (!in_array($kk, $nodefiled)) {
-					unset($data[$k]->$kk);
-				}
-			}
-			if (isset($v->field_pictures['und'])) {
-				foreach ($v->field_pictures['und'] as $kk => $vv) {
-					//$data[$k]->field_pictures['und'][$kk]['uri'] = file_create_url($vv['uri']);
-					//$data[$k]->field_pictures['und'][$kk]['uri'] = image_style_url('750_0', $vv['uri']);
-					$derivative_uri = image_style_path('750_0', $vv['uri']);
-					$success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
-
-					$data[$k]->field_pictures['und'][$kk]['uri']  = file_create_url($derivative_uri);
-//file_create_url($vv['uri']);
-					/*if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
-							//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-							//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-							//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-							@file_get_contents(image_style_url('750_0', $vv['uri']));
-						} else {
-
-						}
-						$data[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
-					*/
-
-				}
-			}
-			if (isset($v->field_image_for_list['und'])) {
-				foreach ($v->field_image_for_list['und'] as $kk => $vv) {
-					//$data[$k]->field_image_for_list['und'][$kk]['uri'] = image_style_url('750_0', $vv['uri']);
-					$derivative_uri = image_style_path('750_0', $vv['uri']);
-					$success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
-
-					$data[$k]->field_image_for_list['und'][$kk]['uri']  = file_create_url($derivative_uri);
-					/*if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
-							//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-							//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-							//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-							@file_get_contents(image_style_url('750_0', $vv['uri']));
-						} else {
-
-						}
-						$data[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
-					*/
-
-				}
-			}
-
-		}
-	}
-	$ends = microtime_float();
-	calcrequesttime($starts, $ends, "易购商品列表");
-	return ['data' => $data, 'remaintime' => $remaintime];
-}
-
-/**
-*商品详情
-*/
-function product_detail($nid) {
-	global $user;
-	$start = microtime_float();
-	if (empty($nid)) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, "商品详情");
-		return services_error(t('商品id不能为空.'), 406);
-	}
-	$node = (array) node_load($nid);
-	if (!$node) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, "商品详情");
-		return services_error(t('商品不存在.'), 406);
-	}
-	if ($node['type'] !== 'product' and $node['type'] != "share_product") {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node['type'] . "商品详情");
-		return services_error(t('不支持的商品类型.'), 406);
-	}
-	if ($node['status'] != NODE_PUBLISHED) {
-		$end = microtime_float();
-		calcrequesttime($start, $end, $node['type'] . "商品详情");
-		return services_error(t('商品未发布.'), 406);
-	}
-	if ($node['type'] == 'share_product') {
-		$seller = [];
-	} else {
-		$seller = $node['field_seller']['und'][0]['nid'];
-		$seller = (array) node_load($seller);//商家信息
-		unset($seller['rdf_mapping']);
-		$rseller = [];//需要返回的商家信息
-		$rseller['intro'] = $seller['field_intro']['und'][0]['value'];
-    if (isset($seller['field_company_logo']['und'])) {
-      foreach ($seller['field_company_logo']['und'] as $kk => $vv) {
-        $seller['field_company_logo']['und'][$kk]['uri'] = file_create_url($vv['uri']);
+  $yesterday = strtotime(date('Y-m-d',strtotime('-1 day')));
+  $timeperiod = [/*['start' =>$yesterday ,'end' =>$yesterday+86399],*/['start' => strtotime('08:00:00'),'end' => strtotime('11:59:59')],['start' => strtotime('12:00:00'),'end' => strtotime('15:59:59')],['start' => strtotime('16:00:00'),'end' => strtotime('19:59:59')],['start' => strtotime('20:00:00'),'end' => strtotime('23:59:59')]];//有效的时间段
+  $starts = microtime_float();
+  $limit = 10;
+  if ($page <= 1) {
+    $page = 1;
+  }
+  $page = $page-1;
+  $currentselected = 0;
+  $now = REQUEST_TIME;
+  if (!isset($time)) {
+    if($now < $timeperiod[0]['start']){//不到8点钟默认8点的时间段高亮，显示产品为0-8点的产品。
+      $start = $timeperiod[0]['start'] -3600*8+1;
+      $end = $timeperiod[0]['start']-1;
+      foreach($timeperiod as $k =>$v){
+        $timeperiod[$k]['remain'] = $v['end'] - $now;
+        $timeperiod[$k]['selected'] = 0;
+      }
+      $timeperiod[0]['selected'] = 1;
+    }else{
+      foreach($timeperiod as $k =>$v){
+        $timeperiod[$k]['selected'] = 0;
+        if($now >= $v['start'] && $now<=$v['end']){
+          $start = $v['start'];
+          $end = $v['end'];
+          $timeperiod[$k]['selected'] = 1;
+        }
+        $timeperiod[$k]['remain'] = $v['end'] - $now;//剩余时间
       }
     }
-		$rseller['company_logo'] = $seller['field_company_logo']['und'][0]['uri'];
-	}
 
-	$nodefiled = usedField()['node'];
-	foreach ($node as $k => $v) {
-		if (!in_array($k, $nodefiled)) {
-			unset($node[$k]);
-		}
-	}
-	$links = [];
-	if($node['field_reference_link']){
-    foreach($node['field_reference_link']['und'] as $key=>$val){
-      $links[$key]['url'] = $val['url'];
-      $links[$key]['title'] = $val['title'];
-    };
+  }else{
+    if(!in_array($time,[0,1,2,3,4])){
+      return services_error(t('.'), 406);
+    }
+    $start = $timeperiod[$time]['start'];
+    $end = $timeperiod[$time]['end'];
+    $currentselected = $time;
+    foreach($timeperiod as $k =>$v){
+      $timeperiod[$k]['remain'] = $v['end'] - $now;
+      $timeperiod[$k]['selected'] = 0;
+    }
+    $timeperiod[$time]['selected'] = 1;
   }
-  $node['links'] = $links;
-	unset($node['field_reference_link']);
+  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_endtime_value <= :stime)) ",$page*$limit,$limit,[':type' => 'share_product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
 
-	if (isset($node['field_pictures']['und'])) {
-		foreach ($node['field_pictures']['und'] as $kk => $vv) {
-			$node['field_pictures']['und'][$kk]['uri'] = file_create_url($vv['uri']);
-			if ($node['type'] == "product") {
-				if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
-					//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					@file_get_contents(image_style_url('750_0', $vv['uri']));
-				} else {
+  $results = $query->fetchAll();
+  $nids = [];
+  foreach($results as $k =>$v){
+    $nids[] = $v-> nid;
+  }
 
-				}
-				$node['field_pictures']['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
-			} elseif ($node['type'] == "share_product") {
-				if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
-					//image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					//$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-					@file_get_contents(image_style_url('750_0', $vv['uri']));
-				} else {
+  $data = [];
+  $nodefiled = usedField()['node'];
+  $data = node_load_multiple($nids);//获取所有产品
+  foreach ($data as $k => $v) {
+    foreach ($v as $kk => $vv) {
+      if (!in_array($kk, $nodefiled)) {
+        unset($data[$k]->$kk);
+      }
+    }
+    foreach ($v->field_pictures['und'] as $kk => $vv) {
+      //$data[$k]->field_pictures['und'][$kk]['uri'] = file_create_url($vv['uri']);
+      $derivative_uri = image_style_path('750_0', $vv['uri']);
+      $success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
 
-				}
-				$node['field_pictures']['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
-			}
+      $data[$k]->field_pictures['und'][$kk]['uri']  = file_create_url($derivative_uri);
+      /*	if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
+              //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              @file_get_contents(image_style_url('750_0', $vv['uri']));
+          } else {
 
-		}
-	}
-	$node['isinbox'] = 0;
-	$res =db_query("SELECT * FROM {product_box} WHERE uid=:uid and nid=:nid", [':uid' => $user->uid,':nid' => $nid]) -> fetch();
-	if(!empty($res)){
-		$node['isinbox'] = 1;
-	}
-	$node['nstatus']['und'][0]['value'] = 2;
-	if(!empty($node['field_endtime'])){
-		$starttime = strtotime($node['field_starttime']['und'][0]['value']);
-		if($starttime>REQUEST_TIME){
-			$node ['nstatus']['und'][0]['value'] = 1;
-		}
-	}
-	if(!empty($node['field_endtime'])){
-		$endtime = strtotime($node['field_endtime']['und'][0]['value']);
-		if($endtime<REQUEST_TIME){
-			$node['nstatus']['und'][0]['value'] = 3;
-		}
-	}
+          }
+      */
+    }
+    foreach ($v->field_image_for_list['und'] as $kk => $vv) {
+      //$data[$k]->field_image_for_list['und'][$kk]['uri'] = file_create_url($vv['uri']);
+      $derivative_uri = image_style_path('750_0', $vv['uri']);
+      $success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
+
+      $data[$k]->field_image_for_list['und'][$kk]['uri']  = file_create_url($derivative_uri);
+
+      /*	if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
+              //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+              @file_get_contents(image_style_url('750_0', $vv['uri']));
+          } else {
+
+          }
+      */
+    }
+
+  }
+  //410_165
+  $ends = microtime_float();
+  calcrequesttime($starts, $ends, "享什么商品列表");
+  return ['data' => $data, 'timeperiod' => $timeperiod];
+}
+
+/**
+ *一购商品列表
+ */
+function product_list($page) {
+  $timeperiod = ['start' => strtotime('08:00:00'),'end' => strtotime('23:59:59')];//有效的时间段
+  $now = REQUEST_TIME;
+  $starts = microtime_float();
+  $limit = 10;
+  if ($page <= 1) {
+    $page = 1;
+  }
+  $page = $page-1;
+  $currentselected = 0;
+  $remaintime = 0;
+  $now = REQUEST_TIME;
+
+  if($now < $timeperiod['start']){//不到8点钟默认8点的时间段高亮，显示产品为0-8点的产品。
+    $remaintime = $timeperiod['start']-$now;
+    $start = 1;
+    $end = 0;
+    $start = $timeperiod['start'];
+    $end = $start+86400-1;
+  }else{
+    $t = $timeperiod['start']+86400-1;
+    //if($now >= $timeperiod['start']){
+    $remaintime = $t-$now;
+    $start = $timeperiod['start'];
+    $end = $t;
+    //}
+    /*else{
+        $remaintime = -1;
+        $start = 1;$end = 0;
+        $start = $timeperiod['start'];
+        $end = $timeperiod['end'];
+    }*/
+
+  }
+
+  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_endtime_value <= :etime)) ",$page*$limit,$limit,[':type' => 'product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
+  /*$query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node');
+
+  $query->propertyCondition('status', NODE_PUBLISHED);
+  $query->entityCondition('bundle', array('product'));*/
+
+
+
+  $results = $query->fetchAll();
+  $nids = [];
+  foreach($results as $k =>$v){
+    $nids[] = $v-> nid;
+  }
+  $data = [];
+  $nodefiled = usedField()['node'];
+  if (!empty($results)) {
+    $data = node_load_multiple($nids);//获取所有产品
+    foreach ($data as $k => $v) {
+      foreach ($v as $kk => $vv) {
+        if (!in_array($kk, $nodefiled)) {
+          unset($data[$k]->$kk);
+        }
+      }
+      if (isset($v->field_pictures['und'])) {
+        foreach ($v->field_pictures['und'] as $kk => $vv) {
+          //$data[$k]->field_pictures['und'][$kk]['uri'] = file_create_url($vv['uri']);
+          //$data[$k]->field_pictures['und'][$kk]['uri'] = image_style_url('750_0', $vv['uri']);
+          $derivative_uri = image_style_path('750_0', $vv['uri']);
+          $success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
+
+          $data[$k]->field_pictures['und'][$kk]['uri']  = file_create_url($derivative_uri);
+//file_create_url($vv['uri']);
+          /*if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
+                  //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+                  //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+                  //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+                  @file_get_contents(image_style_url('750_0', $vv['uri']));
+              } else {
+
+              }
+              $data[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
+          */
+
+        }
+      }
+      if (isset($v->field_image_for_list['und'])) {
+        foreach ($v->field_image_for_list['und'] as $kk => $vv) {
+          //$data[$k]->field_image_for_list['und'][$kk]['uri'] = image_style_url('750_0', $vv['uri']);
+          $derivative_uri = image_style_path('750_0', $vv['uri']);
+          $success        = file_exists($derivative_uri) || image_style_create_derivative(image_style_load('750_0'), $vv['uri'], $derivative_uri);
+
+          $data[$k]->field_image_for_list['und'][$kk]['uri']  = file_create_url($derivative_uri);
+          /*if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
+                  //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+                  //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+                  //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+                  @file_get_contents(image_style_url('750_0', $vv['uri']));
+              } else {
+
+              }
+              $data[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
+          */
+
+        }
+      }
+
+    }
+  }
+  $ends = microtime_float();
+  calcrequesttime($starts, $ends, "易购商品列表");
+  return ['data' => $data, 'remaintime' => $remaintime];
+}
+
+/**
+ *商品详情
+ */
+function product_detail($nid) {
+  global $user;
+  $start = microtime_float();
+  if (empty($nid)) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, "商品详情");
+    return services_error(t('商品id不能为空.'), 406);
+  }
+  $node = (array) node_load($nid);
+  if (!$node) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, "商品详情");
+    return services_error(t('商品不存在.'), 406);
+  }
+  if ($node['type'] !== 'product' and $node['type'] != "share_product") {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node['type'] . "商品详情");
+    return services_error(t('不支持的商品类型.'), 406);
+  }
+  if ($node['status'] != NODE_PUBLISHED) {
+    $end = microtime_float();
+    calcrequesttime($start, $end, $node['type'] . "商品详情");
+    return services_error(t('商品未发布.'), 406);
+  }
+  if ($node['type'] == 'share_product') {
+    $seller = [];
+  } else {
+    $seller = $node['field_seller']['und'][0]['nid'];
+    $seller = (array) node_load($seller);
+    unset($seller['rdf_mapping']);
+  }
+
+  $nodefiled = usedField()['node'];
+  foreach ($node as $k => $v) {
+    if (!in_array($k, $nodefiled)) {
+      unset($node[$k]);
+    }
+  }
+  if (isset($node['field_pictures']['und'])) {
+    foreach ($node['field_pictures']['und'] as $kk => $vv) {
+      $node['field_pictures']['und'][$kk]['uri'] = file_create_url($vv['uri']);
+      if ($node['type'] == "product") {
+        if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
+          //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+          @file_get_contents(image_style_url('750_0', $vv['uri']));
+        } else {
+
+        }
+        $node['field_pictures']['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
+      } elseif ($node['type'] == "share_product") {
+        if (!file_exists(drupal_realpath(image_style_path('750_0', $vv['uri'])))) {
+          //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
+          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
+          @file_get_contents(image_style_url('750_0', $vv['uri']));
+        } else {
+
+        }
+        $node['field_pictures']['und'][$kk]['thumb'] = file_create_url(image_style_path('750_0', $vv['uri']));
+      }
+
+    }
+  }
+  $node['isinbox'] = 0;
+  $res =db_query("SELECT * FROM {product_box} WHERE uid=:uid and nid=:nid", [':uid' => $user->uid,':nid' => $nid]) -> fetch();
+  if(!empty($res)){
+    $node['isinbox'] = 1;
+  }
+  $node['nstatus']['und'][0]['value'] = 2;
+  if(!empty($node['field_endtime'])){
+    $starttime = strtotime($node['field_starttime']['und'][0]['value']);
+    if($starttime>REQUEST_TIME){
+      $node ['nstatus']['und'][0]['value'] = 1;
+    }
+  }
+  if(!empty($node['field_endtime'])){
+    $endtime = strtotime($node['field_endtime']['und'][0]['value']);
+    if($endtime<REQUEST_TIME){
+      $node['nstatus']['und'][0]['value'] = 3;
+    }
+  }
 //product 375_325
-	//share_product 375_360
-	$end = microtime_float();
-	calcrequesttime($start, $end, $node['type'] . "商品详情");
-	return ['product' => $node, 'seller' => $rseller];
+  //share_product 375_360
+  $end = microtime_float();
+  calcrequesttime($start, $end, $node['type'] . "商品详情");
+  return ['product' => $node, 'seller' => $seller];
 }
 /*function users_user_login(&$edit,$account){
 //   $url = $_SERVER['REQUEST_URI'];
@@ -1313,229 +1299,229 @@ drupal_write_record('users_mobile_verifycode',$records,'id');
 }*/
 
 function product_applylist($form,&$form_state){
-	$now = REQUEST_TIME;
-	$form['starttime'] = array(
+  $now = REQUEST_TIME;
+  $form['starttime'] = array(
 
-		'#type' => 'textfield',
+    '#type' => 'textfield',
 
-		'#title' => t('开始时间'),
+    '#title' => t('开始时间'),
 
-		'#default_value' => empty($_SESSION['product_applylist_filter']['starttime'])?'':$_SESSION['product_applylist_filter']['starttime'],
+    '#default_value' => empty($_SESSION['product_applylist_filter']['starttime'])?'':$_SESSION['product_applylist_filter']['starttime'],
 
-		'#size' => 60,
+    '#size' => 60,
 
-		'#maxlength' => 128,
+    '#maxlength' => 128,
 
-		'#description' => '日期格式为1990-2-1'
+    '#description' => '日期格式为1990-2-1'
 
-	);
-	$form['endtime'] = array(
+  );
+  $form['endtime'] = array(
 
-		'#type' => 'textfield',
+    '#type' => 'textfield',
 
-		'#title' => t('结束时间时间'),
+    '#title' => t('结束时间时间'),
 
-		'#default_value' => empty($_SESSION['product_applylist_filter']['endtime'])?'':$_SESSION['product_applylist_filter']['endtime'],
+    '#default_value' => empty($_SESSION['product_applylist_filter']['endtime'])?'':$_SESSION['product_applylist_filter']['endtime'],
 
-		'#size' => 60,
+    '#size' => 60,
 
-		'#maxlength' => 128,
+    '#maxlength' => 128,
 
-		'#description' => '日期格式为1990-2-1'
+    '#description' => '日期格式为1990-2-1'
 
-	);
-	$form['uid'] = array(
+  );
+  $form['uid'] = array(
 
-		'#type' => 'textfield',
+    '#type' => 'textfield',
 
-		'#title' => t('用户id'),
+    '#title' => t('用户id'),
 
-		'#default_value' => empty($_SESSION['product_applylist_filter']['uid'])?'':$_SESSION['product_applylist_filter']['uid'],
+    '#default_value' => empty($_SESSION['product_applylist_filter']['uid'])?'':$_SESSION['product_applylist_filter']['uid'],
 
-		'#size' => 60,
+    '#size' => 60,
 
-		'#maxlength' => 128,
+    '#maxlength' => 128,
 
 
-	);
+  );
 
-	$form['submit'] = array('#type' => 'submit', '#value' => t('搜索'));
-	$form['export'] = array('#type' => 'submit', '#value' => t('导出搜索结果'));
-	$header = array(
-		'id' => array('data' => t('id'), 'field' => 'usl.id', 'sort' => 'desc'),
-		'nid' => array('data' => t('商品id'), 'field' => 'usl.nid'),
-		'uid' => array('data' => t('用户id'), 'field' => 'usl.uid'),
-		'productname' => t('商品名称'),
-		'created' =>t('申领时间'),
-		'mobile' => t('手机号'),
-	);
-	$query = db_select('product_order', 'usl')->extend('PagerDefault')->extend('TableSort')->fields('usl',array('id','nid','uid'))->orderByHeader($header);
-	$query -> leftJoin('node','n','n.nid=usl.nid');
-	$query ->fields('n',array('title'));
-	$query -> fields('usl',array('created'));
-	$query -> leftJoin('users','u','usl.uid=u.uid');
-	$query -> fields('u',array('name'));
-	$query -> condition('usl.product_type','share_product');
-	$filters = ['usl.product_type','product_share'];
-	if(!empty($_SESSION['product_applylist_filter'])){
-		$filters = $_SESSION['product_applylist_filter'];
+  $form['submit'] = array('#type' => 'submit', '#value' => t('搜索'));
+  $form['export'] = array('#type' => 'submit', '#value' => t('导出搜索结果'));
+  $header = array(
+    'id' => array('data' => t('id'), 'field' => 'usl.id', 'sort' => 'desc'),
+    'nid' => array('data' => t('商品id'), 'field' => 'usl.nid'),
+    'uid' => array('data' => t('用户id'), 'field' => 'usl.uid'),
+    'productname' => t('商品名称'),
+    'created' =>t('申领时间'),
+    'mobile' => t('手机号'),
+  );
+  $query = db_select('product_order', 'usl')->extend('PagerDefault')->extend('TableSort')->fields('usl',array('id','nid','uid'))->orderByHeader($header);
+  $query -> leftJoin('node','n','n.nid=usl.nid');
+  $query ->fields('n',array('title'));
+  $query -> fields('usl',array('created'));
+  $query -> leftJoin('users','u','usl.uid=u.uid');
+  $query -> fields('u',array('name'));
+  $query -> condition('usl.product_type','share_product');
+  $filters = ['usl.product_type','product_share'];
+  if(!empty($_SESSION['product_applylist_filter'])){
+    $filters = $_SESSION['product_applylist_filter'];
 
-	}
-	$valid = ['starttime','endtime','uid'];
-	foreach($filters as $k =>$v){
-		if(in_array($k, $valid)){
-			if($k == 'starttime'){
-				$query -> condition('usl.created',strtotime($v),'>=');
-			}elseif($k == 'endtime'){
-				$query -> condition('usl.created',strtotime(date('Y-m-d 23:59:59',strtotime($v))),'<=');
-			}else{
-				$query -> condition('usl.'.$k,$v);
-			}
-		}
+  }
+  $valid = ['starttime','endtime','uid'];
+  foreach($filters as $k =>$v){
+    if(in_array($k, $valid)){
+      if($k == 'starttime'){
+        $query -> condition('usl.created',strtotime($v),'>=');
+      }elseif($k == 'endtime'){
+        $query -> condition('usl.created',strtotime(date('Y-m-d 23:59:59',strtotime($v))),'<=');
+      }else{
+        $query -> condition('usl.'.$k,$v);
+      }
+    }
 
-	}
-	$result = $query -> execute();
-	$rows = [];
-	$destination = drupal_get_destination();
-	while($record = $result->fetchAssoc()) {
-		$record['nid'] = array(
-			'data' => array(
-				'#type' => 'link',
-				'#title' => $record['nid'],
-				'#href' => '/node/' . $record['nid'],
-				'#options' => array('query' => $destination),
-				//'#query' => $,
-			));
-		$record['uid'] = array(
-			'data' => array(
-				'#type' => 'link',
-				'#title' => $record['uid'],
-				'#href' => '/user/' . $record['uid'],
-				'#options' => array('query' => $destination),
-				//'#query' => $,
-			));
-		$record['created'] = date('Y-m-d H:i:s',$record['created']);
-		$rows[] = $record;
-	}
-	//print_r($rows);exit;
-	$form['nodes'] = array(
-		'#theme' => 'table',
-		'#header' => $header,
-		'#rows' => $rows,
-		'#empty' => t('暂无申请记录'),
-	);
-	$form['pager'] = array('#markup' => theme('pager'));
-	return $form;
+  }
+  $result = $query -> execute();
+  $rows = [];
+  $destination = drupal_get_destination();
+  while($record = $result->fetchAssoc()) {
+    $record['nid'] = array(
+      'data' => array(
+        '#type' => 'link',
+        '#title' => $record['nid'],
+        '#href' => '/node/' . $record['nid'],
+        '#options' => array('query' => $destination),
+        //'#query' => $,
+      ));
+    $record['uid'] = array(
+      'data' => array(
+        '#type' => 'link',
+        '#title' => $record['uid'],
+        '#href' => '/user/' . $record['uid'],
+        '#options' => array('query' => $destination),
+        //'#query' => $,
+      ));
+    $record['created'] = date('Y-m-d H:i:s',$record['created']);
+    $rows[] = $record;
+  }
+  //print_r($rows);exit;
+  $form['nodes'] = array(
+    '#theme' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#empty' => t('暂无申请记录'),
+  );
+  $form['pager'] = array('#markup' => theme('pager'));
+  return $form;
 }
 
 function _exportData(){
-	$query = db_select('product_order', 'usl');
-	$query -> leftJoin('node','n','n.nid=usl.nid');
+  $query = db_select('product_order', 'usl');
+  $query -> leftJoin('node','n','n.nid=usl.nid');
 
-	//$query -> fields('usl',array('id','created'));
-	$query -> leftJoin('users','u','usl.uid=u.uid');
-	$query -> fields('u',array('name'));
+  //$query -> fields('usl',array('id','created'));
+  $query -> leftJoin('users','u','usl.uid=u.uid');
+  $query -> fields('u',array('name'));
 
-	$query -> leftJoin('field_data_field_username','fdfu','u.uid=fdfu.entity_id');
-	$query -> fields('fdfu',array('field_username_value'));
-	$query -> leftJoin('field_data_field_company_name','fdfcn','u.uid=fdfcn.entity_id');
-	$query -> fields('fdfcn',array('field_company_name_value'));
-	$query -> leftJoin('field_data_field_company_address','fdfca','u.uid=fdfca.entity_id');
-	$query -> fields('fdfca',array('field_company_address_value'));
-	$query ->fields('n',array('title'));
-	//$filters = ['usl.product_type','product_share'];
-	$query -> condition('usl.product_type','share_product');
-	$query -> condition('usl.uid','1','!=');
-	if(!empty($_SESSION['product_applylist_filter'])){
-		$filters = $_SESSION['product_applylist_filter'];
+  $query -> leftJoin('field_data_field_username','fdfu','u.uid=fdfu.entity_id');
+  $query -> fields('fdfu',array('field_username_value'));
+  $query -> leftJoin('field_data_field_company_name','fdfcn','u.uid=fdfcn.entity_id');
+  $query -> fields('fdfcn',array('field_company_name_value'));
+  $query -> leftJoin('field_data_field_company_address','fdfca','u.uid=fdfca.entity_id');
+  $query -> fields('fdfca',array('field_company_address_value'));
+  $query ->fields('n',array('title'));
+  //$filters = ['usl.product_type','product_share'];
+  $query -> condition('usl.product_type','share_product');
+  $query -> condition('usl.uid','1','!=');
+  if(!empty($_SESSION['product_applylist_filter'])){
+    $filters = $_SESSION['product_applylist_filter'];
 
-	}
-	$fp = fopen ( 'php://output', 'a' );
-	$head = array ('手机','名字','公司名字','公司地址','商品名称');
-	foreach ( $head as $i => $v ) {
-		// CSV的Excel支持GBK编码，一定要转换，否则乱码
-		$head [$i] = iconv ( 'utf-8', 'gbk', $v );
-	}
-	// 将数据通过fputcsv写到文件句柄
-	fputcsv ( $fp, $head );
-	$cnt=0;
-	$valid = ['starttime','endtime','uid'];
-	foreach($filters as $k =>$v){
-		if(in_array($k, $valid)){
-			if($k == 'starttime'){
-				$query -> condition('usl.created',strtotime($v),'>=');
-			}
-			if($k == 'endtime'){
-				$v = strtotime(date('Y-m-d 23:59:59',strtotime($v)));
-				$query -> condition('usl.created',$v,'<=');
-			}
-			if($k=='uid'){
-				$query -> condition('usl.'.$k,$v);
-			}
-		}
+  }
+  $fp = fopen ( 'php://output', 'a' );
+  $head = array ('手机','名字','公司名字','公司地址','商品名称');
+  foreach ( $head as $i => $v ) {
+    // CSV的Excel支持GBK编码，一定要转换，否则乱码
+    $head [$i] = iconv ( 'utf-8', 'gbk', $v );
+  }
+  // 将数据通过fputcsv写到文件句柄
+  fputcsv ( $fp, $head );
+  $cnt=0;
+  $valid = ['starttime','endtime','uid'];
+  foreach($filters as $k =>$v){
+    if(in_array($k, $valid)){
+      if($k == 'starttime'){
+        $query -> condition('usl.created',strtotime($v),'>=');
+      }
+      if($k == 'endtime'){
+        $v = strtotime(date('Y-m-d 23:59:59',strtotime($v)));
+        $query -> condition('usl.created',$v,'<=');
+      }
+      if($k=='uid'){
+        $query -> condition('usl.'.$k,$v);
+      }
+    }
 
-	}
-	$result = $query -> execute();
-	//print_r($query);exit;
-	$limit = 8000;
-	header ( 'Content-Type: application/vnd.ms-excel' );
-	header ( 'Content-Disposition: attachment;filename="'.date('Y-m-d').iconv('utf-8','gbk','白领记录').'.csv' );
-	header ( 'Cache-Control: max-age=0' );
-	header("Content-Transfer-Encoding: binary");
-	// 打开PHP文件句柄，php://output 表示直接输出到浏览器
+  }
+  $result = $query -> execute();
+  //print_r($query);exit;
+  $limit = 8000;
+  header ( 'Content-Type: application/vnd.ms-excel' );
+  header ( 'Content-Disposition: attachment;filename="'.date('Y-m-d').iconv('utf-8','gbk','白领记录').'.csv' );
+  header ( 'Cache-Control: max-age=0' );
+  header("Content-Transfer-Encoding: binary");
+  // 打开PHP文件句柄，php://output 表示直接输出到浏览器
 
-	while($row = $result -> fetchAssoc()){
-		$cnt ++;
-				if ($limit == $cnt) { // 刷新一下输出buffer，防止由于数据过多造成问题
-					ob_flush ();
-					flush ();
-					$cnt = 0;
-				}
+  while($row = $result -> fetchAssoc()){
+    $cnt ++;
+    if ($limit == $cnt) { // 刷新一下输出buffer，防止由于数据过多造成问题
+      ob_flush ();
+      flush ();
+      $cnt = 0;
+    }
 
-				// 读取表数据
-				$content = array ();
-				$content [] = iconv ( 'utf-8', 'gbk', $row ['name'] . "\t" );
-				$content [] = iconv ( 'utf-8', 'gbk', $row ['field_username_value'] );
-				$content [] = iconv ( 'utf-8', 'gbk', $row ['field_company_name_value'] . "\t" );
-				$content [] = iconv ( 'utf-8', 'gbk', $row ['field_company_address_value'] . "\t" );
-				$content [] = iconv ( 'utf-8', 'gbk', $row ['title'] );
+    // 读取表数据
+    $content = array ();
+    $content [] = iconv ( 'utf-8', 'gbk', $row ['name'] . "\t" );
+    $content [] = iconv ( 'utf-8', 'gbk', $row ['field_username_value'] );
+    $content [] = iconv ( 'utf-8', 'gbk', $row ['field_company_name_value'] . "\t" );
+    $content [] = iconv ( 'utf-8', 'gbk', $row ['field_company_address_value'] . "\t" );
+    $content [] = iconv ( 'utf-8', 'gbk', $row ['title'] );
 
-				fputcsv ( $fp, $content );
-	}
-	exit;
-	//$r = $result -> fetchAll();
-	//print_r($r);exit;
+    fputcsv ( $fp, $content );
+  }
+  exit;
+  //$r = $result -> fetchAll();
+  //print_r($r);exit;
 }
 function product_applylist_submit($form,&$form_state){
-	switch ($form_state['values']['op']) {
-		case '搜索':
-			foreach($form_state['values'] as $k =>$v){
-				if(trim($v) != ""){
-					$_SESSION['product_applylist_filter'][$k] = $v;
-				}else{
-					unset($_SESSION['product_applylist_filter'][$k]);
-				}
-			}
-			break;
-		case '导出搜索结果':
-		foreach($form_state['values'] as $k =>$v){
-				if(trim($v) != ""){
-					$_SESSION['product_applylist_filter'][$k] = $v;
-				}else{
-					unset($_SESSION['product_applylist_filter'][$k]);
-				}
-			}
-		_exportData();
-			//return coupon_create_swingshare_lottery_list();
-			break;
-		default:
-			foreach($form_state['values'] as $k =>$v){
-				if(trim($v) != ""){
-					$_SESSION['product_applylist_filter'][$k] = $v;
-				}
-			}
-			break;
-	}
+  switch ($form_state['values']['op']) {
+    case '搜索':
+      foreach($form_state['values'] as $k =>$v){
+        if(trim($v) != ""){
+          $_SESSION['product_applylist_filter'][$k] = $v;
+        }else{
+          unset($_SESSION['product_applylist_filter'][$k]);
+        }
+      }
+      break;
+    case '导出搜索结果':
+      foreach($form_state['values'] as $k =>$v){
+        if(trim($v) != ""){
+          $_SESSION['product_applylist_filter'][$k] = $v;
+        }else{
+          unset($_SESSION['product_applylist_filter'][$k]);
+        }
+      }
+      _exportData();
+      //return coupon_create_swingshare_lottery_list();
+      break;
+    default:
+      foreach($form_state['values'] as $k =>$v){
+        if(trim($v) != ""){
+          $_SESSION['product_applylist_filter'][$k] = $v;
+        }
+      }
+      break;
+  }
 
 
 }
