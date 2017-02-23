@@ -406,7 +406,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 11,
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -446,7 +446,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 7,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -485,10 +485,10 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
-        'weight' => 13,
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -542,10 +542,10 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
-        'weight' => 12,
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -599,10 +599,10 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
-        'weight' => 14,
+        'weight' => 12,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -666,7 +666,7 @@ function juna_basic_features_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 9,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -752,10 +752,10 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
-        'weight' => 10,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -849,14 +849,19 @@ function juna_basic_features_field_default_field_instances() {
     'bundle' => 'product',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '商家提供的其他平台的链接',
+    'description' => '<p>填写相关的外联，title字段可选值有:</p>
+<ul>
+<li><b>tmall</b> - 天猫</li>
+<li><b>official</b> - 官网</li>
+<li><b>wechatqr</b> - 微信QR CODE</li>
+</ul>',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'module' => 'link',
         'settings' => array(),
         'type' => 'link_default',
-        'weight' => 17,
+        'weight' => 14,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -913,7 +918,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'node_reference',
         'settings' => array(),
         'type' => 'node_reference_default',
-        'weight' => 16,
+        'weight' => 15,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -959,7 +964,7 @@ function juna_basic_features_field_default_field_instances() {
           'thousand_separator' => '',
         ),
         'type' => 'number_integer',
-        'weight' => 8,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1000,7 +1005,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'node_reference',
         'settings' => array(),
         'type' => 'node_reference_default',
-        'weight' => 5,
+        'weight' => 13,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1041,7 +1046,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 6,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -2073,49 +2078,18 @@ function juna_basic_features_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-sku_product-field_product_brand'.
-  $field_instances['node-sku_product-field_product_brand'] = array(
-    'bundle' => 'sku_product',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 14,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_product_brand',
-    'label' => 'Product Brand',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
-      'weight' => 13,
-    ),
-  );
-
   // Exported field_instance: 'node-sku_product-field_product_brand_link'.
   $field_instances['node-sku_product-field_product_brand_link'] = array(
     'bundle' => 'sku_product',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => '<p>填写相关的外联，title字段可选值有:</p>
+<ul>
+<li><b>tmall</b> - 天猫</li>
+<li><b>official</b> - 官网</li>
+<li><b>wechatqr</b> - 微信QR CODE</li>
+</ul>
+',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2258,7 +2232,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
         'weight' => 9,
@@ -2316,7 +2290,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
         'weight' => 10,
@@ -2374,7 +2348,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
         'weight' => 11,
@@ -2431,7 +2405,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
         'weight' => 12,
@@ -2489,7 +2463,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
         'weight' => 3,
@@ -2596,7 +2570,7 @@ function juna_basic_features_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => '',
-          'image_style' => '',
+          'image_style' => 'large',
         ),
         'type' => 'image',
         'weight' => 4,
@@ -2964,6 +2938,19 @@ function juna_basic_features_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('<p>填写相关的外联，title字段可选值有:</p>
+<ul>
+<li><b>tmall</b> - 天猫</li>
+<li><b>official</b> - 官网</li>
+<li><b>wechatqr</b> - 微信QR CODE</li>
+</ul>');
+  t('<p>填写相关的外联，title字段可选值有:</p>
+<ul>
+<li><b>tmall</b> - 天猫</li>
+<li><b>official</b> - 官网</li>
+<li><b>wechatqr</b> - 微信QR CODE</li>
+</ul>
+');
   t('Address');
   t('Banner Image');
   t('Body');
@@ -2973,7 +2960,6 @@ function juna_basic_features_field_default_field_instances() {
   t('Info Item Category');
   t('Introduce');
   t('Parameter for Target');
-  t('Product Brand');
   t('Product Brand Link');
   t('Product Description');
   t('Product Display Name');
@@ -3038,7 +3024,6 @@ function juna_basic_features_field_default_field_instances() {
   t('商品库存');
   t('商品详细页面中的商品大图');
   t('商家介绍');
-  t('商家提供的其他平台的链接');
   t('市场价');
   t('库存');
   t('开始时间，日期格式1990-01-31 10:00:00');
