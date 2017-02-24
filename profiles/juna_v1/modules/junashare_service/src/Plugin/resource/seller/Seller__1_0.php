@@ -46,7 +46,7 @@ class Seller__1_0 extends ResourceNode {
     );
 
     // Clean up some fields.
-    unset($public_fields['label'], $public_fields['self']);
+    unset($public_fields['self']);
     $public_fields['id']['methods'] = array();
 
     return $public_fields;
