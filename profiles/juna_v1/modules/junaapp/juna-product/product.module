@@ -246,6 +246,7 @@ function product_swingshare(){
   $query->entityCondition('bundle', array('swingshare'));
   $query -> fieldCondition('field_starttime','value',date('Y-m-d :i:s'),'<=');
   $query -> fieldCondition('field_endtime','value',date('Y-m-d H:i:s'),'>=');
+  //$query ->propertyOrderBy('changed', 'DESC');
   $nids = [];
   $node = [];
   $remaintime = 0;
@@ -594,12 +595,12 @@ function product_buy($nid) {
   $end = strtotime(date('Y-m-d') . " 23:59:59");
   $status = 0;
   if($node -> type == 'product'){
-    $r = db_query('SELECT * FROM product_order WHERE created >=:start AND created<=:end AND uid=:uid', array(":start" => $start, ":end" => $end, ":uid" => $user->uid, ":nid" => $nid))->fetchAll();
+    $r = db_query('SELECT * FROM product_order WHERE created >=:start AND created<=:end AND uid=:uid', array(":start" => $start, ":end" => $end, ":uid" => $user->uid))->fetchAll();
     if ($r) {
       return services_error(t('今天已购买.'), 406);
     }
     $isbuy = db_query('SELECT * FROM product_order WHERE nid=:nid AND uid=:uid', array(":uid" => $user->uid, ":nid" => $nid))->fetchAll();
-    if ($r) {
+    if ($isbuy) {
       return services_error(t('商品已购买.'), 406);
     }
   }elseif($node -> type == 'share_product'){
@@ -979,7 +980,7 @@ function product_share($page, $time) {
     }
     $timeperiod[$time]['selected'] = 1;
   }
-  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_endtime_value <= :stime)) ",$page*$limit,$limit,[':type' => 'share_product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
+  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_starttime_value <= :stime) OR ((fdfe.field_endtime_value >= :stime AND fdfe.field_endtime_value <= :etime)) or (fdfe.field_endtime_value <= :etime AND fdfs.field_starttime_value >= :stime)) ORDER BY n.changed DESC",$page*$limit,$limit,[':type' => 'share_product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
 
   $results = $query->fetchAll();
   $nids = [];
@@ -1075,7 +1076,9 @@ function product_list($page) {
 
   }
 
-  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_endtime_value <= :etime)) ",$page*$limit,$limit,[':type' => 'product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
+  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_starttime_value <= :stime) OR ((fdfe.field_endtime_value >= :stime AND fdfe.field_endtime_value <= :etime)) or (fdfe.field_endtime_value <= :etime AND fdfs.field_starttime_value >= :stime)) ORDER BY n.changed DESC",$page*$limit,$limit,[':type' => 'product',':status' => NODE_PUBLISHED,':stime' =>date('Y-m-d H:i:s',$start),':etime' =>date('Y-m-d H:i:s',$end)]);//获取符合条件的所有产品的nid
+ // echo date('Y-m-d H:i:s',$start);
+  //echo date('Y-m-d H:i:s',$end);
   /*$query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node');
 
@@ -1089,6 +1092,7 @@ function product_list($page) {
   foreach($results as $k =>$v){
     $nids[] = $v-> nid;
   }
+  //print_r($nids);
   $data = [];
   $nodefiled = usedField()['node'];
   if (!empty($results)) {
