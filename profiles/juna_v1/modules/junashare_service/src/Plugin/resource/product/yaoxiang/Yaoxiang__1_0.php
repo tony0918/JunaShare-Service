@@ -33,6 +33,7 @@ class Yaoxiang__1_0 extends ResourceNode {
    */
   protected function publicFields() {
     $public_fields = parent::publicFields();
+    $public_fields['nid'] = $public_fields['id'];
     $public_fields['total_amount'] = array(
       'property' => 'field_product_total_amount'
     );
@@ -52,6 +53,10 @@ class Yaoxiang__1_0 extends ResourceNode {
         'minorVersion' => 0
       )
     );
+
+    // Clean up some fields.
+    unset($public_fields['label'], $public_fields['self']);
+    $public_fields['id']['methods'] = array();
 
     return $public_fields;
   }
