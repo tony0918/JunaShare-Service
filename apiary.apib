@@ -66,6 +66,11 @@ HOST: http://api.junashare.com/
 + provider (Seller) - 供应商信息
 + time_remaining: `24861` - 距离下一场壹购开始还剩余的秒数，不与产品相关，每个商品中的字段都相同。（后期会向上提取一层，减少重复数据）
 
+## YaoxiangProduct (object)
++ nid: `9` - 商品id
++ total_amount: `1` - 可以中奖的人数
++ sku_product (SkuProduct) - 壹购商品对应的SKU商品，包含必要的素材
++ provider (Seller) - 供应商信息
 
 # Group Banner
 
@@ -142,3 +147,13 @@ HOST: http://api.junashare.com/
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[YigouProduct])
+
+## Yaoxiang Product List [/api/v1.0/yaoxiang/{id}]
+
+### Retrieve Yaoxiang Product List [GET]
++ Parameters
+    + id: `9` - 商品id，不传递id，获取整个列表
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array[YaoxiangProduct])
