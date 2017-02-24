@@ -3331,7 +3331,7 @@ function juna_basic_features_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 6,
+      'weight' => 5,
     ),
   );
 
@@ -3382,7 +3382,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 4,
+      'weight' => 3,
     ),
   );
 
@@ -3438,7 +3438,7 @@ function juna_basic_features_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 3,
+      'weight' => 2,
     ),
   );
 
@@ -3466,7 +3466,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_related_sku_product',
     'label' => 'Related SKU Product',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -3480,6 +3480,47 @@ function juna_basic_features_field_default_field_instances() {
       ),
       'type' => 'node_reference_autocomplete',
       'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'node-yaoxiang_product-field_seller'.
+  $field_instances['node-yaoxiang_product-field_seller'] = array(
+    'bundle' => 'yaoxiang_product',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'node_reference',
+        'settings' => array(),
+        'type' => 'node_reference_default',
+        'weight' => 15,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_seller',
+    'label' => 'Related Provider',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'node_reference',
+      'settings' => array(
+        'autocomplete_match' => 'contains',
+        'autocomplete_path' => 'node_reference/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'node_reference_autocomplete',
+      'weight' => 4,
     ),
   );
 

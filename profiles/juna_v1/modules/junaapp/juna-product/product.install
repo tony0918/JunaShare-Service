@@ -22,7 +22,6 @@ function product_schema() {
         'not null' => TRUE,
         'description' => '商品类型'
       ),
-
       'created' => array(
         'type' => 'int',
         'not null' => TRUE,
@@ -34,9 +33,12 @@ function product_schema() {
         'description' => '用户id',
         'unsigned' => TRUE
       )
-
     ),
     'primary key' => array('id'),
+    'indexes' => array(
+      'idx_nid' => array('nid'),
+      'idx_uid' => array('uid'),
+    ),
   );
   $schema['user_wingshare_log'] = array(
     'fields' => array(
@@ -112,6 +114,17 @@ function product_update_7002() {
   $table = 'user_wingshare_log';
   if (!db_field_exists($table, 'couponid')) {
     db_add_field($table, 'couponid', array('type' => 'int', 'description' => '白领券id'));
+  }
+}
+
+/**
+ * Adding new indexes idx_nid and idx_uid for product_box.
+ */
+function product_update_7003() {
+  $table = 'product_box';
+  if (db_table_exists($table)) {
+    db_add_index($table, 'idx_nid', array('nid'));
+    db_add_index($table, 'idx_uid', array('uid'));
   }
 }
 

@@ -17,6 +17,7 @@ class DataProviderYaoxiangNode extends DataProviderNode {
     $query = parent::getEntityFieldQuery();
     $query->fieldCondition('field_product_valid_period', 'value', REQUEST_TIME, '<=');
     $query->fieldCondition('field_product_valid_period', 'value2', REQUEST_TIME, '>=');
+    $query->range(0, 1);
     return $query;
   }
 }

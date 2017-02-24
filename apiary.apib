@@ -65,6 +65,7 @@ HOST: http://api.junashare.com/
 + sku_product (SkuProduct) - 壹购商品对应的SKU商品，包含必要的素材
 + provider (Seller) - 供应商信息
 + time_remaining: `24861` - 距离下一场壹购开始还剩余的秒数，不与产品相关，每个商品中的字段都相同。（后期会向上提取一层，减少重复数据）
++ in_box: `0` - 商品是否已经被当前用户加入盒子，1为已经加入，0为未加入，未登入状态始终为0
 
 ## YaoxiangProduct (object)
 + nid: `9` - 商品id

@@ -70,6 +70,9 @@ class Yigou__1_0 extends ResourceNode {
     $public_fields['time_remaining'] = array(
       'callback' => array($this, 'getRemainingTime'),
     );
+    $public_fields['in_box'] = array(
+      'callback' => array($this, 'getInBoxStatus')
+    );
 
     // Clean up some fields.
     unset($public_fields['label'], $public_fields['self']);
@@ -93,5 +96,18 @@ class Yigou__1_0 extends ResourceNode {
       $result = strtotime('tomorrow 08:00') - REQUEST_TIME;
     }
     return $result;
+  }
+
+  public function getInBoxStatus(DataInterpreterInterface $interpreter) {
+    global $user;
+    $result = array();
+    if ($user->uid > 0) {
+      $q = db_select('product_box', 'pb')
+        ->fields('pb', array('id'))
+        ->condition('uid', $user->uid, '=')
+        ->condition('nid', $interpreter->getWrapper()->value()->vid, '=');
+      $result = $q->execute()->fetchAll();
+    }
+    return empty($result) ? 0 : 1;
   }
 }

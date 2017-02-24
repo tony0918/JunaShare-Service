@@ -157,6 +157,7 @@ features[field_instance][] = node-yaoxiang_product-body
 features[field_instance][] = node-yaoxiang_product-field_product_total_amount
 features[field_instance][] = node-yaoxiang_product-field_product_valid_period
 features[field_instance][] = node-yaoxiang_product-field_related_sku_product
+features[field_instance][] = node-yaoxiang_product-field_seller
 features[filter][] = filtered_html
 features[filter][] = full_html
 features[filter][] = php_code
