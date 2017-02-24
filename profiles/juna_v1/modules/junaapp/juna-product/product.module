@@ -1283,8 +1283,6 @@ function product_detail($nid) {
     $seller = [];
   }
   else {
-  }
-else {
     $seller = $node['field_seller']['und'][0]['nid'];
     $seller = (array) node_load($seller);
     unset($seller['rdf_mapping']);
