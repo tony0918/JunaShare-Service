@@ -86,7 +86,7 @@ class Yigou__1_0 extends ResourceNode {
   }
 
   public function getRemainingTime(DataInterpreterInterface $interpreter) {
-    if (8 > (int) format_date(REQUEST_TIME, 'custom', 'h')) {
+    if (8 > (int) format_date(REQUEST_TIME, 'custom', 'H')) {
       $result = strtotime('today 08:00') - REQUEST_TIME;
     }
     else {

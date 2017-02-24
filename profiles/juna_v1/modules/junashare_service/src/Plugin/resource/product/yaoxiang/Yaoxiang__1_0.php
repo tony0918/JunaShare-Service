@@ -18,7 +18,8 @@ use Drupal\restful\Plugin\resource\ResourceNode;
  *   dataProvider = {
  *     "entityType": "node",
  *     "bundles": {
- *        "yaoxiang_product"
+ *        "yaoxiang_product",
+ *        "swingshare"
  *      }
  *   },
  *   majorVersion = 1,
@@ -32,13 +33,21 @@ class Yaoxiang__1_0 extends ResourceNode {
    */
   protected function publicFields() {
     $public_fields = parent::publicFields();
-    $public_fields['totalAmount'] = array('property' => 'field_product_total_amount');
-    $public_fields['yaoxiangPrice'] = array('property' => 'field_product_yaoxiang_price');
-
-    $public_fields['skuProductItem'] = array(
-      'property' => 'field_sku_product_item',
+    $public_fields['total_amount'] = array(
+      'property' => 'field_product_total_amount'
+    );
+    $public_fields['sku_product'] = array(
+      'property' => 'field_related_sku_product',
       'resource' => array(
         'name' => 'skuproduct',
+        'majorVersion' => 1,
+        'minorVersion' => 0
+      )
+    );
+    $public_fields['provider'] = array(
+      'property' => 'field_seller',
+      'resource' => array(
+        'name' => 'seller',
         'majorVersion' => 1,
         'minorVersion' => 0
       )

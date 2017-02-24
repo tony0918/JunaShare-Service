@@ -91,6 +91,14 @@ function juna_basic_features_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
+    'swingshare' => array(
+      'name' => t('Swingshare Product'),
+      'base' => 'node_content',
+      'description' => t('摇享商品（将弃用)'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
     'yaoxiang_product' => array(
       'name' => t('Yaoxiang Product'),
       'base' => 'node_content',

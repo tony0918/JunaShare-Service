@@ -74,6 +74,27 @@ function juna_basic_features_field_default_field_bases() {
     'type' => 'image',
   );
 
+  // Exported field_base: 'field_brandinfo'.
+  $field_bases['field_brandinfo'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_brandinfo',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   // Exported field_base: 'field_columns'.
   $field_bases['field_columns'] = array(
     'active' => 1,
@@ -754,23 +775,6 @@ function juna_basic_features_field_default_field_bases() {
     'type' => 'datestamp',
   );
 
-  // Exported field_base: 'field_product_yaoxiang_price'.
-  $field_bases['field_product_yaoxiang_price'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_product_yaoxiang_price',
-    'indexes' => array(),
-    'locked' => 0,
-    'module' => 'number',
-    'settings' => array(
-      'decimal_separator' => '.',
-    ),
-    'translatable' => 0,
-    'type' => 'number_float',
-  );
-
   // Exported field_base: 'field_reference_link'.
   $field_bases['field_reference_link'] = array(
     'active' => 1,
@@ -825,6 +829,7 @@ function juna_basic_features_field_default_field_bases() {
         'seller' => 0,
         'share_product' => 0,
         'sku_product' => 'sku_product',
+        'swingshare' => 0,
         'yaoxiang_product' => 0,
       ),
       'view' => array(
@@ -877,6 +882,7 @@ function juna_basic_features_field_default_field_bases() {
         'seller' => 'seller',
         'share_product' => 0,
         'sku_product' => 0,
+        'swingshare' => 0,
         'yaoxiang_product' => 0,
       ),
       'view' => array(
@@ -887,36 +893,6 @@ function juna_basic_features_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'node_reference',
-  );
-
-  // Exported field_base: 'field_sku_product_item'.
-  $field_bases['field_sku_product_item'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_sku_product_item',
-    'indexes' => array(
-      'target_id' => array(
-        0 => 'target_id',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'entityreference',
-    'settings' => array(
-      'handler' => 'base',
-      'handler_settings' => array(
-        'sort' => array(
-          'type' => 'none',
-        ),
-        'target_bundles' => array(
-          'sku_product' => 'sku_product',
-        ),
-      ),
-      'target_type' => 'node',
-    ),
-    'translatable' => 0,
-    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_target_type'.

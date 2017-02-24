@@ -450,6 +450,13 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'create product content'.
+  $permissions['create product content'] = array(
+    'name' => 'create product content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
   // Exported permission: 'create seller content'.
   $permissions['create seller content'] = array(
     'name' => 'create seller content',
@@ -466,6 +473,13 @@ function juna_basic_features_user_default_permissions() {
       'administrator' => 'administrator',
       'editor' => 'editor',
     ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'create swingshare content'.
+  $permissions['create swingshare content'] = array(
+    'name' => 'create swingshare content',
+    'roles' => array(),
     'module' => 'node',
   );
 
@@ -524,6 +538,13 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'delete any product content'.
+  $permissions['delete any product content'] = array(
+    'name' => 'delete any product content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
   // Exported permission: 'delete any seller content'.
   $permissions['delete any seller content'] = array(
     'name' => 'delete any seller content',
@@ -539,6 +560,13 @@ function juna_basic_features_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
     ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete any swingshare content'.
+  $permissions['delete any swingshare content'] = array(
+    'name' => 'delete any swingshare content',
+    'roles' => array(),
     'module' => 'node',
   );
 
@@ -578,6 +606,13 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'delete own product content'.
+  $permissions['delete own product content'] = array(
+    'name' => 'delete own product content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
   // Exported permission: 'delete own seller content'.
   $permissions['delete own seller content'] = array(
     'name' => 'delete own seller content',
@@ -593,6 +628,13 @@ function juna_basic_features_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
     ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete own swingshare content'.
+  $permissions['delete own swingshare content'] = array(
+    'name' => 'delete own swingshare content',
+    'roles' => array(),
     'module' => 'node',
   );
 
@@ -670,6 +712,13 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit any product content'.
+  $permissions['edit any product content'] = array(
+    'name' => 'edit any product content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
   // Exported permission: 'edit any seller content'.
   $permissions['edit any seller content'] = array(
     'name' => 'edit any seller content',
@@ -686,6 +735,13 @@ function juna_basic_features_user_default_permissions() {
       'administrator' => 'administrator',
       'editor' => 'editor',
     ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'edit any swingshare content'.
+  $permissions['edit any swingshare content'] = array(
+    'name' => 'edit any swingshare content',
+    'roles' => array(),
     'module' => 'node',
   );
 
@@ -746,6 +802,13 @@ function juna_basic_features_user_default_permissions() {
     'module' => 'node',
   );
 
+  // Exported permission: 'edit own product content'.
+  $permissions['edit own product content'] = array(
+    'name' => 'edit own product content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
   // Exported permission: 'edit own seller content'.
   $permissions['edit own seller content'] = array(
     'name' => 'edit own seller content',
@@ -762,6 +825,13 @@ function juna_basic_features_user_default_permissions() {
       'administrator' => 'administrator',
       'editor' => 'editor',
     ),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'edit own swingshare content'.
+  $permissions['edit own swingshare content'] = array(
+    'name' => 'edit own swingshare content',
+    'roles' => array(),
     'module' => 'node',
   );
 
