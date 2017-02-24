@@ -1,116 +1,108 @@
 <?php
 
-function product_schema() {
-  $schema['product_box'] = array(
-    'fields' => array(
-      'id' => array(
+function product_schema(){
+  $schema['product_box'] = array (
+    'fields' => array (
+      'id' => array (
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'nid' => array(
+      'nid' => array (
         'type' => 'int',
         'not null' => TRUE,
-        'description' => '商品id'
+        'description'=>'商品id'
       ),
-      'product_type' => array(
+      'product_type' => array (
         'type' => 'varchar',
         'length' => 16,
         'not null' => TRUE,
-        'description' => '商品类型'
+        'description'=>'商品类型'
       ),
-
-      'created' => array(
+     
+      'created' => array (
         'type' => 'int',
         'not null' => TRUE,
-        'description' => '加入时间'
+        'description' =>'加入时间'
       ),
-      'uid' => array(
-        'type' => 'int',
-        'not null' => TRUE,
-        'description' => '用户id',
-        'unsigned' => TRUE
-      )
-
+      'uid'=>array(
+      	'type'=>'int',
+      	'not null' => TRUE,
+      	'description' => '用户id',
+      	'unsigned'=>TRUE
+      	)
+      
     ),
-    'primary key' => array('id'),
+    'primary key' => array ('id'),
   );
-  $schema['user_wingshare_log'] = array(
-    'fields' => array(
-      'id' => array(
+    $schema['user_wingshare_log'] = array (
+    'fields' => array (
+      'id' => array (
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'nid' => array(
+      'nid' => array (
         'type' => 'int',
         'not null' => TRUE,
-        'description' => '商品id'
+        'description'=>'商品id'
       ),
-      'uid' => array(
+      'uid' => array (
         'type' => 'int',
         'not null' => TRUE,
-        'description' => '用户id'
+        'description'=>'用户id'
       ),
-      'swingnum' => array(
+      'swingnum' => array (
         'type' => 'varchar',
         'length' => 16,
         'not null' => TRUE,
-        'description' => '抽奖号'
+        'description'=>'抽奖号'
       ),
-      'title' => array(
+     'title' => array (
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
-        'description' => '商品名称'
+        'description'=>'商品名称'
       ),
-      'created' => array(
+      'created' => array (
         'type' => 'int',
         'not null' => TRUE,
-        'description' => '参加摇享时间'
+        'description' =>'参加摇享时间'
       ),
-      'pdate' => array(
-        'type' => 'varchar',
+      'pdate'=>array(
+        'type'=>'varchar',
         'length' => 16,
         'not null' => TRUE,
         'description' => '摇享的期号',
-      ),
-      'status' => array(
-        'type' => 'int',
+        ),
+      'status'=>array(
+        'type'=>'int',
         'not null' => TRUE,
         'default' => 0,
         'description' => '是否中奖，0为未中奖，1为中奖',
-      ),
-      'couponid' => array(
-        'type' => 'int',
+        ),
+      'couponid'=>array(
+        'type'=>'int',
         'description' => '白领券id',
-      ),
-
+        ),
+      
     ),
-    'primary key' => array('id'),
+    'primary key' => array ('id'),
   );
 
-
-  return $schema;
+    
+return $schema;
 }
-
-/**
- * Creating a new table user_wingshare_log.
- */
-function product_update_7001() {
-  if (!db_table_exists('user_wingshare_log')) {
+function product_update_7001(){
+    if (!db_table_exists('user_wingshare_log')) {
     db_create_table('user_wingshare_log', drupal_get_schema_unprocessed('product', 'user_wingshare_log'));
   }
 }
-
-/**
- * Adding new field couponid to user_wingshare_log.
- */
-function product_update_7002() {
-  $table = 'user_wingshare_log';
-  if (!db_field_exists($table, 'couponid')) {
-    db_add_field($table, 'couponid', array('type' => 'int', 'description' => '白领券id'));
-  }
+function product_update_7002(){
+    $table = 'user_wingshare_log';
+    if (!db_field_exists($table, 'couponid')) {
+        db_add_field($table, 'couponid', array('type' => 'int',  'description' => '白领券id'));
+    }
 }
 
 

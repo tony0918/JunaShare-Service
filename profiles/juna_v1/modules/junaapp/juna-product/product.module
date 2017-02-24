@@ -260,6 +260,7 @@ function product_swingshare() {
   $query->entityCondition('bundle', array('swingshare'));
   $query->fieldCondition('field_starttime', 'value', date('Y-m-d :i:s'), '<=');
   $query->fieldCondition('field_endtime', 'value', date('Y-m-d H:i:s'), '>=');
+  //$query ->propertyOrderBy('changed', 'DESC');
   $nids = [];
   $node = [];
   $remaintime = 0;
@@ -582,7 +583,13 @@ function usedField() {
     'field_starttime',
     'field_endtime'
   );
-  $bannerField = ['nid', 'title', 'field_url', 'field_image', 'field_banner_btype'];
+  $bannerField = [
+    'nid',
+    'title',
+    'field_url',
+    'field_image',
+    'field_banner_btype'
+  ];
   return ['node' => $nodeField, 'banner' => $bannerField];
 }
 
@@ -735,7 +742,10 @@ function product_buy($nid) {
 
     }
   }
-  db_delete('product_box')->condition('uid', $user->uid)->condition('nid', $nid)->execute();//购买商品，删除盒子中收藏的白领商品
+  db_delete('product_box')
+    ->condition('uid', $user->uid)
+    ->condition('nid', $nid)
+    ->execute();//购买商品，删除盒子中收藏的白领商品
   calcrequesttime($starts, $ends, $node->type . "商品购买");
   return ['message' => '购买成功', 'nid' => $nid, 'data' => $order];
 }
@@ -864,7 +874,6 @@ function product_boxlist() {
       }
     }
     else {
-
       $boxdata[$k]->field_image_for_box = array();
       $boxdata[$k]->field_image_for_list = array();
     }
@@ -945,7 +954,6 @@ function product_tobox($nid) {
 function product_banner($btype) {
   $validtype = [1, 2];
   $start = microtime_float();
-
   if (!in_array($btype, $validtype)) {
     $end = microtime_float();
     calcrequesttime($start, $end, "banner");
@@ -1059,7 +1067,7 @@ function product_share($page, $time) {
     }
     $timeperiod[$time]['selected'] = 1;
   }
-  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_endtime_value <= :stime)) ", $page * $limit, $limit, [
+  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_starttime_value <= :stime) OR ((fdfe.field_endtime_value >= :stime AND fdfe.field_endtime_value <= :etime)) or (fdfe.field_endtime_value <= :etime AND fdfs.field_starttime_value >= :stime)) ORDER BY n.changed DESC", $page * $limit, $limit, [
     ':type' => 'share_product',
     ':status' => NODE_PUBLISHED,
     ':stime' => date('Y-m-d H:i:s', $start),
@@ -1126,7 +1134,10 @@ function product_share($page, $time) {
  *一购商品列表
  */
 function product_list($page) {
-  $timeperiod = ['start' => strtotime('08:00:00'), 'end' => strtotime('23:59:59')];//有效的时间段
+  $timeperiod = [
+    'start' => strtotime('08:00:00'),
+    'end' => strtotime('23:59:59')
+  ];//有效的时间段
   $now = REQUEST_TIME;
   $starts = microtime_float();
   $limit = 10;
@@ -1161,12 +1172,14 @@ function product_list($page) {
 
   }
 
-  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_endtime_value <= :etime)) ", $page * $limit, $limit, [
+  $query = db_query_range("SELECT n.nid FROM {node} n left join {field_data_field_starttime} fdfs ON n.nid = fdfs.entity_id LEFT JOIN {field_data_field_endtime} fdfe ON fdfe.entity_id = n.nid WHERE n.type = :type AND n.status = :status AND ((fdfs.field_starttime_value >= :stime and fdfs.field_starttime_value <= :etime) OR (fdfe.field_endtime_value >= :stime AND fdfs.field_starttime_value <= :stime) OR ((fdfe.field_endtime_value >= :stime AND fdfe.field_endtime_value <= :etime)) or (fdfe.field_endtime_value <= :etime AND fdfs.field_starttime_value >= :stime)) ORDER BY n.changed DESC", $page * $limit, $limit, [
     ':type' => 'product',
     ':status' => NODE_PUBLISHED,
     ':stime' => date('Y-m-d H:i:s', $start),
     ':etime' => date('Y-m-d H:i:s', $end)
   ]);//获取符合条件的所有产品的nid
+  // echo date('Y-m-d H:i:s',$start);
+  //echo date('Y-m-d H:i:s',$end);
   /*$query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node');
 
@@ -1436,6 +1449,7 @@ function product_applylist($form, &$form_state) {
 
     '#default_value' => empty($_SESSION['product_applylist_filter']['uid']) ? '' : $_SESSION['product_applylist_filter']['uid'],
 
+
     '#size' => 60,
 
     '#maxlength' => 128,
@@ -1453,11 +1467,11 @@ function product_applylist($form, &$form_state) {
     'created' => t('申领时间'),
     'mobile' => t('手机号'),
   );
-  $query = db_select('product_order', 'usl')->extend('PagerDefault')->extend('TableSort')->fields('usl', array(
-    'id',
-    'nid',
-    'uid'
-  ))->orderByHeader($header);
+  $query = db_select('product_order', 'usl')
+    ->extend('PagerDefault')
+    ->extend('TableSort')
+    ->fields('usl', array('id', 'nid', 'uid'))
+    ->orderByHeader($header);
   $query->leftJoin('node', 'n', 'n.nid=usl.nid');
   $query->fields('n', array('title'));
   $query->fields('usl', array('created'));

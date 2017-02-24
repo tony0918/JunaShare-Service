@@ -1,5 +1,4 @@
 name = juna-product
 description = juna商品管理
 core = 7.x
-package = Juna
-project = 7.x
+package = juna
