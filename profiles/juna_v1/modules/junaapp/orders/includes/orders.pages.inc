@@ -234,7 +234,7 @@ function orders_admin_juna_orders_detail_edit_form($form, &$form_state, $oid) {
     '#type' => 'select',
     '#title' => t('Order Status'),
     '#default_value' => $result['status'],
-    '#options' => array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '已取消', '待评价'),
+    '#options' => array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成',  '待评价','已取消'),
   );
   $form['express'] = array(
     '#type' => 'fieldset',
