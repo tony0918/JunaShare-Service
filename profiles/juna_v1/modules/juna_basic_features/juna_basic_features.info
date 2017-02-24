@@ -102,6 +102,7 @@ features[field_instance][] = node-product-field_inbox_num
 features[field_instance][] = node-product-field_origin_price
 features[field_instance][] = node-product-field_pictures
 features[field_instance][] = node-product-field_price
+features[field_instance][] = node-product-field_product_valid_period
 features[field_instance][] = node-product-field_reference_link
 features[field_instance][] = node-product-field_related_sku_product
 features[field_instance][] = node-product-field_remain_num
