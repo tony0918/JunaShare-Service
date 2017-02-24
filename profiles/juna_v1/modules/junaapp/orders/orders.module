@@ -351,13 +351,7 @@ function orders_payementweixin($order) {
   $newtime = $order->created + 30 * 60;
   $now = REQUEST_TIME;
   if ($now > $newtime) {
-    $orderobj = new stdClass();
-    $orderobj->id = $order->id;
-    $orderobj->status = 7;//已取消
-    drupal_write_record('product_order', $orderobj, 'id');
-    $node = node_load($order->nid);
-    $node->field_remain_num['und'][0]['value'] = $node->field_remain_num['und'][0]['value'] + 1;
-    node_save($node);
+    cancelOrder($order);
     return services_error(t('订单支付超时'), 406);
     //echo json_encode(['errcode' => '10015','msg' => getConfig()['10015'],'data' => []]);exit;
   }
@@ -585,13 +579,13 @@ function orders_pre_pay($orderid, $payment_type) {
   }
   $newtime = $order->created + 30 * 60;
   $now = REQUEST_TIME;
-  /*if($now >$newtime){
-      $orderobj = new stdClass();
-  $orderobj -> id = $orderid;
-  $orderobj -> status = 6;
-  drupal_write_record('product_order',$orderobj,'id');
-      return services_error(t('订单支付超时'),406);
-  }*/
+  if ($now > $newtime) {
+    $orderobj = new stdClass();
+    $orderobj->id = $orderid;
+    $orderobj->status = 7;
+    drupal_write_record('product_order', $orderobj, 'id');
+    return services_error(t('订单支付超时'), 406);
+  }
   $orderobj = new stdClass();
   $orderobj->id = $orderid;
   $orderobj->payment_type = $payment_type;
@@ -890,7 +884,8 @@ function orders_notify() {
       'method' => 'alipay.trade.app.pay',
       'notify_url' => $alipay_settings['notify_url'],
       'sign_type' => 'RSA',
-      'timestamp' => '2016-12-11 11:57:52',//date('Y-m-d H:i:s',$order -> created),
+      'timestamp' => '2016-12-11 11:57:52',
+      //date('Y-m-d H:i:s',$order -> created),
       'version' => '1.0',
     ];
     $signparam = $_POST;
@@ -1232,8 +1227,18 @@ function orders_lists($pages = 1, $status = NULL) {
     ));
   }
   $data = $r->fetchAll();
+  $now = REQUEST_TIME;
+  foreach ($data as $k => $v) {
+    $time = $v->created + 30 * 60;
+    if ($now > $time && $v->status == 0) {
+      cancelOrder($v);
+      $v->status = 7;
+    }
+  }
+  $data = $r->fetchAll();
   foreach ($data as $k => $v) {
     //0为已提交待付款，1为已付款，2,待发货，3为待收货，4为已评价,5为交易完成，6为已取消，7为待评价
+
 
     switch ($v->product_type) {
       case 'product':
@@ -1616,6 +1621,16 @@ function _alipay_orders_refund_query() {
   else {
     echo "失败";
   }
+}
+
+function cancelOrder($data) {
+  $orderobj = new stdClass();
+  $orderobj->id = $data->id;
+  $orderobj->status = 7;//已取消
+  drupal_write_record('product_order', $orderobj, 'id');
+  $node = node_load($data->nid);
+  $node->field_remain_num['und'][0]['value'] = $node->field_remain_num['und'][0]['value'] + 1;
+  node_save($node);
 }
 
 function orders_form_alter(&$form, &$form_state, $form_id) {
