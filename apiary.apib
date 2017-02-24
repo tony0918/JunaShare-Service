@@ -44,9 +44,7 @@ HOST: http://api.junashare.com/
 + logo (Image) - 商家的logo
 
 ## SkuProduct (object)
-+ display_name: `拓普克林 轻柔丝滑洗发水 60ml` - 显示的名字
 + market_price: `10` - 商品市场价格
-+ short_desc: `null` - 商品简短描述（已弃用）
 + detail_desc - 商品的详细描述
 + main_kv (array[Image]) - 商品详细界面大KV
 + image_for_share_list (Image) - 商品在享什么列表上展示的图片
@@ -58,6 +56,7 @@ HOST: http://api.junashare.com/
 
 ## YigouProduct (object)
 + nid: `9` - 商品id
++ label: `拓普克林 轻柔丝滑洗发水 60ml` - 显示的名字
 + price: `7.9` - 商品壹购价格
 + stock: `100` - 商品总库存
 + remaining: `30` - 商品剩余数量
@@ -69,9 +68,21 @@ HOST: http://api.junashare.com/
 
 ## YaoxiangProduct (object)
 + nid: `9` - 商品id
-+ total_amount: `1` - 可以中奖的人数
++ label: `拓普克林 轻柔丝滑洗发水 60ml` - 显示的名字
++ stock: `1` - 可以中奖的人数
 + sku_product (SkuProduct) - 壹购商品对应的SKU商品，包含必要的素材
 + provider (Seller) - 供应商信息
+
+## ShareProduct (object)
++ nid: `9` - 商品id
++ label: `拓普克林 轻柔丝滑洗发水 60ml` - 显示的名字
++ stock: `100` - 商品总库存
++ remaining: `30` - 商品剩余数量
++ sku_product (SkuProduct) - 壹购商品对应的SKU商品，包含必要的素材
++ provider (Seller) - 供应商信息
++ in_box: `0` - 商品是否已经被当前用户加入盒子，1为已经加入，0为未加入，未登入状态始终为0
++ current_period: `0` - 当前所处的时间周期，0表示早上0点至8点，1表示第一场，2表示第二场，3表示第三场，4表示第四场
++ duration (array[number]): `[1,2,3]` - 表示该商品会出现在当天的那几场
 
 # Group Banner
 

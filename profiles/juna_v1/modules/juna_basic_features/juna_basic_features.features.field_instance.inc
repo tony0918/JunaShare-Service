@@ -1486,13 +1486,7 @@ function juna_basic_features_field_default_field_instances() {
   // Exported field_instance: 'node-share_product-body'.
   $field_instances['node-share_product-body'] = array(
     'bundle' => 'share_product',
-    'default_value' => array(
-      0 => array(
-        'summary' => '',
-        'value' => '<embed id="xunlei_com_thunder_helper_plugin_d462f475-c18e-46be-bd10-327458d045bd" type="application/thunder_download_plugin" height="0" width="0"/>',
-        'format' => 'filtered_html',
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -1516,7 +1510,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'body',
     'label' => '享什么商品详情',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'display_summary' => 1,
       'text_processing' => 1,
@@ -1558,7 +1552,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_description',
     'label' => '享什么商品描述',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1817,7 +1811,11 @@ function juna_basic_features_field_default_field_instances() {
   // Exported field_instance: 'node-share_product-field_inbox_num'.
   $field_instances['node-share_product-field_inbox_num'] = array(
     'bundle' => 'share_product',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
     'deleted' => 0,
     'description' => '加入盒子数量',
     'display' => array(
@@ -1843,7 +1841,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_inbox_num',
     'label' => '享什么商品加入盒子数量',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'max' => '',
       'min' => 0,
@@ -1886,7 +1884,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_pictures',
     'label' => '享什么商品图片',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
@@ -1939,7 +1937,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_price',
     'label' => '享什么商品市场价',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'max' => '',
       'min' => '',
@@ -1953,6 +1951,102 @@ function juna_basic_features_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'node-share_product-field_product_valid_period'.
+  $field_instances['node-share_product-field_product_valid_period'] = array(
+    'bundle' => 'share_product',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+        ),
+        'type' => 'date_default',
+        'weight' => 13,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_product_valid_period',
+    'label' => 'Product Valid Period',
+    'required' => 1,
+    'settings' => array(
+      'default_value' => 'now',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'increment' => 15,
+        'input_format' => 'm/d/Y - H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'no_fieldset' => 0,
+        'text_parts' => array(),
+        'year_range' => '-3:+3',
+      ),
+      'type' => 'date_popup',
+      'weight' => 16,
+    ),
+  );
+
+  // Exported field_instance: 'node-share_product-field_related_sku_product'.
+  $field_instances['node-share_product-field_related_sku_product'] = array(
+    'bundle' => 'share_product',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'node_reference',
+        'settings' => array(),
+        'type' => 'node_reference_default',
+        'weight' => 14,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_related_sku_product',
+    'label' => 'Related SKU Product',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'node_reference',
+      'settings' => array(
+        'autocomplete_match' => 'contains',
+        'autocomplete_path' => 'node_reference/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'node_reference_autocomplete',
+      'weight' => 18,
     ),
   );
 
@@ -1984,7 +2078,7 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_remain_num',
-    'label' => '享什么商品剩余数量',
+    'label' => 'Remaining Number',
     'required' => 1,
     'settings' => array(
       'max' => '',
@@ -1999,6 +2093,47 @@ function juna_basic_features_field_default_field_instances() {
       'settings' => array(),
       'type' => 'number',
       'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance: 'node-share_product-field_seller'.
+  $field_instances['node-share_product-field_seller'] = array(
+    'bundle' => 'share_product',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'node_reference',
+        'settings' => array(),
+        'type' => 'node_reference_default',
+        'weight' => 15,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_seller',
+    'label' => 'Related Provider',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'node_reference',
+      'settings' => array(
+        'autocomplete_match' => 'contains',
+        'autocomplete_path' => 'node_reference/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'node_reference_autocomplete',
+      'weight' => 20,
     ),
   );
 
@@ -3051,7 +3186,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_product_total_amount',
     'label' => 'Product Total Amount',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'max' => '',
       'min' => '',
@@ -3593,7 +3728,6 @@ function juna_basic_features_field_default_field_instances() {
   t('产品纯文本描述，显示在kv区块的描述');
   t('产品详细界面中产品信息部分，一段html结构');
   t('享什么商品列表使用图片');
-  t('享什么商品剩余数量');
   t('享什么商品加入盒子数量');
   t('享什么商品图片');
   t('享什么商品市场价');

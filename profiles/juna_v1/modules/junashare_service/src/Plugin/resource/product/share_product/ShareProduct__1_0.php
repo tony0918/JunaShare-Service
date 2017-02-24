@@ -1,26 +1,25 @@
 <?php
 
-namespace Drupal\junashare_service\Plugin\resource\product\yigou;
+namespace Drupal\junashare_service\Plugin\resource\product\share_product;
 
-use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\restful\Plugin\resource\ResourceNode;
 
 /**
- * Class Yigou__1_0
- * @package Drupal\junashare_service\Plugin\resource\product\yigou
+ * Class ShareProduct__1_0
+ * @package Drupal\junashare_service\Plugin\resource\product\share_product
  *
  * @Resource(
- *   name = "yigou:1.0",
- *   resource = "yigou",
- *   label = "Yigou",
- *   description = "Export the Yigou Product.",
+ *   name = "shareproduct:1.0",
+ *   resource = "shareproduct",
+ *   label = "ShareProduct",
+ *   description = "Export the Share Product.",
  *   authenticationTypes = TRUE,
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "node",
  *     "bundles": {
- *       "product"
- *     },
+ *        "share_product"
+ *      },
  *     "sort": {
  *       "sticky": "DESC",
  *       "created": "DESC"
@@ -30,7 +29,7 @@ use Drupal\restful\Plugin\resource\ResourceNode;
  *   minorVersion = 0
  * )
  */
-class Yigou__1_0 extends ResourceNode {
+class ShareProduct__1_0 extends ResourceNode {
 
   /**
    * {@inheritdoc}
@@ -39,9 +38,6 @@ class Yigou__1_0 extends ResourceNode {
     $public_fields = parent::publicFields();
 
     $public_fields['nid'] = $public_fields['id'];
-    $public_fields['price'] = array(
-      'property' => 'field_price'
-    );
     $public_fields['stock'] = array(
       'property' => 'field_total_num'
     );
@@ -67,11 +63,14 @@ class Yigou__1_0 extends ResourceNode {
         'minorVersion' => 0
       )
     );
-    $public_fields['time_remaining'] = array(
-      'callback' => array($this, 'getRemainingTime'),
-    );
     $public_fields['in_box'] = array(
       'callback' => array($this, 'getInBoxStatus')
+    );
+    $public_fields['current_period'] = array(
+      'callback' => array($this, 'getCurrentPeriod')
+    );
+    $public_fields['duration'] = array(
+      'callback' => array($this, 'getDuration')
     );
 
     // Clean up some fields.
@@ -87,20 +86,10 @@ class Yigou__1_0 extends ResourceNode {
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return 'Drupal\junashare_service\Plugin\resource\DataProvider\DataProviderYigouNode';
+    return 'Drupal\junashare_service\Plugin\resource\DataProvider\DataProviderShareProductNode';
   }
 
-  public function getRemainingTime(DataInterpreterInterface $interpreter) {
-    if (8 > (int) format_date(REQUEST_TIME, 'custom', 'H')) {
-      $result = strtotime('today 08:00') - REQUEST_TIME;
-    }
-    else {
-      $result = strtotime('tomorrow 08:00') - REQUEST_TIME;
-    }
-    return $result;
-  }
-
-  public function getInBoxStatus(DataInterpreterInterface $interpreter) {
+  public function getInBoxStatus($interpreter) {
     global $user;
     $result = array();
     if ($user->uid > 0) {
@@ -112,4 +101,44 @@ class Yigou__1_0 extends ResourceNode {
     }
     return empty($result) ? 0 : 1;
   }
+
+  public function getCurrentPeriod() {
+    $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
+    if (8 > $hour) {
+      return 0;
+    }
+    if (12 > $hour) {
+      return 1;
+    }
+    if (16 > $hour) {
+      return 2;
+    }
+    if (20 > $hour) {
+      return 3;
+    }
+    return 4;
+  }
+
+  public function getDuration($interpreter) {
+    $duration = array();
+    $node = $interpreter->getWrapper()->value();
+    $start = $node->field_product_valid_period[LANGUAGE_NONE][0]['value'];
+    $end = $node->field_product_valid_period[LANGUAGE_NONE][0]['value2'];
+    if (8 <= (int) format_date(REQUEST_TIME, 'custom', 'H')) {
+      if ($start <= strtotime('today 8:00:00') && $end >= strtotime('today 11:59:59')) {
+        array_push($duration, 1);
+      }
+      if ($start <= strtotime('today 12:00:00') && $end >= strtotime('today 15:59:59')) {
+        array_push($duration, 2);
+      }
+      if ($start <= strtotime('today 16:00:00') && $end >= strtotime('today 19:59:59')) {
+        array_push($duration, 3);
+      }
+      if ($start <= strtotime('today 20:00:00') && $end >= strtotime('today 23:59:59')) {
+        array_push($duration, 4);
+      }
+    }
+    return $duration;
+  }
+
 }

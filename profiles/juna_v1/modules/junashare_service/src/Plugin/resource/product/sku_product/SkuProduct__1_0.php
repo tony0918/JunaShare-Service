@@ -35,9 +35,9 @@ class SkuProduct__1_0 extends ResourceNode {
     $public_fields = parent::publicFields();
     $utility = JunashareServiceUtilities::getInstance();
 
-    $public_fields['display_name'] = array('property' => 'field_product_display_name');
+//    $public_fields['display_name'] = array('property' => 'field_product_display_name');
     $public_fields['market_price'] = array('property' => 'field_product_price');
-    $public_fields['short_desc'] = array('property' => 'field_product_short_description');
+//    $public_fields['short_desc'] = array('property' => 'field_product_short_description');
     $public_fields['detail_desc'] = array(
       'property' => 'field_product_description',
       'sub_property' => 'value'
