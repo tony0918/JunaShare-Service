@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Default theme implementation to present a picture configured for the
@@ -17,7 +16,7 @@
  */
 ?>
 <?php if ($message): ?>
-  <div class="<?php print $classes;?>">
-    <?php print $message;?>
+  <div class="<?php print $classes; ?>">
+    <?php print $message; ?>
   </div>
-<?php endif;?>
+<?php endif; ?>
