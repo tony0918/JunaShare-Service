@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * Implementation of hook_schema().
+ *
+ * @return array
+ */
+function juna_push_schema() {
+  $schema['juna_getui_push_user_cid'] = array(
+    'description' => 'The table for binding data of user and Getui.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'description' => 'Uid',
+        'default' => 0,
+        'not null' => TRUE,
+      ),
+      'cid' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Cid of Getui platform.'
+      )
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'uidx_uid_cid' => array('uid', 'cid'),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Adding common primary key to juna_getui_push_user_cid.
+ */
+function juna_push_update_7001() {
+  db_drop_primary_key('juna_getui_push_user_cid');
+  db_add_field('juna_getui_push_user_cid', 'id', array(
+    'type' => 'serial',
+    'unsigned' => TRUE,
+    'not null' => TRUE,
+  ));
+  db_add_primary_key('juna_getui_push_user_cid', array('id'));
+  db_add_unique_key('juna_getui_push_user_cid', 'uidx_uid_cid', array('uid', 'cid'));
+}
