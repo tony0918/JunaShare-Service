@@ -169,3 +169,21 @@ HOST: http://api.junashare.com/
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[YaoxiangProduct])
+
+# Group Notification
+
+## Getui Id [/api/v1.0/getui_user_binding]
+
+### Binding Getui cid with uid [POST]
++ Parameters
+    + uid: `9` - 用户id
+
+        该接口需要在用户已经登入的情况下请求，需要带上cookie和csrf的头部信息。如果在用户实体中已经有getui_id字段说明已经绑定
+
+    + cid: `xxxxxxxx` - 个推设备ID
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (object)
+            + uid
+            + cid - 接口成功后，会再用户实体中添加getui_id字段

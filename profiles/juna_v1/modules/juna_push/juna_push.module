@@ -1,1 +1,16 @@
 <?php
+
+/**
+ * Implements hook_user_load().
+ */
+function juna_push_user_load($users) {
+  $uids = array_keys($users);
+  $result = db_select('juna_getui_push_user_cid', 'jgpuc')
+    ->fields('jgpuc', array('cid', 'uid'))
+    ->condition('uid', $uids, 'IN')
+    ->execute()->fetchAll();
+
+  foreach ($result as $value) {
+    $users[$value->uid]->getui_id = $value->cid;
+  }
+}
