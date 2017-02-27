@@ -35,6 +35,7 @@ class GetuiUserBinding__1_0 extends ResourceDbQuery {
    */
   protected function publicFields() {
     $fields = array();
+    $fields['id'] = array('property' => 'id', 'methods' => array(RequestInterface::METHOD_POST));
     $fields['uid'] = array('property' => 'uid', 'methods' => array(RequestInterface::METHOD_POST));
     $fields['cid'] = array('property' => 'cid', 'methods' => array(RequestInterface::METHOD_POST));
     return $fields;
