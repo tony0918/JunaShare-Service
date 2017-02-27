@@ -1,24 +1,15 @@
 <?php
 function product_services_resources() {
   return array(
-    'banner' => array(
+    'mybox' => array(
       'operations' => array(
         'index' => array(
-          'help' => t('易购广告列表'),
-          'callback' => 'product_banner',
+          'help' => t('My Box List'),
+          'callback' => 'product_my_box',
           'access arguments' => array('access content'),
-          'args' => array(
-            array(
-              'name' => 'btype',
-              'optional' => TRUE,
-              'source' => array('param' => 'btype'),
-              'description' => t('banner类型'),
-              'type' => 'int',
-            ),
-
-          ),
+          'file' => array('type' => 'inc', 'module' => 'product', 'name' => 'includes/product.resource'),
         ),
-      )
+      ),
     ),
     'prizelist' => array(
       'operations' => array(
@@ -34,7 +25,6 @@ function product_services_resources() {
               'description' => t('摇享期号'),
               'type' => 'string',
             ),
-
           ),
         ),
       )
