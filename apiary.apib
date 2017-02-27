@@ -170,6 +170,16 @@ HOST: http://api.junashare.com/
     + Attributes (object)
         + data (array[YaoxiangProduct])
 
+## Share Product List [/api/v1.0/shareproduct/{id}]
+
+### Retrieve Share Product List [GET]
++ Parameters
+    + id: `9` - 商品id，不传递id，获取整个列表
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array[ShareProduct])
+
 # Group Notification
 
 ## Getui Id [/api/v1.0/getui_user_binding]
