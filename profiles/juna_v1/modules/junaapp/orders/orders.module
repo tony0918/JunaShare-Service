@@ -5,8 +5,9 @@ define('ORDER_STATUS_UNDELIVERED', 2); // 待发货
 define('ORDER_STATUS_DELIVERED', 3); // 待收货
 define('ORDER_STATUS_PROVIDED_COMMENT', 4); // 已评价
 define('ORDER_STATUS_FINISH', 5); // 交易完成
-define('ORDER_STATUS_CANCEL', 6); // 待评价
-define('ORDER_STATUS_WAIT_FOR_COMMENT', 7); // 已取消
+define('ORDER_STATUS_WAIT_FOR_COMMENT', 6); // 待评价
+define('ORDER_STATUS_CANCEL', 7); // 已取消
+define('SINGLE_PAGE_LIMIT', 100);
 
 /**
  * Implements hook_services_resources().
@@ -19,14 +20,8 @@ function orders_services_resources() {
           'help' => t('订单列表'),
           'callback' => 'orders_lists',
           'access arguments' => array('access content'),
+          'file' => array('type' => 'inc', 'module' => 'orders', 'name' => 'includes/orders.resource'),
           'args' => array(
-            array(
-              'name' => 'page',
-              'optional' => TRUE,
-              'source' => array('param' => 'page'),
-              'description' => t('页码'),
-              'type' => 'int',
-            ),
             array(
               'name' => 'status',
               'optional' => TRUE,
@@ -1191,104 +1186,6 @@ function orders_weixin_settings_form_submit($form, &$form_state) {
   $values = serialize($form_state['values']);
   variable_set('weixin_settings', $values);
   drupal_set_message('微信配置保存成功');
-}
-
-function orders_lists($pages = 1, $status = NULL) {
-  global $user;
-  if (!$user->uid) {
-    return services_error(t('用户未登录'), 406);
-  }
-
-  $query = db_select('product_order', 'po')
-    ->condition('po.uid', $user->uid, '=')
-    ->fields('po')
-    ->extend('PagerDefault')->limit(100);
-  if ($status) {
-    $query->condition('po.status', $status, '=');
-  }
-  $query->join('node', 'n', 'po.nid = n.nid');
-  $query->condition('n.status', NODE_PUBLISHED, '=');
-
-  $query->join('field_data_field_image_for_list', 'f', 'f.entity_id = po.nid');
-  $query->join('file_managed', 'fm', 'f.field_image_for_list_fid = fm.fid');
-  $query->fields('n', array('title', 'type'))
-    ->fields('fm', array('uri'));
-  $data = $query->execute()->fetchAll();
-
-  foreach ($data as $k => $v) {
-    switch ($v->product_type) {
-      case 'product':
-        $data[$k]->product_type = '壹购商品';
-        switch ($v->status) {
-          case 0:
-            $data[$k]->status = '待付款';
-            break;
-          case 1:
-            $data[$k]->status = '已付款';
-            break;
-          case 2:
-            $data[$k]->status = '待发货';
-            break;
-          case 3:
-            $data[$k]->status = '待收货';
-            break;
-          case 4:
-            $data[$k]->status = '已评价';
-            break;
-          case 5:
-            $data[$k]->status = '交易完成';
-            break;
-          case 6:
-            $data[$k]->status = '待评价';
-          case 7:
-            $data[$k]->status = '已取消';
-            break;
-          default:
-            $data[$k]->status = '待付款';
-            break;
-        }
-        break;
-      case 'share_product':
-        $data[$k]->product_type = '白领商品';
-        switch ($v->status) {
-          case 0:
-            $data[$k]->status = '待发货';
-            break;
-          case 1:
-            $data[$k]->status = '待发货';
-            break;
-          case 2:
-            $data[$k]->status = '待发货';
-            break;
-          case 3:
-            $data[$k]->status = '待收货';
-            break;
-          case 4:
-            $data[$k]->status = '已评价';
-            break;
-          case 5:
-            $data[$k]->status = '交易完成';
-            break;
-          case 6:
-            $data[$k]->status = '已取消';
-          case 7:
-            $data[$k]->status = '待评价';
-            break;
-          default:
-            $data[$k]->status = '待付款';
-            break;
-        }
-        break;
-
-      default:
-        $data[$k]->product_type = '壹购商品';
-        break;
-    }
-    if ($v->uri) {
-      $data[$k]->uri = file_create_url($v->uri);
-    }
-  }
-  return ['success' => 1, 'data' => $data];
 }
 
 function orders_update($orderid, $update_data) {

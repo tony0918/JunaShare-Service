@@ -65,7 +65,7 @@ function orders_schema() {
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
-        'description' => '订单状态，0为已提交待付款，1为已付款，2,待发货，3为待收货，4为已评价,5为交易完成，6为支付超时'
+        'description' => '订单状态，0为已提交待付款，1为已付款，2,待发货，3为待收货，4为已评价,5为交易完成，6为待评价，7已取消'
       ),
       'express_id' => array(
         'type' => 'varchar',
