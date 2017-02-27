@@ -428,7 +428,7 @@ function product_swingshare_accept() {
     ->fieldCondition('field_uid', 'uid', $user->uid, '=')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->fieldCondition('field_starttime', 'value', date('Y-m-d', $now), '<=')
-    ->fieldCondition('field_endtime', 'value', date('Y-m-t'), '<=')
+    ->fieldCondition('field_endtime', 'value', date('Y-m-d',$now), '>=')
     ->fieldOrderBy('field_endtime', 'value', 'DESC')
     ->execute();
   $couponids = [];
