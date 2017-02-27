@@ -1235,6 +1235,15 @@ function orders_lists($pages = 1, $status = NULL) {
       $v->status = 7;
     }
   }
+  if (!isset($status)) {
+    $r = db_query_range('SELECT p.*,n.title,fm.uri FROM {product_order} p LEFT JOIN {node} n ON p.nid=n.nid LEFT JOIN field_data_field_image_for_list fdfp ON fdfp.entity_id=p.nid LEFT JOIN file_managed fm ON fdfp.field_image_for_list_fid=fm.fid where p.uid=:uid', $offset, $limit, array(':uid' => $uid));
+  }
+  else {
+    $r = db_query_range("SELECT p.*,n.title,fm.uri FROM {product_order} p LEFT JOIN {node} n ON p.nid=n.nid LEFT JOIN field_data_field_image_for_list fdfp ON fdfp.entity_id=p.nid LEFT JOIN file_managed fm ON fdfp.field_image_for_list_fid=fm.fid where p.uid=:uid and p.status=:status", $offset, $limit, array(
+      ":uid" => $uid,
+      ':status' => $status
+    ));
+  }
   $data = $r->fetchAll();
   foreach ($data as $k => $v) {
     //0为已提交待付款，1为已付款，2,待发货，3为待收货，4为已评价,5为交易完成，6为已取消，7为待评价
