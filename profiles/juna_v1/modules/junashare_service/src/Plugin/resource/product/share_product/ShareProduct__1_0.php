@@ -105,18 +105,18 @@ class ShareProduct__1_0 extends ResourceNode {
   public function getCurrentPeriod() {
     $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
     if (8 > $hour) {
-      return 0;
+      return array('round' => 0, 'remaining_time' => 0);
     }
     if (12 > $hour) {
-      return 1;
+      return array('round' => 1, 'remaining_time' => strtotime('today 12:00:00') - REQUEST_TIME);
     }
     if (16 > $hour) {
-      return 2;
+      return array('round' => 2, 'remaining_time' => strtotime('today 16:00:00') - REQUEST_TIME);
     }
     if (20 > $hour) {
-      return 3;
+      return array('round' => 3, 'remaining_time' => strtotime('today 20:00:00') - REQUEST_TIME);
     }
-    return 4;
+    return array('round' => 4, 'remaining_time' => strtotime('tomorrow 00:00:00') - REQUEST_TIME);
   }
 
   public function getDuration($interpreter) {
