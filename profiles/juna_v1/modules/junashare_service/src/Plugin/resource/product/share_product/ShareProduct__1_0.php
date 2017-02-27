@@ -69,9 +69,6 @@ class ShareProduct__1_0 extends ResourceNode {
     $public_fields['current_period'] = array(
       'callback' => array($this, 'getCurrentPeriod')
     );
-    $public_fields['duration'] = array(
-      'callback' => array($this, 'getDuration')
-    );
 
     // Clean up some fields.
     unset($public_fields['self']);
@@ -117,28 +114,6 @@ class ShareProduct__1_0 extends ResourceNode {
       return array('round' => 3, 'remaining_time' => strtotime('today 20:00:00') - REQUEST_TIME);
     }
     return array('round' => 4, 'remaining_time' => strtotime('tomorrow 00:00:00') - REQUEST_TIME);
-  }
-
-  public function getDuration($interpreter) {
-    $duration = array();
-    $node = $interpreter->getWrapper()->value();
-    $start = $node->field_product_valid_period[LANGUAGE_NONE][0]['value'];
-    $end = $node->field_product_valid_period[LANGUAGE_NONE][0]['value2'];
-    if (8 <= (int) format_date(REQUEST_TIME, 'custom', 'H')) {
-      if ($start <= strtotime('today 8:00:00') && $end >= strtotime('today 11:59:59')) {
-        array_push($duration, 1);
-      }
-      if ($start <= strtotime('today 12:00:00') && $end >= strtotime('today 15:59:59')) {
-        array_push($duration, 2);
-      }
-      if ($start <= strtotime('today 16:00:00') && $end >= strtotime('today 19:59:59')) {
-        array_push($duration, 3);
-      }
-      if ($start <= strtotime('today 20:00:00') && $end >= strtotime('today 23:59:59')) {
-        array_push($duration, 4);
-      }
-    }
-    return $duration;
   }
 
 }

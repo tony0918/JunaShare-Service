@@ -428,7 +428,7 @@ function product_swingshare_accept() {
     ->fieldCondition('field_uid', 'uid', $user->uid, '=')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->fieldCondition('field_starttime', 'value', date('Y-m-d', $now), '<=')
-    ->fieldCondition('field_endtime', 'value', date('Y-m-t'), '<=')
+    ->fieldCondition('field_endtime', 'value', date('Y-m-t'), '>=')
     ->fieldOrderBy('field_endtime', 'value', 'DESC')
     ->execute();
   $couponids = [];
@@ -662,14 +662,14 @@ function product_buy($nid) {
       ":uid" => $user->uid
     ))->fetchAll();
     if ($r) {
-      return services_error(t('今天已购买.'), 406);
+      //return services_error(t('今天已购买.'), 406);
     }
     $isbuy = db_query('SELECT * FROM product_order WHERE nid=:nid AND uid=:uid', array(
       ":uid" => $user->uid,
       ":nid" => $nid
     ))->fetchAll();
     if ($isbuy) {
-      return services_error(t('商品已购买.'), 406);
+      //return services_error(t('商品已购买.'), 406);
     }
   }
   elseif ($node->type == 'share_product') {

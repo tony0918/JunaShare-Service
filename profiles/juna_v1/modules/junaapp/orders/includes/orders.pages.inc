@@ -54,7 +54,7 @@ function orders_admin_order_list_filter_form($form, &$form_state) {
     '#type' => 'select',
     '#title' => t('Order Status'),
     '#default_value' => $order_status,
-    '#options' => array('全部', '待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '已取消', '待评价')
+    '#options' => array('全部', '待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '待评价', '已取消')
   );
   $form['filters']['order_type'] = array(
     '#type' => 'select',
@@ -76,7 +76,7 @@ function orders_admin_order_list_filter_form($form, &$form_state) {
  * @return array|mixed
  */
 function orders_admin_list($form, &$form_state) {
-  $status_name = array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '已取消', '待评价');
+  $status_name = array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '待评价', '已取消');
   $order_types = array('share_product' => '申领', 'product' => '购买', 'swingshare' => '摇享');
   $header = array(
     'sorderid' => array(
@@ -234,7 +234,7 @@ function orders_admin_juna_orders_detail_edit_form($form, &$form_state, $oid) {
     '#type' => 'select',
     '#title' => t('Order Status'),
     '#default_value' => $result['status'],
-    '#options' => array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成',  '待评价','已取消'),
+    '#options' => array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '待评价', '已取消'),
   );
   $form['express'] = array(
     '#type' => 'fieldset',

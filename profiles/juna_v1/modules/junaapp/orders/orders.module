@@ -1,5 +1,12 @@
 <?php
-define('ORDER_STATUS_DELIVERED', 3);
+define('ORDER_STATUS_UNPAID', 0); // 已提交待付款
+define('ORDER_STATUS_PAID', 1); // 已付款
+define('ORDER_STATUS_UNDELIVERED', 2); // 待发货
+define('ORDER_STATUS_DELIVERED', 3); // 待收货
+define('ORDER_STATUS_PROVIDED_COMMENT', 4); // 已评价
+define('ORDER_STATUS_FINISH', 5); // 交易完成
+define('ORDER_STATUS_CANCEL', 6); // 待评价
+define('ORDER_STATUS_WAIT_FOR_COMMENT', 7); // 已取消
 
 /**
  * Implements hook_services_resources().
@@ -1191,55 +1198,24 @@ function orders_lists($pages = 1, $status = NULL) {
   if (!$user->uid) {
     return services_error(t('用户未登录'), 406);
   }
-  /*  $query = db_select('product_order','po');
-    $query->join('node', 'n', 'po.nid = n.nid');
-    $query -> fields(array('po','n.title'));
-    $limit = 10;
-    $query -> condition('po.uid',$user-> uid,'=');
-    if(is_null($status)){
 
-    }else{
-        $query -> condition('po.status',$status,'=');
-    }
-    $pages = intval($pages);
-    if($pages<=1){
-        $pages= 1;
-    }
-    $offset = ($pages-1)*$limit;
-    $query -> range($offset,$limit);
-    $res = $query -> execute();
-    $data = $res -> fetchAll();*/
-  $uid = $user->uid;
-  $pages = intval($pages);
-  if ($pages <= 1) {
-    $pages = 1;
+  $query = db_select('product_order', 'po')
+    ->condition('po.uid', $user->uid, '=')
+    ->fields('po')
+    ->extend('PagerDefault')->limit(100);
+  if ($status) {
+    $query->condition('po.status', $status, '=');
   }
-  $limit = 10;
-  $offset = ($pages - 1) * $limit;
+  $query->join('node', 'n', 'po.nid = n.nid');
+  $query->condition('n.status', NODE_PUBLISHED, '=');
 
-  if (!isset($status)) {
-    $r = db_query_range('SELECT p.*,n.title,fm.uri FROM {product_order} p LEFT JOIN {node} n ON p.nid=n.nid LEFT JOIN field_data_field_image_for_list fdfp ON fdfp.entity_id=p.nid LEFT JOIN file_managed fm ON fdfp.field_image_for_list_fid=fm.fid where p.uid=:uid', $offset, $limit, array(':uid' => $uid));
-  }
-  else {
-    $r = db_query_range("SELECT p.*,n.title,fm.uri FROM {product_order} p LEFT JOIN {node} n ON p.nid=n.nid LEFT JOIN field_data_field_image_for_list fdfp ON fdfp.entity_id=p.nid LEFT JOIN file_managed fm ON fdfp.field_image_for_list_fid=fm.fid where p.uid=:uid and p.status=:status", $offset, $limit, array(
-      ":uid" => $uid,
-      ':status' => $status
-    ));
-  }
-  $data = $r->fetchAll();
-  $now = REQUEST_TIME;
+  $query->join('field_data_field_image_for_list', 'f', 'f.entity_id = po.nid');
+  $query->join('file_managed', 'fm', 'f.field_image_for_list_fid = fm.fid');
+  $query->fields('n', array('title', 'type'))
+    ->fields('fm', array('uri'));
+  $data = $query->execute()->fetchAll();
+
   foreach ($data as $k => $v) {
-    $time = $v->created + 30 * 60;
-    if ($now > $time && $v->status == 0) {
-      cancelOrder($v);
-      $v->status = 7;
-    }
-  }
-  $data = $r->fetchAll();
-  foreach ($data as $k => $v) {
-    //0为已提交待付款，1为已付款，2,待发货，3为待收货，4为已评价,5为交易完成，6为已取消，7为待评价
-
-
     switch ($v->product_type) {
       case 'product':
         $data[$k]->product_type = '壹购商品';
@@ -1311,7 +1287,6 @@ function orders_lists($pages = 1, $status = NULL) {
     if ($v->uri) {
       $data[$k]->uri = file_create_url($v->uri);
     }
-
   }
   return ['success' => 1, 'data' => $data];
 }
