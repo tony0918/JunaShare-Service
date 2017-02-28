@@ -84,6 +84,16 @@ HOST: http://api.junashare.com/
 + current_period (object)
     + round: `0` - 当前所处的时间周期，0表示早上0点至8点，1表示第一场，2表示第二场，3表示第三场，4表示第四场
     + remaining_time: `8500` - 距离当前场次结束的剩余秒数，如果为0表示已结束
+    
+## BoxItem (object)
++ nid: `4` - 商品id
++ created: `10月27日` - 加入盒子的日期
++ label: `LG 香水玫瑰身体乳美白保湿滋润400ml` - 商品的名字
++ remaining: `190` - 商品剩余的数量
++ image_on_item_in_box: `http://api-dev.junashare.com/2x.png` - 商品在盒子里展示的图片
++ type_machine_name: `product` - 商品类型机器名，不会变更
++ type: `壹购商品` - 商品类型的中文名
++ field_price: `7.90` - 商品价值
 
 # Group Banner
 
@@ -188,16 +198,8 @@ HOST: http://api.junashare.com/
 ### Retrieve My Box List [GET]
 + Response 200 (application/json)
     + Attributes (object)
-        + data (array[object])
-            + nid: `4` - 商品id
-            + created: `10月27日` - 加入盒子的日期
-            + label: `LG 香水玫瑰身体乳美白保湿滋润400ml` - 商品的名字
-            + remaining: `190` - 商品剩余的数量
-            + image_on_item_in_box: `http://api-dev.junashare.com/2x.png` - 商品在盒子里展示的图片
-            + type_machine_name: `product` - 商品类型机器名，不会变更
-            + type: `壹购商品` - 商品类型的中文名
-            + field_price: `7.90` - 商品价值
-
+        + data (array[BoxItem])
+            
 # Group Notification
 
 ## Getui Id [/api/v1.0/getui_user_binding]
