@@ -67,9 +67,6 @@ class Yigou__1_0 extends ResourceNode {
         'minorVersion' => 0
       )
     );
-    $public_fields['time_remaining'] = array(
-      'callback' => array($this, 'getRemainingTime'),
-    );
     $public_fields['in_box'] = array(
       'callback' => array($this, 'getInBoxStatus')
     );
@@ -90,16 +87,6 @@ class Yigou__1_0 extends ResourceNode {
     return 'Drupal\junashare_service\Plugin\resource\DataProvider\DataProviderYigouNode';
   }
 
-  public function getRemainingTime(DataInterpreterInterface $interpreter) {
-    if (8 > (int) format_date(REQUEST_TIME, 'custom', 'H')) {
-      $result = strtotime('today 08:00') - REQUEST_TIME;
-    }
-    else {
-      $result = strtotime('tomorrow 08:00') - REQUEST_TIME;
-    }
-    return $result;
-  }
-
   public function getInBoxStatus(DataInterpreterInterface $interpreter) {
     global $user;
     $result = array();
@@ -111,5 +98,15 @@ class Yigou__1_0 extends ResourceNode {
       $result = $q->execute()->fetchAll();
     }
     return empty($result) ? 0 : 1;
+  }
+
+  public function additionalHateoas($data) {
+    if (8 > (int) format_date(REQUEST_TIME, 'custom', 'H')) {
+      $result = strtotime('today 08:00') - REQUEST_TIME;
+    }
+    else {
+      $result = strtotime('tomorrow 08:00') - REQUEST_TIME;
+    }
+    return ['remaining' => $result];
   }
 }

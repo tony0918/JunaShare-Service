@@ -63,7 +63,6 @@ HOST: http://api.junashare.com/
 + num_in_box: `10` - 商品被收纳入盒子的数量
 + sku_product (SkuProduct) - 壹购商品对应的SKU商品，包含必要的素材
 + provider (Seller) - 供应商信息
-+ time_remaining: `24861` - 距离下一场壹购开始还剩余的秒数，不与产品相关，每个商品中的字段都相同。（后期会向上提取一层，减少重复数据）
 + in_box: `0` - 商品是否已经被当前用户加入盒子，1为已经加入，0为未加入，未登入状态始终为0
 
 ## YaoxiangProduct (object)
@@ -83,6 +82,7 @@ HOST: http://api.junashare.com/
 + in_box: `0` - 商品是否已经被当前用户加入盒子，1为已经加入，0为未加入，未登入状态始终为0
 
 ## BoxItem (ShareProduct)
++ price: `7.90` - 在我的盒子中
 
 ## ShareProductTimePeriod (object)
 + start: `1488254400` - 开始时间
@@ -165,6 +165,7 @@ HOST: http://api.junashare.com/
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[YigouProduct])
+        + remaining: `8400` - 倒计时剩余秒数
 
 ## Yaoxiang Product List [/api/v1.0/yaoxiang/{id}]
 
@@ -175,6 +176,7 @@ HOST: http://api.junashare.com/
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[YaoxiangProduct])
+        + remaining: `8400` - 倒计时剩余秒数
 
 ## Share Product List [/api/v1.0/shareproduct/{id}{?time,page}]
 

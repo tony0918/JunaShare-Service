@@ -121,7 +121,7 @@ class ShareProduct__1_0 extends ResourceNode {
       )
     );
     foreach ($rounds as $key => &$val) {
-      if ($val['round'] > $hour && $hour > $val['round'] - 4) {
+      if ($val['round'] < $hour && $hour < $val['round'] + 4) {
         $val['selected'] = 1;
         $val['remain'] = $val['end'] - REQUEST_TIME;
       }

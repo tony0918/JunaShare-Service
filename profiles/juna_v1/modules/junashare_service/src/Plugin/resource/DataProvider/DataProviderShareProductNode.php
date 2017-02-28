@@ -15,10 +15,11 @@ class DataProviderShareProductNode extends DataProviderNode {
    */
   protected function getEntityFieldQuery() {
     $query = parent::getEntityFieldQuery();
-    $period = 0;
     $start = 0;
     $end = 0;
-    if (8 > (int) format_date(REQUEST_TIME, 'custom', 'H')) {
+    $period = 0;
+    $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
+    if (8 > $hour) {
       // 请求时间小于8点，显示昨天最后一场
       $start = strtotime('yesterday 20:00:00');
       $end = strtotime('yesterday 23:59:59');
@@ -26,6 +27,20 @@ class DataProviderShareProductNode extends DataProviderNode {
     else {
       if (isset($_GET['time']) && in_array($_GET['time'], array(1, 2, 3, 4))) {
         $period = $_GET['time'];
+      }
+      else {
+        if (12 > $hour) {
+          $period = 1;
+        }
+        if (16 > $hour && $hour >= 12) {
+          $period = 2;
+        }
+        if (20 > $hour && $hour >= 16) {
+          $period = 3;
+        }
+        if ($hour >= 20) {
+          $period = 4;
+        }
       }
       switch ($period) {
         case 1:
@@ -44,7 +59,10 @@ class DataProviderShareProductNode extends DataProviderNode {
           $start = strtotime('today 20:00:00');
           $end = strtotime('today 23:59:59');
           break;
+        default:
+          break;
       }
+
     }
     $query->fieldCondition('field_product_valid_period', 'value', $start, '<=');
     $query->fieldCondition('field_product_valid_period', 'value2', $end, '>=');
