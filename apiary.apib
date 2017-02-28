@@ -82,15 +82,7 @@ HOST: http://api.junashare.com/
 + provider (Seller) - 供应商信息
 + in_box: `0` - 商品是否已经被当前用户加入盒子，1为已经加入，0为未加入，未登入状态始终为0
 
-## BoxItem (object)
-+ nid: `4` - 商品id
-+ created: `10月27日` - 加入盒子的日期
-+ label: `LG 香水玫瑰身体乳美白保湿滋润400ml` - 商品的名字
-+ remaining: `190` - 商品剩余的数量
-+ image_on_item_in_box: `http://api-dev.junashare.com/2x.png` - 商品在盒子里展示的图片
-+ type_machine_name: `product` - 商品类型机器名，不会变更
-+ type: `壹购商品` - 商品类型的中文名
-+ field_price: `7.90` - 商品价值
+## BoxItem (ShareProduct)
 
 ## ShareProductTimePeriod (object)
 + start: `1488254400` - 开始时间
@@ -204,6 +196,7 @@ HOST: http://api.junashare.com/
 + Response 200 (application/json)
     + Attributes (object)
         + data (array[BoxItem])
+        + remain_boxproduct_num: `2` - 我的盒子还剩下的空间
 
 # Group Notification
 

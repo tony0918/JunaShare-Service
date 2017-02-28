@@ -206,6 +206,13 @@ function product_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('product_applylist'),
   );
+  $items['tonytest'] = array(
+    'title' => '申领列表',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'product_my_box',
+    'file' => 'includes/product.resource.inc',
+  );
   return $items;
 }
 
@@ -939,70 +946,6 @@ function product_tobox($nid) {
 }
 
 /**
- *广告列表
- */
-function product_banner($btype) {
-  $validtype = [1, 2];
-  $start = microtime_float();
-  if (!in_array($btype, $validtype)) {
-    $end = microtime_float();
-    calcrequesttime($start, $end, "banner");
-    return services_error(t('banner类型错误.'), 406);
-  }
-  $banner = cache_get('product_banner', 'cache');
-  if ((!empty($banner)) && $banner->expire > REQUEST_TIME) {
-    $data = $banner->data;
-  }
-  else {
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'node');
-    $query->propertyCondition('status', NODE_PUBLISHED);
-    $query->entityCondition('bundle', array('banner'));
-    $query->fieldCondition('field_banner_category', 'value', $btype, '=');
-    $results = $query->execute();
-    $data = [];
-    if (!empty($results)) {
-      $data = node_load_multiple(array_keys($results['node']));
-      $bannerfield = usedField()['banner'];
-      foreach ($data as $k => $v) {
-        foreach ($v->field_image['und'] as $kk => $vv) {
-
-          $data[$k]->field_image['und'][$kk]['uri'] = file_create_url($vv['uri']);
-          //print_r($box[$k]);
-          /*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
-              //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-              //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-              @file_get_contents(image_style_url('345_140', $vv['uri']));
-          } else {
-
-          }
-          $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
-        }
-        foreach ($v as $kk => $vv) {
-          if (!in_array($kk, $bannerfield)) {
-            unset($data[$k]->$kk);
-          }
-        }
-        if ($v->field_banner_btype['und'][0]['value'] == 1) {
-          $data[$k]->field_nid = $v->field_url['und'][0]['value'];
-          unset($data[$k]->field_url);
-
-        }
-        unset($data[$k]->field_banner_btype);
-
-      }
-      cache_set('product_banner_' . $btype, $data, 'cache', REQUEST_TIME + variable_get('cache_lifetime'));
-    }
-
-  }
-
-  $end = microtime_float();
-  calcrequesttime($start, $end, "banner");
-  return ['data' => $data];
-}
-
-/**
  *享什么商品列表
  */
 function product_share($page, $time) {
@@ -1637,4 +1580,77 @@ function product_applylist_submit($form, &$form_state) {
   }
 
 
+}
+
+/**
+ * Build Provider object according to nid for API.
+ * @param $nid
+ * @return array
+ */
+function prepare_product_provider_object($nid) {
+  $provider = node_load($nid);
+  return array(
+    'label' => $provider->title,
+    'introduce' => $provider->field_intro[LANGUAGE_NONE][0]['safe_value'],
+    'logo' => product_image_field_formatter($provider->field_company_logo)
+  );
+}
+
+/**
+ * Build SKU product object according to nid for API.
+ * @param $nid
+ * @return array
+ */
+function prepare_sku_product_object($nid) {
+  $sku_product = node_load($nid);
+  $output = array(
+    'market_price' => $sku_product->field_product_price[LANGUAGE_NONE][0]['value'],
+    'detail_desc' => $sku_product->field_product_description[LANGUAGE_NONE][0]['safe_value'],
+    'main_kv' => array(),
+    'image_for_share_list' => product_image_field_formatter($sku_product->field_product_share_list_image),
+    'image_on_item_in_box' => product_image_field_formatter($sku_product->field_product_image_in_box),
+    'image_on_coupon' => product_image_field_formatter($sku_product->field_product_image_on_coupon),
+    'image_on_order' => product_image_field_formatter($sku_product->field_product_image_on_order),
+    'image_for_yigou_list' => product_image_field_formatter($sku_product->field_product_image_on_yigou),
+    'brand_links' => array(),
+  );
+  foreach ($sku_product->field_product_main_kv[LANGUAGE_NONE] as $key => $value) {
+    $output['main_kv'][] = product_image_field_formatter($value);
+  }
+  foreach ($sku_product->field_product_brand_link[LANGUAGE_NONE] as $key => $value) {
+    $output['brand_links'][$key]['title'] = $value['title'];
+    $output['brand_links'][$key]['url'] = $value['url'];
+  }
+  return $output;
+}
+
+/**
+ * Filter useless field of image field for API.
+ * @param $field
+ * @return array
+ */
+function product_image_field_formatter($field) {
+  return array(
+    'fid' => $field[LANGUAGE_NONE][0]['fid'],
+    'self' => file_create_url($field[LANGUAGE_NONE][0]['uri']),
+    'filemine' => $field[LANGUAGE_NONE][0]['filemime'],
+    'filesize' => $field[LANGUAGE_NONE][0]['filesize'],
+    'width' => $field[LANGUAGE_NONE][0]['width'],
+    'height' => $field[LANGUAGE_NONE][0]['height']
+  );
+}
+
+/**
+ * Build basic product fields for API.
+ * @param $node
+ * @return array
+ */
+function prepare_product_node_fields($node) {
+  return array(
+    'nid' => $node->nid,
+    'label' => $node->title,
+    'stock' => $node->field_total_num[LANGUAGE_NONE][0]['value'],
+    'remaining' => $node->field_remain_num[LANGUAGE_NONE][0]['value'],
+    'num_in_box' => $node->num_in_box[LANGUAGE_NONE][0]['value'],
+  );
 }
