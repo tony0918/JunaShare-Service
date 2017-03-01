@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: http://api.junashare.com/
+HOST: http://api-prod.junashare.com/
 
 # Junashare Service 1.x
 享什么app API 1.x 版本
@@ -230,3 +230,27 @@ HOST: http://api.junashare.com/
         + `3` - 待收货订单
         + `6` - 待评价订单
     + page: `1` - 分页
+
+## Order [/juna/order/{id}.json]
+
+### Retrieve An Order Detail [GET]
++ Parameters
+    + id: `1` - 订单的内部id号，并非订单号
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + id: `309`
+        + created: `2017-02-15 12:17:38`
+        + total_price: `0`
+        + express_provider: `天天快递`
+        + express_id: `580346274219`
+        + sorderid: `2017021512173913401600`
+        + title: `皇冠 丹麦曲奇原味 90g`
+        + type: `白领商品`
+        + mobile: `13761654290`
+        + full_name: `Tony`
+        + address: `这个是快递的地址`
+        + market_price: `10`
+        + price: `0`
+        + uri: `http://api-dev.junashare.com/sites/default/files/product_image_on_order/%E8%AE%A2%E5%8D%95%402x.png`
+        + express_fee: `0`
