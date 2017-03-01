@@ -73,7 +73,7 @@ class SkuProduct__1_0 extends ResourceNode {
       )
     );
     $public_fields['image_for_yigou_list'] = array(
-      'property' => 'field_product_image_on_order',
+      'property' => 'field_product_image_on_yigou',
       'process_callbacks' => array(
         array($utility, 'imageProcess')
       )

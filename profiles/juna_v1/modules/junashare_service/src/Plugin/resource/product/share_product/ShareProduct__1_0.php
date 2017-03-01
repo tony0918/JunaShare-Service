@@ -66,9 +66,6 @@ class ShareProduct__1_0 extends ResourceNode {
     $public_fields['in_box'] = array(
       'callback' => array($this, 'getInBoxStatus')
     );
-    $public_fields['current_period'] = array(
-      'callback' => array($this, 'getCurrentPeriod')
-    );
 
     // Clean up some fields.
     unset($public_fields['self']);
@@ -99,21 +96,41 @@ class ShareProduct__1_0 extends ResourceNode {
     return empty($result) ? 0 : 1;
   }
 
-  public function getCurrentPeriod() {
+  public function additionalHateoas($data) {
     $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
-    if (8 > $hour) {
-      return array('round' => 0, 'remaining_time' => 0);
+    $rounds = array(
+      array(
+        'round' => 8,
+        'start' => strtotime('today 08:00:00'),
+        'end' => strtotime('today 11:59:59'),
+      ),
+      array(
+        'round' => 12,
+        'start' => strtotime('today 12:00:00'),
+        'end' => strtotime('today 15:59:59'),
+      ),
+      array(
+        'round' => 16,
+        'start' => strtotime('today 16:00:00'),
+        'end' => strtotime('today 19:59:59'),
+      ),
+      array(
+        'round' => 20,
+        'start' => strtotime('today 20:00:00'),
+        'end' => strtotime('today 23:59:59'),
+      )
+    );
+    foreach ($rounds as $key => &$val) {
+      if ($val['round'] > $hour && $hour > $val['round'] - 4) {
+        $val['selected'] = 1;
+        $val['remain'] = $val['end'] - REQUEST_TIME;
+      }
+      else {
+        $val['selected'] = 0;
+        $val['remain'] = 0;
+      }
+      unset($val['round']);
     }
-    if (12 > $hour) {
-      return array('round' => 1, 'remaining_time' => strtotime('today 12:00:00') - REQUEST_TIME);
-    }
-    if (16 > $hour) {
-      return array('round' => 2, 'remaining_time' => strtotime('today 16:00:00') - REQUEST_TIME);
-    }
-    if (20 > $hour) {
-      return array('round' => 3, 'remaining_time' => strtotime('today 20:00:00') - REQUEST_TIME);
-    }
-    return array('round' => 4, 'remaining_time' => strtotime('tomorrow 00:00:00') - REQUEST_TIME);
+    return ['time_period' => $rounds];
   }
-
 }
