@@ -44,6 +44,11 @@ function orders_lists($status = NULL) {
   return ['success' => 1, 'data' => $data];
 }
 
+/**
+ * Retrieve an order detail information.
+ * @param $oid
+ * @return array
+ */
 function orders_order_resource_retrieve($oid) {
   global $user;
   if (!$user->uid) {
@@ -52,7 +57,7 @@ function orders_order_resource_retrieve($oid) {
 
   $query = db_select('product_order', 'po')
     ->condition('po.id', $oid, '=')
-    ->fields('po', array('id', 'created', 'total_price', 'express_provider', 'express_id', 'sorderid'));
+    ->fields('po', array('id', 'created', 'total_price', 'express_provider', 'express_id', 'sorderid', 'status'));
 
   $query->join('node', 'n', 'po.nid = n.nid');
   $query->fields('n', array('title', 'type'));
@@ -92,6 +97,7 @@ function orders_order_resource_retrieve($oid) {
   $data['type'] = $product_types[$data['type']];
   $data['uri'] = file_create_url($data['uri']);
   $data['created'] = format_date($data['created'], 'custom', 'Y-m-d H:i:s');
+  $data['mobile'] = substr_replace($data['mobile'], '****', 3, 4);
   $data['express_fee'] = 0;
 
   return ['data' => $data];

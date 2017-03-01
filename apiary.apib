@@ -239,18 +239,19 @@ HOST: http://api-prod.junashare.com/
 
 + Response 200 (application/json)
     + Attributes (object)
-        + id: `309`
-        + created: `2017-02-15 12:17:38`
-        + total_price: `0`
-        + express_provider: `天天快递`
-        + express_id: `580346274219`
-        + sorderid: `2017021512173913401600`
-        + title: `皇冠 丹麦曲奇原味 90g`
-        + type: `白领商品`
-        + mobile: `13761654290`
-        + full_name: `Tony`
-        + address: `这个是快递的地址`
-        + market_price: `10`
-        + price: `0`
-        + uri: `http://api-dev.junashare.com/sites/default/files/product_image_on_order/%E8%AE%A2%E5%8D%95%402x.png`
-        + express_fee: `0`
+        + id: `309` - 订单的内部id号，对订单操作的必要的id号
+        + created: `2017-02-15 12:17:38` - 下单时间
+        + total_price: `0` - 实付款（含运费）
+        + express_provider: `天天快递` - 快递公司
+        + express_id: `580346274219` - 快递单号
+        + sorderid: `2017021512173913401600` - 显示的订单号
+        + status: `0` - 订单的各种状态，与订单列表中的状态相对应，0为待付款，2为待发货，3为待收货，6为待评价
+        + title: `皇冠 丹麦曲奇原味 90g` - 商品名字
+        + type: `白领商品` - 订单类型
+        + mobile: `13761654290` - 手机号
+        + full_name: `Tony` - 收件人
+        + address: `这个是快递的地址` - 收件地址
+        + market_price: `10` - 价值，市场价值
+        + price: `0` - 实际价格
+        + uri: `http://api-dev.junashare.com/sites/default/files/product_image_on_order/%E8%AE%A2%E5%8D%95%402x.png` - 商品图片
+        + express_fee: `0` - 快递费
