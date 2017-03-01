@@ -682,7 +682,7 @@ function _alipay_pre_pay($order) {
     return services_error(t('用户未登录'), 406);
   }
   $alipay_settings = unserialize(variable_get('alipay_settings'));
-  $alipay_settings['app_id'] = "2016102900776032";
+  //$alipay_settings['app_id'] = "2016102900776032";
   //var_dump($alipay_settings);exit;
   module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_rsa.function');
   module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_core.function');
@@ -694,11 +694,38 @@ function _alipay_pre_pay($order) {
   $passback_params = urlencode(json_encode(array(
     'uid' => $user->uid,
     'nid' => $order->nid,
-    'orderid' => $order->id,
+    'orderid' => $order->sorderid,
     'total_fee' => $order->total_price * 100,
 
   )));
-
+  array(
+    'total_amount' => '0.01',
+    'buyer_id' => '2088202805360242',
+    'trade_no' => '2017022821001004240203554563',
+    'notify_time' => '2017-02-28 19:47:49',
+    'subject' => '【测试】多力多滋 玉米片烟熏烤味198.4g*2',
+    'sign_type' => 'RSA',
+    'buyer_logon_id' => 'lif***@163.com',
+    'auth_app_id' => '2016111602886056',
+    'charset' => 'utf-8',
+    'notify_type' => 'trade_status_sync',
+    'invoice_amount' => '0.01',
+    'out_trade_no' => '2017022819472319358421',
+    'trade_status' => 'TRADE_SUCCESS',
+    'gmt_payment' => '2017-02-28 19:47:49',
+    'version' => '1.0',
+    'point_amount' => '0.00',
+    'sign' => 'hODpe+034P87OuCSHB2zgLwGsxRizkYnenw1LbGg84XenBdwRS3iLUNBIrL8o30ljuA9dpsTPNjlKnUVS6zZL5f8UccVUHTbd9UQeN12HPFn8IHhFTNBeEJ8AZ9ZuqwRDyWIDAoxuWRCnXpjde9CZMv7dCkhmmoyDGEhIBJmwh0=',
+    'gmt_create' => '2017-02-28 19:47:48',
+    'buyer_pay_amount' => '0.01',
+    'receipt_amount' => '0.01',
+    'passback_params' => '%7B%22uid%22%3A%22135%22%2C%22nid%22%3A%222%22%2C%22orderid%22%3A%222017022819472319358421%22%2C%22total_fee%22%3A1%7D',
+    'fund_bill_list' => '[{"amount":"0.01","fundChannel":"ALIPAYACCOUNT"}]',
+    'app_id' => '2016111602886056',
+    'seller_id' => '2088421944340625',
+    'notify_id' => '859b5c3805b4133c87b837f77bf101fhuq',
+    'seller_email' => 'heidy.huang@junashare.com',
+  );
   $content = [
     'subject' => $node->title,
     'out_trade_no' => $order->sorderid,
@@ -731,119 +758,19 @@ function _alipay_pre_pay($order) {
   $config['notify_url'] = $alipay_settings['notify_url'];
   require_once 'alipay/AopSdk.php';
   $c = new AopClient;
-  //$c->gatewayUrl = "https://openapi.alipay.com/gateway.do";
+  $c->gatewayUrl = "https://openapi.alipay.com/gateway.do";
   //$c->appId = '2016111602886056';//$alipay_settings['app_id'];
-  $c->gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
+  //$c->gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
   $c->appId = $alipay_settings['app_id'];//"2016102900776032";
   $c->rsaPrivateKey = $alipay_settings['private_key'];
   $c->format = "json";
   $c->charset = "utf-8";
   $c->alipayrsaPublicKey = $alipay_settings['public_key'];
   $sign = $c->generateSign($signparam);
-  // $c ->rsaPrivateKey = $alipay_settings['private_key'];
-  //$c ->rsaPrivateKey = $alipay_settings['private_key'];
-  //var_dump($sign);
-  //exit;
-  // $c -> alipayrsaPublicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgrUMJUgaYLJpSrHBY60gpoYYkTzg9Z8OBljpEbeymHt1GzD8wRdOfRUTgWNXwM9ZNsQmn18/tli6d+MXSHlzvewi7Vd322u/U1OUY0Ljv5QSIyi4nzkM2nBt2sszEWz/63CM4CEbZKQtrHM7Z3bxnJKa9LrcSUwynhXTSC+udTwIDAQAB';//$alipay_settings['public_key'];
-  //$c ->rsaPrivateKey = $alipay_settings['private_key'];
-  //$sign = $c -> rsaSign($signparam);
-  //$config['sign'] = $sign;
-  //$signstr=createLinkstring($signparam);
-  //echo $signstr;
-  //print_r($alipay_settings);exit;
-  //$signstr = http_build_query($signparam);
-  //$sign = rsaSign($signstr,$alipay_settings['private_key']);
-  //$client = new AopClient();
-  //pzU8DKEo2z5LciSQ23vdjP032iLVP%2BkkwjoOQVtT85gpoQB%2BwWsmUsbE1iaFBG1s0n1ZQa4b2h8YHS%2FFqrlpH6hX1ZbNw9UVy2wqz9uy9ZV2OikZeENopCQ%2B5akOoHuQKM1t2VhbgdU2nOk8BklNSYW2JH2wJ3N8ofjW0i8Ara8%3D
-  //$sign = $client -> rsaSign($signparam,$private_key);
-  //$sign=rsaSign($signstr, $alipay_settings['private_key']);
-  //require_once 'alipay/AopSdk.php';
-  //$c = new AopClient;
-  //$c -> alipayrsaPublicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgrUMJUgaYLJpSrHBY60gpoYYkTzg9Z8OBljpEbeymHt1GzD8wRdOfRUTgWNXwM9ZNsQmn18/tli6d+MXSHlzvewi7Vd322u/U1OUY0Ljv5QSIyi4nzkM2nBt2sszEWz/63CM4CEbZKQtrHM7Z3bxnJKa9LrcSUwynhXTSC+udTwIDAQAB';//$alipay_settings['public_key'];
-  //$c ->rsaPrivateKey = $alipay_settings['private_key'];
-  //$sign = $c -> rsaSign($signparam);
-  //$str = '';
-  //foreach($signparam as $k =>$v){
-  //  if($str == ''){
-  //    $str.=$k.'='.$v;
-  //}else{
-  //  $str.= '&'.$k.'='.$v;
-  //}
-
-  //}
-  //function verify($data, $sign, $rsaPublicKeyFilePath, $signType = 'RSA') {
-  //$res = $c -> verify($str,$sign);
-  //var_dump($alipay_settings['private_key']);exit;
-  //$res = rsaVerify($signstr,$alipay_settings['app_key'],$sign);
-  //var_dump($res);exit;
   $config ['sign_type'] = 'RSA';
   $config['timestamp'] = date('Y-m-d H:i:s', $order->created);
   $config['version'] = '1.0';
   $config['sign'] = $sign;
-  //module_load_include('inc','orders','alipay/server/php/lib/alipay_submit.class');
-
-  /* *
-   * 配置文件
-   * 版本：3.4
-   * 日期：2016-03-08
-   * 说明：
-   * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
-   * 该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
-
-   * 安全校验码查看时，输入支付密码后，页面呈灰色的现象，怎么办？
-   * 解决方法：
-   * 1、检查浏览器配置，不让浏览器做弹框屏蔽设置
-   * 2、更换浏览器或电脑，重新登录查询。
-   */
-
-//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-// 合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://openhome.alipay.com/platform/keyManage.htm?keyType=partner
-
-
-//商户的私钥,此处填写原始私钥去头去尾，RSA公私钥生成：https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.nBDxfy&treeId=58&articleId=103242&docType=1
-  $alipay_config['private_key'] = $alipay_settings['private_key'];
-
-//支付宝的公钥，查看地址：https://openhome.alipay.com/platform/keyManage.htm?keyType=partner
-  $alipay_config['alipay_public_key'] = $alipay_settings['public_key'];
-
-// 服务器异步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问
-  $alipay_config['notify_url'] = $alipay_settings['notify_url'];
-
-// 签名方式
-  $alipay_config['sign_type'] = strtoupper('RSA');
-
-// 退款日期 时间格式 yyyy-MM-dd HH:mm:ss
-//date_default_timezone_set('PRC');//设置当前系统服务器时间为北京时间，PHP5.1以上可使用。
-  $alipay_config['refund_date'] = date("Y-m-d H:i:s", time());;
-
-// 调用的接口名，无需修改
-  $alipay_config['service'] = 'alipay.trade.app.pay';
-
-//字符编码格式 目前支持 gbk 或 utf-8
-  $alipay_config['input_charset'] = strtolower('utf-8');
-
-//ca证书路径地址，用于curl中ssl校验
-//请保证cacert.pem文件在当前文件夹目录中
-  $alipay_config['cacert'] = getcwd() . '\\cacert.pem';
-
-//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-  $alipay_config['transport'] = 'http';
-
-//↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
-  /* $alipaySubmit = new AlipaySubmit($alipay_config);
-$html_text = $alipaySubmit->buildRequestForm($signparam,"get", "确认");
-$str = 'app_id=2015052600090779&biz_content={"timeout_express":"30m","seller_id":"","product_code":"QUICK_MSECURITY_PAY","total_amount":"0.01","subject":"1","body":"我是测试数据","out_trade_no":"IQJZSRC1YMQB5HU"}&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=http://api.junashare.com/payment/notify&sign_type=RSA&timestamp=2016-08-25 20:26:31&version=1.0';
-$sign = rsaSign($str,$alipay_settings['private_key']);
-$str.='&sign='.$sign;
-app_id%3D2016111602886056%26biz_content%3D%7B%22goods_type%22%3A1%2C%22passback_params%22%3A%22e19167ca387348ee9c53309da5a16fab%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22seller_id%22%3A%222088421944340625%22%2C%22subject%22%3A%22abc%22%2C%22timeout_express%22%3A%2230m%22%2C%22total_amount%22%3A0.01%2C%22out_trade_no%22%3A%221%22%7D%26charset%3Dutf-8%26format%3Djson%26method%3Dalipay.trade.app.pay%26sign_type%3DRSA%26timestamp%3D2016-11-19+18%3A36%3A02%26version%3D1%26sign%3D%22kE6ZYBXuz7SxUW7R4zrG9%2FIm0mpY9wxlqyI3ZDyJpiaoJIBAXHc3trDNbpRbXJKwydX9KSk5jeTp9TNoWpL8Gwq%2F3l%2FSQtzpHU4%2Fs2t6KIkC5bqYZUtfrCkCmdeBXB8BL%2FLkNaSmaBXJctS8h8wr%2FNKOqmIZC9CESNGenlqK8L0%3D%22%26sign_type%3DRSA*/
-//$signstr = $signstr.'&sign='.'"'.$sign.'"'.'&sign_type='."RSA";
-//$config['timestamp'] = str_replace(' ', '%20', $config['timestamp']);
-//$str = http_build_query($config,'','%20%20');
-  /*$str = 'app_id=2016111602886056&biz_content={"timeout_express":"30m","seller_id":"","product_code":"QUICK_MSECURITY_PAY","total_amount":"0.01","subject":"1","body":"test","out_trade_no":"IQJZSRC1YMQB5HU"}&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=http://api.junashare.com/payment/notify&sign_type=RSA&timestamp=2016-08-25 20:26:31&version=1.0';
-  $sign = rsaSign($str,$alipay_settings['private_key']);
-  $str='app_id=2016111602886056&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.01%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22IQJZSRC1YMQB5HU%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fdomain.merchant.com%2Fpayment_notify&sign_type=RSA&timestamp=2016-08-25%2020%3A26%3A31&version=1.0&sign='.$sign;
-  $str = 'app_id=2016111602886056&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.01%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22IQJZSRC1YMQB5HU%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fdomain.merchant.com%2Fpayment_notify&sign_type=RSA&timestamp=2016-08-25%2020%3A26%3A31&version=1.0&sign=cYmuUnKi5QdBsoZEAbMXVMmRWjsuUj%2By48A2DvWAVVBuYkiBj13CFDHu2vZQvmOfkjE0YqCUQE04kqm9Xg3tIX8tPeIGIFtsIyp%2FM45w1ZsDOiduBbduGfRo1XRsvAyVAv2hCrBLLrDI5Vi7uZZ77Lo5J0PpUUWwyQGt0M4cj8g%3D';*/
   $str = http_build_query($config, NULL, ini_get('arg_separator.output'), PHP_QUERY_RFC3986);
   return ['data' => $str];
 
@@ -852,180 +779,39 @@ app_id%3D2016111602886056%26biz_content%3D%7B%22goods_type%22%3A1%2C%22passback_
 
 function orders_notify() {
   $alipay_settings = unserialize(variable_get('alipay_settings'));
-  //print_r($alipay_settings);exit;
-  watchdog('alipay_notify', print_r($_POST, TRUE));
-  watchdog('alipay_notify_get', print_r($_GET, TRUE));
-  $_POST = Array(
-    'total_amount' => 0.01,
-    'buyer_id' => '2088002114070180',
-    'trade_no' => '2016121121001004180225275045',
-    'notify_time' => '2016-12-11 11:59:12',
-    'subject' => 'NUK 学饮杯 5oz 蝴蝶款或大象款150ml',
-    'sign_type' => 'RSA',
-    'buyer_logon_id' => '501***@qq.com',
-    'auth_app_id' => '2016111602886056',
-    'charset' => 'utf-8',
-    'notify_type' => 'trade_status_sync',
-    'invoice_amount' => 0.01,
-    'out_trade_no' => '206',
-    'trade_status' => 'TRADE_SUCCESS',
-    'gmt_payment' => '2016-12-11 11:59:11',
-    'version' => '1.0',
-    'point_amount' => 0.00,
-    'sign' => 'KGF78hGTcu1Sifh2W894280mfrVnwWhkQ1Fvmb84o2Td55ncA+2qXIX1KUTHcz5rDXrbMsgmzl2AeIa7DLq4fHyTyVHB+Ub/5yTEaZOQX+xJetdhCXrO9gYTOSWmXh363UDW2QkMSKGRx7n51Bz+IfRssSSita6kj3C3AMm/Qbw=',
-    'gmt_create' => '2016-12-11 11:59:10',
-    'buyer_pay_amount' => 0.01,
-    'receipt_amount' => 0.01,
-    'passback_params' => '4f9c076db2c745b03e4456b4a13e3bbf',
-    'fund_bill_list' => '[{"amount":"0.01","fundChannel":"ALIPAYACCOUNT"}]',
-    'app_id' => '2016111602886056',
-    'seller_id' => 2088421944340625,
-    'notify_id' => '44594a6ea7e78846f37ff4e467de794he2',
-    'seller_email' => 'heidy.huang@junashare.com'
-  );
+  watchdog('alipay_notify', var_export($_POST, TRUE));
+  watchdog('alipay_notify_get', var_export($_GET, TRUE));
   require_once 'alipay/AopSdk.php';
   $c = new AopClient;
-  //$c->gatewayUrl = "https://openapi.alipay.com/gateway.do";
-  //$c->appId = '2016111602886056';//$alipay_settings['app_id'];
-  $c->gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
-  $c->appId = "2016102900776032";
+  $c->gatewayUrl = "https://openapi.alipay.com/gateway.do";
+  $c->appId = $alipay_settings['app_id'];//"2016102900776032";
   $c->rsaPrivateKey = $alipay_settings['private_key'];
   $c->format = "json";
   $c->charset = "utf-8";
   $c->alipayrsaPublicKey = $alipay_settings['public_key'];
-  $signparam = $_POST;
-  //unset($signparam['sign_type']);
-  //unset($signparam['sign']);
-  ksort($signparam);
-  //print_r($signparam);exit;
-  //$c->alipayPublicKey = $alipay_settings['app_key'];
-  //$sign = $c -> rsaCheckV1($_POST,'');
-  //var_dump($sign);exit;
-  $alipay_config['private_key'] = $alipay_settings['private_key'];
-
-//支付宝的公钥，查看地址：https://openhome.alipay.com/platform/keyManage.htm?keyType=partner
-  $alipay_config['alipay_public_key'] = $alipay_settings['public_key'];
-
-// 服务器异步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问
-  $alipay_config['notify_url'] = $alipay_settings['notify_url'];
-
-// 签名方式
-  $alipay_config['sign_type'] = strtoupper('RSA');
-
-// 退款日期 时间格式 yyyy-MM-dd HH:mm:ss
-//date_default_timezone_set('PRC');//设置当前系统服务器时间为北京时间，PHP5.1以上可使用。
-  $alipay_config['refund_date'] = date("Y-m-d H:i:s", time());;
-
-// 调用的接口名，无需修改
-  $alipay_config['service'] = 'alipay.trade.app.pay';
-
-//字符编码格式 目前支持 gbk 或 utf-8
-  $alipay_config['input_charset'] = strtolower('utf-8');
-
-//ca证书路径地址，用于curl中ssl校验
-//请保证cacert.pem文件在当前文件夹目录中
-  $alipay_config['cacert'] = getcwd() . '\\cacert.pem';
-
-//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-  $alipay_config['transport'] = 'http';
-  module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_rsa.function');
-  module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_core.function');
-  module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_notify.class');
-
-  $alipayNotify = new AlipayNotify($alipay_config);
-  if ($alipayNotify->getResponse('44594a6ea7e78846f37ff4e467de794he2'))//判断成功之后使用getResponse方法判断l是否是支付宝发来的异步通知。
-  {
-    echo "aa";
-    var_dump($r);
-    exit;
-    $content = [
-      'subject' => $_POST['subject'],
-      'out_trade_no' => $_POST['out_trade_no'],
-      'timeout_express' => '30m',
-      'total_amount' => '0.01',
-      'seller_id' => $alipay_settings['seller_id'],
-      'product_code' => 'QUICK_MSECURITY_PAY',
-      'goods_type' => '1',
-      'passback_params' => '4f9c076db2c745b03e4456b4a13e3bbf'
-    ];
-    $biz_content = json_encode($content);
-    $config['biz_content'] = $biz_content;
-    $private_key = $alipay_settings['private_key'];
-    $signparam = [
-      'app_id' => $alipay_settings['app_id'],
-      'biz_content' => $biz_content,
-      'charset' => 'utf-8',
-      'format' => 'json',
-      'method' => 'alipay.trade.app.pay',
-      'notify_url' => $alipay_settings['notify_url'],
-      'sign_type' => 'RSA',
-      'timestamp' => '2016-12-11 11:57:52',
-      //date('Y-m-d H:i:s',$order -> created),
-      'version' => '1.0',
-    ];
-    $signparam = $_POST;
-    unset($signparam['sign_type']);
-    unset($signparam['sign']);
-    if ($alipayNotify->getSignVeryfy($signparam, $_POST['sign'])) {//使用支付宝公钥验签
-
-      //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
-      //获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
-      //商户订单号
-      $out_trade_no = $_POST['out_trade_no'];
-
-      //支付宝交易号
-      $trade_no = $_POST['trade_no'];
-
-      //交易状态
-      $trade_status = $_POST['trade_status'];
-      $attach = urldecode(json_decode($_POST['passback_params']));
-      if ($_POST['trade_status'] == 'TRADE_FINISHED') {
-
-      }
-      else {
-        if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
-
-          $orderobj = db_query("SELECT * FROM {product_order} WHERE id=:id", array(':id' => $$attach->orderid))->fetch();
-          if ($orderobj) {
-            if ($orderobj->total_price == $_POST['total_amount'] && $_POST['seller_id'] == $alipay_config['partner'] && $_POST['app_id'] == $app_id) {
-
-              $order = new stdClass();
-              $order->id = $attach->orderid;
-              $order->status = 1;
-              $order->alipay_order_id = $trade_no;
-              $order->payment_type = 1;
-              drupal_write_record('product_order', $order, 'id');
-              $log = db_query('SELECT * from {user_amount_log} WHERE sorderid=:sorderid', array(':sorderid' => $out_trade_no))->fetchAll();
-              if (empty($log)) {
-                $record = new stdClass();
-                $record->uid = $attach->uid;
-                $record->total_fee = $attach->total_fee;
-                $record->paytype = 'alipay';
-                $record->paytime = REQUEST_TIME;
-                $record->nid = $attach->nid;
-                $record->status = 1;
-                $record->sthirdorderno = $trade_no;
-                $record->type = "recharge";
-                $record->sorderid = $out_trade_no;
-                drupal_write_record('user_amount_log', $record);
-              }
-              else {
-                db_update('user_amount_log')
-                  ->fields(array('status' => 1, 'sthirdno' => $trade_no))
-                  ->condition('sorderid', $out_trade_no)
-                  ->execute();
-              }
-            }
-          }
-          echo "success";
-          //判断该笔订单是否在商户网站中已经做过处理
-          //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-          //如果有做过处理，不执行商户的业务程序
-          //注意：
-          //付款完成后，支付宝系统发送该交易状态通知
-          //请务必判断请求时的out_trade_no、total_fee、seller_id与通知时获取的out_trade_no、total_fee、seller_id为一致的
-        }
-        else {
+  //$result = $c -> rsaCheckV1($_POST,$alipay_settings['public_key']);
+  $out_trade_no = $_POST['out_trade_no'];
+  //支付宝交易号
+  $trade_no = $_POST['trade_no'];
+  //交易状态
+  $trade_status = $_POST['trade_status'];
+  $attach = json_decode(urldecode($_POST['passback_params']));
+  //var_export($attach);exit;
+  if ($_POST['trade_status'] == 'TRADE_FINISHED') {
+  }
+  else {
+    if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
+      //watchdog('aplipaty_notify','TRADE_SUCCESS');
+      $orderobj = db_query("SELECT * FROM {product_order} WHERE sorderid=:id", array(':id' => $attach->orderid))->fetch();
+      if ($orderobj) {
+        //
+        if ($orderobj->total_price == $_POST['total_amount'] && $_POST['seller_id'] == $alipay_settings['seller_id'] && $_POST['app_id'] == $alipay_settings['app_id']) {
+          $order = new stdClass();
+          $order->sorderid = $attach->orderid;
+          $order->status = 1;
+          $order->alipay_order_id = $trade_no;
+          $order->payment_type = 1;
+          drupal_write_record('product_order', $order, 'sorderid');
           $log = db_query('SELECT * from {user_amount_log} WHERE sorderid=:sorderid', array(':sorderid' => $out_trade_no))->fetchAll();
           if (empty($log)) {
             $record = new stdClass();
@@ -1034,34 +820,51 @@ function orders_notify() {
             $record->paytype = 'alipay';
             $record->paytime = REQUEST_TIME;
             $record->nid = $attach->nid;
-            $record->status = 2;
+            $record->status = 1;
             $record->sthirdorderno = $trade_no;
-            $record->type = "recharge";
+            $record->type = "consume";
             $record->sorderid = $out_trade_no;
             drupal_write_record('user_amount_log', $record);
-            watchdog('weixin_recharge', "系统充值订单为:{$sOrderNo}的支付订单{$tradeNo}充值失败,失败原因:{$data['return_code']}:{$data['return_msg']}");
           }
           else {
             db_update('user_amount_log')
-              ->fields(array('status' => 2, 'sthirdno' => $trade_no))
+              ->fields(array('status' => 1, 'sthirdorderno' => $trade_no))
               ->condition('sorderid', $out_trade_no)
               ->execute();
           }
         }
+        else {
+          watchdog('alipay_notify', '校验失败');
+        }
       }
-      //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
-      echo "fail";     //请不要修改或删除
+      echo "success";
     }
-    else //验证签名失败
-    {
-      echo "sign fail";
+    else {
+      watchdog('aplipaty_notify', 'pay fail');
+      $log = db_query('SELECT * from {user_amount_log} WHERE sorderid=:sorderid', array(':sorderid' => $out_trade_no))->fetchAll();
+      if (empty($log)) {
+        $record = new stdClass();
+        $record->uid = $attach->uid;
+        $record->total_fee = $attach->total_fee;
+        $record->paytype = 'alipay';
+        $record->paytime = REQUEST_TIME;
+        $record->nid = $attach->nid;
+        $record->status = 2;
+        $record->sthirdorderno = $trade_no;
+        $record->type = "recharge";
+        $record->sorderid = $out_trade_no;
+        drupal_write_record('user_amount_log', $record);
+        watchdog('weixin_recharge', "系统充值订单为:{$out_trade_no}的支付订单{$trade_no}充值失败,失败原因:{$_POST['return_code']}:{$_POST['return_msg']}");
+      }
+      else {
+        db_update('user_amount_log')
+          ->fields(array('status' => 2, 'sthirdorderno' => $trade_no))
+          ->condition('sorderid', $out_trade_no)
+          ->execute();
+      }
     }
   }
-  else //验证是否来自支付宝的通知失败
-  {
-    return 'success';
-  }
-
+  // echo "success";    //请不要修改或删除
 }
 
 function orders_callback() {
