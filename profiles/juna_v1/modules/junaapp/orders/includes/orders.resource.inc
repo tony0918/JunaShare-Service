@@ -97,12 +97,12 @@ function orders_order_resource_retrieve($oid) {
   $data['type'] = $product_types[$data['type']];
   $data['uri'] = file_create_url($data['uri']);
   $data['created'] = format_date($data['created'], 'custom', 'Y-m-d H:i:s');
-  $data['mobile'] = substr_replace($data['mobile'], '****', 3, 4);
+  $data['mobile'] = orders_mask_user_mobile($data['mobile']);
   $data['express_fee'] = 0;
 
   return ['data' => $data];
 }
 
 function orders_mask_user_mobile($mobile) {
-  return $mobile;
+  return substr_replace($mobile, '****', 3, 4);
 }

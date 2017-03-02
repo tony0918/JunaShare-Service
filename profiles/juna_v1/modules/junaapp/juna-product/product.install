@@ -93,6 +93,12 @@ function product_schema() {
 
     ),
     'primary key' => array('id'),
+    'unique keys' => array(
+      'uidx_nid_uid' => array('nid', 'uid'),
+    ),
+    'indexes' => array(
+      'idx_couponid' => array('couponid'),
+    ),
   );
 
   return $schema;
@@ -125,6 +131,17 @@ function product_update_7003() {
   if (db_table_exists($table)) {
     db_add_index($table, 'idx_nid', array('nid'));
     db_add_index($table, 'idx_uid', array('uid'));
+  }
+}
+
+/**
+ * Adding unique index uidx_nid_uid and index idx_couponid to user_wingshare_log.
+ */
+function product_update_7004() {
+  $table = 'user_wingshare_log';
+  if (db_table_exists($table)) {
+    db_add_unique_key($table, 'uidx_nid_uid', array('nid', 'uid'));
+    db_add_index($table, 'idx_couponid', array('couponid'));
   }
 }
 
