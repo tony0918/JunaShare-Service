@@ -375,8 +375,8 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'body',
-    'label' => '一购商品详情',
-    'required' => 1,
+    'label' => 'Body',
+    'required' => 0,
     'settings' => array(
       'display_summary' => 1,
       'text_processing' => 1,
@@ -390,7 +390,7 @@ function juna_basic_features_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 1,
+      'weight' => 8,
     ),
   );
 
@@ -418,7 +418,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_description',
     'label' => '一购商品描述',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -430,7 +430,7 @@ function juna_basic_features_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 9,
     ),
   );
 
@@ -458,7 +458,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_endtime',
     'label' => '一购商品限时销售结束时间',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -470,7 +470,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 7,
+      'weight' => 12,
     ),
   );
 
@@ -527,7 +527,7 @@ function juna_basic_features_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'media_generic',
-      'weight' => 12,
+      'weight' => 15,
     ),
   );
 
@@ -557,7 +557,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_image_for_list',
     'label' => '一购商品列表使用图片',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
@@ -574,17 +574,18 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'media',
       'settings' => array(
         'allowed_schemes' => array(
-          0 => 'public',
-          1 => 'private',
+          'public' => 'public',
         ),
         'allowed_types' => array(
-          0 => 'image',
+          'audio' => 0,
+          'default' => 0,
+          'image' => 'image',
+          'video' => 0,
         ),
-        'preview_image_style' => '348_300',
         'progress_indicator' => 'throbber',
       ),
       'type' => 'media_generic',
-      'weight' => 11,
+      'weight' => 14,
     ),
   );
 
@@ -631,17 +632,18 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'media',
       'settings' => array(
         'allowed_schemes' => array(
-          0 => 'public',
-          1 => 'private',
+          'public' => 'public',
         ),
         'allowed_types' => array(
-          0 => 'image',
+          'audio' => 0,
+          'default' => 0,
+          'image' => 'image',
+          'video' => 0,
         ),
-        'preview_image_style' => 'thumbnail',
         'progress_indicator' => 'throbber',
       ),
       'type' => 'media_generic',
-      'weight' => 13,
+      'weight' => 16,
     ),
   );
 
@@ -654,7 +656,7 @@ function juna_basic_features_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '加入盒子数量',
+    'description' => '商品加入盒子数量',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -677,7 +679,7 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_inbox_num',
-    'label' => '一购商品加入盒子数量',
+    'label' => 'Items in Box',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -691,7 +693,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 9,
+      'weight' => 7,
     ),
   );
 
@@ -724,7 +726,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_origin_price',
     'label' => '一购商品市场价',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'max' => '',
       'min' => '',
@@ -737,7 +739,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 4,
+      'weight' => 10,
     ),
   );
 
@@ -767,7 +769,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_pictures',
     'label' => '一购商品图片',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
@@ -784,17 +786,18 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'media',
       'settings' => array(
         'allowed_schemes' => array(
-          0 => 'public',
-          1 => 'private',
+          'public' => 'public',
         ),
         'allowed_types' => array(
-          0 => 'image',
+          'audio' => 0,
+          'default' => 0,
+          'image' => 'image',
+          'video' => 0,
         ),
-        'preview_image_style' => 'thumbnail',
         'progress_indicator' => 'throbber',
       ),
       'type' => 'media_generic',
-      'weight' => 10,
+      'weight' => 13,
     ),
   );
 
@@ -803,7 +806,7 @@ function juna_basic_features_field_default_field_instances() {
     'bundle' => 'product',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => '一购商品价格',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -826,12 +829,12 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_price',
-    'label' => '一购商品价格',
+    'label' => 'Yigou Price',
     'required' => 1,
     'settings' => array(
       'max' => '',
       'min' => '',
-      'prefix' => '￥',
+      'prefix' => '',
       'suffix' => '',
       'user_register_form' => FALSE,
     ),
@@ -895,69 +898,7 @@ function juna_basic_features_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 18,
-    ),
-  );
-
-  // Exported field_instance: 'node-product-field_reference_link'.
-  $field_instances['node-product-field_reference_link'] = array(
-    'bundle' => 'product',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '<p>填写相关的外联，title字段可选值有:</p>
-<ul>
-<li><b>tmall</b> - 天猫</li>
-<li><b>official</b> - 官网</li>
-<li><b>wechatqr</b> - 微信QR CODE</li>
-</ul>',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'link',
-        'settings' => array(),
-        'type' => 'link_default',
-        'weight' => 14,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_reference_link',
-    'label' => 'Reference Link',
-    'required' => 0,
-    'settings' => array(
-      'absolute_url' => 1,
-      'attributes' => array(
-        'class' => '',
-        'configurable_class' => 0,
-        'configurable_title' => 0,
-        'rel' => '',
-        'target' => 'default',
-        'title' => '',
-      ),
-      'display' => array(
-        'url_cutoff' => 80,
-      ),
-      'enable_tokens' => 1,
-      'rel_remove' => 'default',
-      'title' => 'required',
-      'title_label_use_field_label' => 0,
-      'title_maxlength' => 128,
-      'title_value' => '',
-      'url' => 0,
-      'user_register_form' => FALSE,
-      'validate_url' => 1,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'link',
-      'settings' => array(),
-      'type' => 'link_field',
-      'weight' => 16,
+      'weight' => 4,
     ),
   );
 
@@ -985,7 +926,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_related_sku_product',
     'label' => 'Related SKU Product',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -998,7 +939,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'node_reference_autocomplete',
-      'weight' => 15,
+      'weight' => 5,
     ),
   );
 
@@ -1044,7 +985,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 8,
+      'weight' => 2,
     ),
   );
 
@@ -1085,7 +1026,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'node_reference_autocomplete',
-      'weight' => 14,
+      'weight' => 6,
     ),
   );
 
@@ -1113,7 +1054,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_starttime',
     'label' => '一购商品限时销售开始时间',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1125,16 +1066,20 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 6,
+      'weight' => 11,
     ),
   );
 
   // Exported field_instance: 'node-product-field_total_num'.
   $field_instances['node-product-field_total_num'] = array(
     'bundle' => 'product',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
     'deleted' => 0,
-    'description' => '商品库存',
+    'description' => '一购商品库存',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1157,11 +1102,11 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_total_num',
-    'label' => '一购商品库存',
+    'label' => 'Stock',
     'required' => 1,
     'settings' => array(
       'max' => '',
-      'min' => 1,
+      'min' => 0,
       'prefix' => '',
       'suffix' => '',
       'user_register_form' => FALSE,
@@ -1171,7 +1116,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 5,
+      'weight' => 1,
     ),
   );
 
@@ -1509,7 +1454,7 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'body',
-    'label' => '享什么商品详情',
+    'label' => 'Body',
     'required' => 0,
     'settings' => array(
       'display_summary' => 1,
@@ -1524,7 +1469,7 @@ function juna_basic_features_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 1,
+      'weight' => 7,
     ),
   );
 
@@ -1564,7 +1509,7 @@ function juna_basic_features_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 2,
+      'weight' => 8,
     ),
   );
 
@@ -1592,7 +1537,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_endtime',
     'label' => '享什么商品限时销售结束时间',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1604,7 +1549,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 5,
+      'weight' => 11,
     ),
   );
 
@@ -1634,7 +1579,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_image_for_box',
     'label' => '享什么商品盒子图片',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
@@ -1654,7 +1599,7 @@ function juna_basic_features_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 14,
+      'weight' => 16,
     ),
   );
 
@@ -1704,7 +1649,7 @@ function juna_basic_features_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 10,
+      'weight' => 13,
     ),
   );
 
@@ -1754,7 +1699,7 @@ function juna_basic_features_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 11,
+      'weight' => 14,
     ),
   );
 
@@ -1804,7 +1749,7 @@ function juna_basic_features_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 12,
+      'weight' => 15,
     ),
   );
 
@@ -1817,7 +1762,7 @@ function juna_basic_features_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '加入盒子数量',
+    'description' => '商品加入盒子数量',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1840,7 +1785,7 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_inbox_num',
-    'label' => '享什么商品加入盒子数量',
+    'label' => 'Items in Box',
     'required' => 0,
     'settings' => array(
       'max' => '',
@@ -1854,7 +1799,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 8,
+      'weight' => 6,
     ),
   );
 
@@ -1904,7 +1849,7 @@ function juna_basic_features_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 9,
+      'weight' => 12,
     ),
   );
 
@@ -1950,7 +1895,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 3,
+      'weight' => 9,
     ),
   );
 
@@ -2005,7 +1950,7 @@ function juna_basic_features_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 16,
+      'weight' => 3,
     ),
   );
 
@@ -2046,7 +1991,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'node_reference_autocomplete',
-      'weight' => 18,
+      'weight' => 4,
     ),
   );
 
@@ -2092,7 +2037,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 7,
+      'weight' => 2,
     ),
   );
 
@@ -2133,7 +2078,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'node_reference_autocomplete',
-      'weight' => 20,
+      'weight' => 5,
     ),
   );
 
@@ -2161,7 +2106,7 @@ function juna_basic_features_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_starttime',
     'label' => '享什么商品限时销售开始时间',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -2173,16 +2118,20 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 4,
+      'weight' => 10,
     ),
   );
 
   // Exported field_instance: 'node-share_product-field_total_num'.
   $field_instances['node-share_product-field_total_num'] = array(
     'bundle' => 'share_product',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
     'deleted' => 0,
-    'description' => '库存',
+    'description' => '享什么商品库存',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2205,7 +2154,7 @@ function juna_basic_features_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_total_num',
-    'label' => '享什么商品库存',
+    'label' => 'Stock',
     'required' => 1,
     'settings' => array(
       'max' => '',
@@ -2219,7 +2168,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 6,
+      'weight' => 1,
     ),
   );
 
@@ -3517,7 +3466,7 @@ function juna_basic_features_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 3,
+      'weight' => 1,
     ),
   );
 
@@ -3614,7 +3563,7 @@ function juna_basic_features_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'node_reference_autocomplete',
-      'weight' => 1,
+      'weight' => 3,
     ),
   );
 
@@ -3666,12 +3615,6 @@ function juna_basic_features_field_default_field_instances() {
 <li><b>tmall</b> - 天猫</li>
 <li><b>official</b> - 官网</li>
 <li><b>wechatqr</b> - 微信QR CODE</li>
-</ul>');
-  t('<p>填写相关的外联，title字段可选值有:</p>
-<ul>
-<li><b>tmall</b> - 天猫</li>
-<li><b>official</b> - 官网</li>
-<li><b>wechatqr</b> - 微信QR CODE</li>
 </ul>
 ');
   t('Address');
@@ -3682,6 +3625,7 @@ function juna_basic_features_field_default_field_instances() {
   t('Info Item');
   t('Info Item Category');
   t('Introduce');
+  t('Items in Box');
   t('Parameter for Target');
   t('Product Brand Link');
   t('Product Description');
@@ -3697,11 +3641,12 @@ function juna_basic_features_field_default_field_instances() {
   t('Product Short Description');
   t('Product Total Amount');
   t('Product Valid Period');
-  t('Reference Link');
   t('Related Provider');
   t('Related SKU Product');
   t('Remaining Number');
+  t('Stock');
   t('Target Type');
+  t('Yigou Price');
   t('brandinfo');
   t('favorite_num');
   t('lat');
@@ -3709,14 +3654,12 @@ function juna_basic_features_field_default_field_instances() {
   t('一条条罗列类型的信息或者规则页面的内容');
   t('一购商品价格');
   t('一购商品列表使用图片');
-  t('一购商品加入盒子数量');
   t('一购商品图片');
   t('一购商品市场价');
   t('一购商品库存');
   t('一购商品描述');
   t('一购商品盒子图片');
   t('一购商品订单图片');
-  t('一购商品详情');
   t('一购商品限时销售开始时间');
   t('一购商品限时销售结束时间');
   t('产品在壹购列表上展示的图片');
@@ -3728,7 +3671,6 @@ function juna_basic_features_field_default_field_instances() {
   t('产品纯文本描述，显示在kv区块的描述');
   t('产品详细界面中产品信息部分，一段html结构');
   t('享什么商品列表使用图片');
-  t('享什么商品加入盒子数量');
   t('享什么商品图片');
   t('享什么商品市场价');
   t('享什么商品库存');
@@ -3736,20 +3678,17 @@ function juna_basic_features_field_default_field_instances() {
   t('享什么商品白领图片');
   t('享什么商品盒子图片');
   t('享什么商品订单图片');
-  t('享什么商品详情');
   t('享什么商品限时销售开始时间');
   t('享什么商品限时销售结束时间');
   t('剩余数量');
-  t('加入盒子数量');
   t('可以中奖人数');
   t('品牌介绍');
   t('商品剩余数量');
+  t('商品加入盒子数量');
   t('商品在享什么列表页面中展示的图片');
-  t('商品库存');
   t('商品详细页面中的商品大图');
   t('商家介绍');
   t('市场价');
-  t('库存');
   t('开始时间，日期格式1990-01-31 10:00:00');
   t('开始时间，格式1990-01-31 00:00:00');
   t('描述');

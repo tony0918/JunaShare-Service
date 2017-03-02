@@ -39,6 +39,9 @@ class Yigou__1_0 extends ResourceNode {
     $public_fields = parent::publicFields();
 
     $public_fields['nid'] = $public_fields['id'];
+    $public_fields['type_machine_name'] = array(
+      'property' => 'type'
+    );
     $public_fields['price'] = array(
       'property' => 'field_price'
     );

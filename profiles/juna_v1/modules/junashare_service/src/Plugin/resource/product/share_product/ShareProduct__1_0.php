@@ -38,6 +38,9 @@ class ShareProduct__1_0 extends ResourceNode {
     $public_fields = parent::publicFields();
 
     $public_fields['nid'] = $public_fields['id'];
+    $public_fields['type_machine_name'] = array(
+      'property' => 'type'
+    );
     $public_fields['stock'] = array(
       'property' => 'field_total_num'
     );
