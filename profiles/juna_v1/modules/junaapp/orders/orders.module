@@ -91,6 +91,23 @@ function orders_services_resources() {
         ),
       )
     ),
+    'order' => array(
+      'retrieve' => array(
+        'help' => 'Retrieves an order',
+        'file' => array('type' => 'inc', 'module' => 'orders', 'name' => 'includes/orders.resource'),
+        'callback' => 'orders_order_resource_retrieve',
+        'args' => array(
+          array(
+            'name' => 'oid',
+            'optional' => FALSE,
+            'source' => array('path' => 0),
+            'type' => 'int',
+            'description' => 'The id of the order to retrieve',
+          ),
+        ),
+        'access arguments' => array('access content'),
+      )
+    ),
   );
 }
 
