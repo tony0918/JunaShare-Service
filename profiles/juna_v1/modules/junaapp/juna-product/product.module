@@ -1,4 +1,6 @@
 <?php
+define('YIGOU_PRODUCT_CONTENT_TYPE', 'product');
+
 function product_services_resources() {
   return array(
     'mybox' => array(
@@ -52,6 +54,7 @@ function product_services_resources() {
       'operations' => array(
         'index' => array(
           'help' => t('盒子列表'),
+          'description' => 'DEPRECATED',
           'callback' => 'product_boxlist',
           'access arguments' => array('access content'),
 
@@ -122,7 +125,6 @@ function product_services_resources() {
           ),
         ),
       ),
-
       'relationships' => array(
         'detail' => array(
           'help' => t('商品详情'),
@@ -154,12 +156,13 @@ function product_services_resources() {
               'description' => t('商品id'),
               'type' => 'int',
             ),
-
           ),
+          'file' => array('type' => 'inc', 'module' => 'product', 'name' => 'includes/product.resource'),
         ),
         'buy' => array(
           'help' => t('购买商品'),
           'callback' => 'product_buy',
+          'description' => 'DEPRECATED',
           'access arguments' => array('access content'),
           'args' => array(
             array(
@@ -169,8 +172,22 @@ function product_services_resources() {
               'description' => t('商品id'),
               'type' => 'int',
             ),
-
           ),
+        ),
+        'purchase' => array(
+          'help' => t('Purchase a Product'),
+          'callback' => 'product_make_a_purchase',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'description' => t('商品id'),
+              'type' => 'int',
+            ),
+          ),
+          'file' => array('type' => 'inc', 'module' => 'product', 'name' => 'includes/product.resource'),
         ),
         'removefrombox' => array(
           'help' => t('移除盒子商品'),
@@ -184,7 +201,6 @@ function product_services_resources() {
               'description' => t('商品id'),
               'type' => 'int',
             ),
-
           ),
         ),
         'swingshare' => array(
@@ -206,11 +222,12 @@ function product_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('product_applylist'),
   );
-  $items['tonytest'] = array(
+  $items['tonytest/%'] = array(
     'title' => '申领列表',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
-    'page callback' => 'product_my_box',
+    'page callback' => 'product_tobox',
+    'page arguments' => array(1),
     'file' => 'includes/product.resource.inc',
   );
   return $items;
@@ -719,6 +736,7 @@ function product_buy($nid) {
   $order->sorderid = date('YmdHis') . mt_rand(10000, 99999999);
   $order->status = $status;
   drupal_write_record('product_order', $order);
+
   $node->field_remain_num['und'][0]['value'] = $node->field_remain_num['und'][0]['value'] - 1;
   node_save($node);
   $ends = microtime_float();
@@ -882,67 +900,6 @@ function product_boxlist() {
   //345_140
   return ['data' => $boxdata];
 
-}
-
-/**
- *加入盒子
- */
-function product_tobox($nid) {
-  $start = microtime_float();
-  global $user;
-  if (empty($user->uid)) {
-    $end = microtime_float();
-    calcrequesttime($start, $end, "加入盒子");
-    return services_error(t('用户未登录.'), 403);
-  }
-  if (empty($nid)) {
-    $end = microtime_float();
-    calcrequesttime($start, $end, "加入盒子");
-    return services_error(t('商品id都不能为空.'), 406);
-  }
-  $node = node_load($nid);
-  if (empty($node)) {
-    $end = microtime_float();
-    calcrequesttime($start, $end, $node->type . "加入盒子");
-    return services_error(t('商品不存在.'), 406);
-  }
-  if ($node->status != NODE_PUBLISHED) {
-    $end = microtime_float();
-    calcrequesttime($start, $end, $node->type . "加入盒子");
-    return services_error(t('商品已下架.'), 406);
-  }
-  if (strtotime($node->field_endtime['und'][0]['value']) <= REQUEST_TIME) {
-    $end = microtime_float();
-    calcrequesttime($start, $end, $node->type . "加入盒子");
-    return services_error(t('商品限时结束.'), 406);
-  }
-  $boxquery = db_query("SELECT * FROM {product_box} WHERE uid=:uid", [':uid' => $user->uid]);
-  $boxdata = $boxquery->fetchAll();
-  $num = count($boxdata);
-  if ($num >= 5) {
-    $end = microtime_float();
-    calcrequesttime($start, $end, $node->type . "加入盒子");
-    return services_error(t('盒子已满，请先从盒子中删除部分商品.'), 406);
-  }
-  foreach ($boxdata as $k => $v) {
-    if ($v->nid == $nid) {
-      $end = microtime_float();
-      calcrequesttime($start, $end, $node->type . "加入盒子");
-      return services_error(t('此商品已加入盒子，不能重复加入.'), 406);
-      break;
-    }
-  }
-  $box = new stdClass();
-  $box->nid = $nid;
-  $box->uid = $user->uid;
-  $box->product_type = $node->type;
-  $box->created = REQUEST_TIME;
-  drupal_write_record('product_box', $box);
-  $node->field_inbox_num['und'][0]['value'] = $node->field_inbox_num['und'][0]['value'] + 1;
-  $r = node_save($node);
-  $end = microtime_float();
-  calcrequesttime($start, $end, $node->type . "加入盒子");
-  return ['message' => '加入盒子成功', 'nid' => $nid];
 }
 
 /**

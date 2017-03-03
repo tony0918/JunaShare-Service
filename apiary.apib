@@ -197,6 +197,35 @@ HOST: http://api-prod.junashare.com/
         + data (array[ShareProduct])
         + time_period (array[ShareProductTimePeriod])
 
+## Yigou Purchase [/juna/product/purchase.json]
+
+### Do a Yigou Purchase [POST]
++ Request (application/json)
+
+    {
+        "nid": "120"
+    }
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + message: `购买成功`
+        + nid: 120
+        + data (object)
+            + uid
+            + created
+            + nid
+            + product_type
+            + amount
+            + price
+            + total_price
+            + sorderid
+            + status
+            + id
+            + payment_type
+            + updated
+
+
+# Group Box
 
 ## My Box List [/juna/mybox.json]
 

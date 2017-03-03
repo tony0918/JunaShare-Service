@@ -111,6 +111,30 @@ function orders_services_resources() {
   );
 }
 
+/**
+ * Creating a unpaid order.
+ * @param $uid
+ * @param $nid
+ * @param $product_type
+ * @param $price
+ * @return bool|int
+ */
+function _order_create_a_order($uid, $nid, $product_type, $price) {
+  $order = new stdClass();
+  $order->uid = $uid;
+  $order->created = REQUEST_TIME;
+  $order->nid = $nid;
+  $order->product_type = $product_type;
+  $order->amount = 1;
+  $order->price = $price;
+  $order->total_price = $price;
+  $order->sorderid = '1' . date('YmdHis') . mt_rand(10000, 99999999);
+  $order->status = ORDER_STATUS_UNPAID;
+  drupal_write_record('product_order', $order);
+  return $order;
+}
+
+
 function orders_alipay_callback($appdata) {
   global $user;
   if (!$user->uid) {

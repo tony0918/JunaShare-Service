@@ -49,10 +49,10 @@ class Yigou__1_0 extends ResourceNode {
       'property' => 'field_total_num'
     );
     $public_fields['remaining'] = array(
-      'property' => 'field_remain_num'
+      'callback' => array($this, 'getRemainingNumber')
     );
     $public_fields['num_in_box'] = array(
-      'property' => 'field_inbox_num'
+      'callback' => array($this, 'getProductNumberInBox')
     );
     $public_fields['sku_product'] = array(
       'property' => 'field_related_sku_product',
@@ -88,6 +88,22 @@ class Yigou__1_0 extends ResourceNode {
    */
   protected function dataProviderClassName() {
     return 'Drupal\junashare_service\Plugin\resource\DataProvider\DataProviderYigouNode';
+  }
+
+  public function getProductNumberInBox($interpreter) {
+    $query = db_select('product_box', 'pb')
+      ->fields('pb', array('id'))
+      ->condition('nid', $interpreter->getWrapper()->value()->vid, '=');
+    return count($query->execute()->fetchAll());
+  }
+
+  public function getRemainingNumber($interpreter) {
+    $query = db_select('product_order', 'po')
+      ->condition('po.nid', $interpreter->getWrapper()->value()->vid, '=')
+      ->condition('po.status', ORDER_STATUS_CANCEL, '<>')
+      ->fields('po', array('uid'));
+    return ((int) $interpreter->getWrapper()
+        ->value()->field_total_num[LANGUAGE_NONE][0]['value']) - count($query->execute()->fetchAll());
   }
 
   public function getInBoxStatus(DataInterpreterInterface $interpreter) {
