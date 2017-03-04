@@ -196,6 +196,11 @@ function product_share_product_apply($nid) {
     return services_error(t('用户未登录.'), 403);
   }
 
+  $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
+  if (8 < $hour && $hour >= 0) {
+    return services_error(t('商品限时结束.'), 406);
+  }
+
   $u = user_load($user->uid);
   if (empty($u->field_certed) || (empty($u->field_certed['und'][0]['value']))) {
     return services_error(t('请先完成认证'), 406);

@@ -11,6 +11,8 @@ function orders_lists($status = NULL) {
     return services_error(t('用户未登录'), 406);
   }
 
+  orders_expire_unpaid_order_by_uid($user->uid);
+
   $query = db_select('product_order', 'po')
     ->condition('po.uid', $user->uid, '=')
     ->fields('po')->orderBy('po.created', 'DESC')
@@ -22,8 +24,10 @@ function orders_lists($status = NULL) {
   $query->join('node', 'n', 'po.nid = n.nid');
   $query->condition('n.status', NODE_PUBLISHED, '=');
 
-  $query->join('field_data_field_image_for_list', 'f', 'f.entity_id = po.nid');
-  $query->join('file_managed', 'fm', 'f.field_image_for_list_fid = fm.fid');
+  $query->join('field_data_field_related_sku_product', 'f3', 'po.nid = f3.entity_id');
+
+  $query->join('field_data_field_product_image_on_order', 'f', 'f.entity_id = f3.field_related_sku_product_nid');
+  $query->join('file_managed', 'fm', 'f.field_product_image_on_order_fid = fm.fid');
   $query->fields('n', array('title', 'type'))->fields('fm', array('uri'));
 
   $data = $query->execute()->fetchAll();
@@ -103,6 +107,11 @@ function orders_order_resource_retrieve($oid) {
   return ['data' => $data];
 }
 
+/**
+ * Tool function to mask user mobile with star.
+ * @param $mobile
+ * @return mixed
+ */
 function orders_mask_user_mobile($mobile) {
   return substr_replace($mobile, '****', 3, 4);
 }

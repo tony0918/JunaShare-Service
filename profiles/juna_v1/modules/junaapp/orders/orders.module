@@ -129,7 +129,7 @@ function _order_create_a_order($uid, $nid, $product_type, $price) {
   $order->price = $price;
   $order->total_price = $price;
   $order->sorderid = '1' . date('YmdHis') . mt_rand(10000, 99999999);
-  $order->status = ORDER_STATUS_UNPAID;
+  $order->status = (YIGOU_PRODUCT_CONTENT_TYPE == $product_type) ? ORDER_STATUS_UNPAID : ORDER_STATUS_UNDELIVERED;
   drupal_write_record('product_order', $order);
   return $order;
 }
@@ -1544,6 +1544,19 @@ function cancelOrder($data) {
   $node = node_load($data->nid);
   $node->field_remain_num['und'][0]['value'] = $node->field_remain_num['und'][0]['value'] + 1;
   node_save($node);
+}
+
+function orders_expire_unpaid_order_by_uid($uid) {
+  $result = db_update('product_order')
+    ->fields(array(
+      'status' => ORDER_STATUS_CANCEL,
+      'updated' => REQUEST_TIME
+    ))
+    ->condition('uid', $uid, '=')
+    ->condition('status', ORDER_STATUS_UNPAID, '=')
+    ->condition('created', REQUEST_TIME - 1800, '<=')
+    ->execute();
+  return $result;
 }
 
 function orders_form_alter(&$form, &$form_state, $form_id) {
