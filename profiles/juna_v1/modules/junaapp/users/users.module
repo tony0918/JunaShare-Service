@@ -1,221 +1,17 @@
 <?php
 
+/**
+ * Implementation of hook_permission()
+ * @return array
+ */
 function users_permission() {
   $perms = array(
-    'administer users list' => array(
-      'title' => t('用户列表'),
+    'administer juna users list' => array(
+      'title' => t('Access juna user list'),
     ),
-
   );
 
   return $perms;
-}
-
-function users_admin_list($form, &$form_state) {
-  $form['uid'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('用户id'),
-
-    '#default_value' => empty($_SESSION['users_admin_list_filter']['uid']) ? '' : $_SESSION['users_admin_list_filter']['uid'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-  );
-  $form['name'] = array(
-    '#type' => 'textfield',
-    '#title' => '手机号',
-    '#default_value' => empty($_SESSION['users_admin_list_filter']['name']) ? '' : $_SESSION['users_admin_list_filter']['name'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-  );
-  $form['starttime'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('注册开始时间'),
-
-    '#default_value' => empty($_SESSION['users_admin_list_filter']['starttime']) ? '' : $_SESSION['users_admin_list_filter']['starttime'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-    '#description' => '日期格式为1990-02-01'
-
-  );
-  $form['endtime'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('注册结束时间'),
-
-    '#default_value' => empty($_SESSION['users_admin_list_filter']['endtime']) ? '' : $_SESSION['users_admin_list_filter']['endtime'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-    '#description' => '日期格式为1990-02-01'
-
-  );
-  $form['certed'] = array(
-
-    '#type' => 'select',
-
-    '#title' => t('认证状态'),
-    '#options' => array(
-      0 => t('未认证'),
-      1 => t('已认证'),
-      2 => t('认证中')
-    ),
-    '#empty_value' => '请选择',
-    '#default_value' => empty($_SESSION['users_admin_list_filter']['certed']) ? '' : $_SESSION['users_admin_list_filter']['certed'],
-
-
-  );
-
-
-  $form['submit'] = array('#type' => 'submit', '#value' => t('搜索'));
-  $header = array(
-    'uid' => array('data' => t('id'), 'field' => 'u.uid', 'sort' => 'desc'),
-    'name' => array('data' => t('手机号'), 'field' => 'u.name', 'sort' => 'desc'),
-    'status' => array('data' => t('用户状态'), 'field' => 'u.status'),
-    'created' => array('data' => t('注册时间'), 'field' => 'u.created'),
-    'field_certed_value' => array(
-      'data' => t('是否认证'),
-      'field' => 'rz.field_certed_value'
-    ),
-    'operations' => t('操作')
-  );
-  $query = db_select('users', 'u')
-    ->extend('PagerDefault')
-    ->extend('TableSort')
-    ->fields('u', array(
-      'uid',
-      'name',
-      'status',
-      'created'
-    ))
-    ->fields('rz', array('field_certed_value'))
-    ->orderByHeader($header);
-  $filters = [];
-  if (!empty($_SESSION['users_admin_list_filter'])) {
-    $filters = $_SESSION['users_admin_list_filter'];
-
-  }
-  $query->leftJoin('field_data_field_certed', ' rz', 'rz.entity_id = u.uid');
-  //$query -> condition('rz.field_certed_value',1);
-  $query->condition('rz.bundle', "user");
-  $valid = ['starttime', 'endtime', 'uid', 'certed', 'name'];
-
-  foreach ($filters as $k => $v) {
-    if (in_array($k, $valid)) {
-      $v = trim($v);
-      if ($v !== "") {
-        if ($k == 'starttime') {
-          $query->condition('u.created', strtotime($v), '>=');
-        }
-        if ($k == 'endtime') {
-          $query->condition('u.created', strtotime($v), '<=');
-        }
-        if ($k == 'certed' && $v != "请选择") {
-          $query->condition('rz.field_certed_value', $v);
-        }
-        if ($k != 'starttime' && $k != 'endtime' && $k != 'certed') {
-          $query->condition('u.' . $k, $v);
-        }
-      }
-
-    }
-
-  }
-  //echo "<pre>";
-  $result = $query->execute();
-  //print_r($result);exit;
-  $rows = [];
-  $destination = drupal_get_destination();
-  while ($record = $result->fetchAssoc()) {
-    switch ($record['status']) {
-      case 0:
-        $record['status'] = '非活跃';
-        break;
-      case 1:
-        $record['status'] = '活跃';
-        break;
-    }
-    $record['created'] = date('Y-m-d H:i:s', $record['created']);
-    if (empty($record['field_certed_value'])) {
-      $record['field_certed_value'] = '未认证';
-    }
-    elseif ($record['field_certed_value'] == 1) {
-      $record['field_certed_value'] = '已认证';
-    }
-    else {
-      $record['field_certed_value'] = '认证中';
-    }
-    $record['operations'] = array(
-      'data' => array(
-        '#type' => 'link',
-        '#title' => t('编辑'),
-        '#href' => '/user/' . $record['uid'] . '/edit',
-        '#options' => array('query' => $destination),
-        //'#query' => $,
-      )
-    );
-    $record['name'] = array(
-      'data' => array(
-        '#type' => 'link',
-        '#title' => $record['name'],
-        '#href' => '/user/' . $record['uid'],
-        '#options' => array('query' => $destination),
-        //'#query' => $,
-      )
-    );
-    $rows[] = $record;
-  }
-  //print_r($rows);exit;
-  $form['nodes'] = array(
-    '#theme' => 'table',
-    '#header' => $header,
-    '#rows' => $rows,
-    '#empty' => t('暂无用户.'),
-  );
-  $form['pager'] = array('#markup' => theme('pager'));
-  return $form;
-}
-
-function users_admin_list_submit($form, &$form_state) {
-  switch ($form_state['values']['op']) {
-    case '搜索':
-      foreach ($form_state['values'] as $k => $v) {
-        if (trim($v) != "") {
-          $_SESSION['users_admin_list_filter'][$k] = $v;
-        }
-        else {
-          unset($_SESSION['users_admin_list_filter'][$k]);
-        }
-      }
-      break;
-    case '发布当日中奖名单':
-      return coupon_create_swingshare_lottery_list();
-      break;
-    default:
-      foreach ($form_state['values'] as $k => $v) {
-        if (trim($v) != "") {
-          $_SESSION['users_admin_list_filter'][$k] = $v;
-        }
-      }
-      break;
-  }
-
-
 }
 
 function users_services_resources() {
@@ -614,13 +410,14 @@ function users_menu() {
     'access arguments' => array('administer payment'),
     'type' => MENU_LOCAL_TASK,
   );
-  $items['admin/users'] = array(
+  $items['admin/juna/users'] = array(
     'title' => '用户认证查询',
     'description' => '用户认证查询',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('users_admin_list'),
-    'access arguments' => array('administer user list'),
+    'page arguments' => array('users_juna_admin_list'),
+    'access arguments' => array('administer juna users list'),
     'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/users.pages.inc',
   );
   return $items;
 }

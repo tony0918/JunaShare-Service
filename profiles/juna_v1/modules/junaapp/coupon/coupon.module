@@ -841,6 +841,12 @@ function coupon_create_swingshare_lottery_list() {
   drupal_set_message('发放中奖名单成功');
 }
 
+/**
+ * Check if user has available coupon.
+ * @param $uid
+ * @param $time
+ * @return bool|mixed
+ */
 function _coupon_check_coupon_available_by_uid($uid, $time) {
   $query = new EntityFieldQuery();
   $rows = $query->entityCondition('entity_type', 'node')
@@ -878,7 +884,7 @@ function coupon_consume_a_coupon($cid, $nid, $uid, $order_id, $product_type) {
     ->condition('entity_id', $cid, '=')
     ->execute();
   cache_clear_all($cid, 'cache_entity_node');
-  
+
   $rec = new stdClass();
   $rec->couponid = $cid;
   $rec->nid = $nid;
