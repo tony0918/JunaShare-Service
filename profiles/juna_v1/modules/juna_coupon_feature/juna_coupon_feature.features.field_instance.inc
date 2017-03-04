@@ -54,6 +54,61 @@ function juna_coupon_feature_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-coupon-field_coupon_valid_period'.
+  $field_instances['node-coupon-field_coupon_valid_period'] = array(
+    'bundle' => 'coupon',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+        ),
+        'type' => 'date_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_coupon_valid_period',
+    'label' => 'Coupon Valid Period',
+    'required' => 1,
+    'settings' => array(
+      'default_value' => 'now',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'increment' => 15,
+        'input_format' => 'm/d/Y - H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'no_fieldset' => 0,
+        'text_parts' => array(),
+        'year_range' => '-3:+3',
+      ),
+      'type' => 'date_popup',
+      'weight' => 4,
+    ),
+  );
+
   // Exported field_instance: 'node-coupon-field_endtime'.
   $field_instances['node-coupon-field_endtime'] = array(
     'bundle' => 'coupon',
@@ -255,6 +310,7 @@ function juna_coupon_feature_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
+  t('Coupon Valid Period');
   t('endtime');
   t('sendtime');
   t('starttime');

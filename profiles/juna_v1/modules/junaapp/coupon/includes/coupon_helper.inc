@@ -291,10 +291,12 @@ function coupon_helper_create_a_coupon_node($uid, $start, $end) {
   node_object_prepare($node);
   $node->language = LANGUAGE_NONE;
   $node->field_uid[LANGUAGE_NONE][0]['uid'] = $uid;
-  $node->field_starttime[LANGUAGE_NONE][0]['value'] = date('Y-m-d', strtotime($start));
-  $node->field_endtime[LANGUAGE_NONE][0]['value'] = date('Y-m-d', strtotime($end));
+  $node->field_starttime[LANGUAGE_NONE][0]['value'] = date('Y-m-d', $start);
+  $node->field_endtime[LANGUAGE_NONE][0]['value'] = date('Y-m-d', $end);
   $node->field_status[LANGUAGE_NONE][0]['value'] = 1;
   $node->field_sendtime[LANGUAGE_NONE][0]['value'] = date('Y-m-d', REQUEST_TIME);
+  $node->field_coupon_valid_period[LANGUAGE_NONE][0]['value'] = $start;
+  $node->field_coupon_valid_period[LANGUAGE_NONE][0]['value2'] = $end;
   $node = node_submit($node);
   return node_save($node);
 }

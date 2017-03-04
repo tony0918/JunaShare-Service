@@ -1,5 +1,6 @@
 <?php
 define('YIGOU_PRODUCT_CONTENT_TYPE', 'product');
+define('SHARE_PRODUCT_CONTENT_TYPE', 'share_product');
 
 function product_services_resources() {
   return array(
@@ -95,7 +96,24 @@ function product_services_resources() {
 
           ),
         ),
-      )
+      ),
+      'actions' => array(
+        'apply' => array(
+          'help' => t('申领白领商品'),
+          'callback' => 'product_share_product_apply',
+          'access arguments' => array('access content'),
+          'args' => array(
+            array(
+              'name' => 'nid',
+              'optional' => FALSE,
+              'source' => array('data' => 'nid'),
+              'description' => t('商品id'),
+              'type' => 'int',
+            ),
+          ),
+          'file' => array('type' => 'inc', 'module' => 'product', 'name' => 'includes/product.resource'),
+        )
+      ),
     ),
     'swingshare' => array(
       'operations' => array(

@@ -224,6 +224,32 @@ HOST: http://api-prod.junashare.com/
             + payment_type
             + updated
 
+## Share Product Apply [/juna/share_product/apply.json]
+
+### Apply a Share Product [POST]
++ Request (application/json)
+
+    {
+        "nid": 21
+    }
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + message: `申请成功`
+        + nid: 21
+        + data (object)
+            + uid
+            + created
+            + nid
+            + product_type
+            + amount
+            + price
+            + total_price
+            + sorderid
+            + status
+            + id
+            + payment_type
+            + updated
 
 # Group Box
 

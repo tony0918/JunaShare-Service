@@ -1,20 +1,8 @@
 <?php
-//function coupon_cron(){
-//	watchdog('mycron','my cron executed');
-//$queue = DrupalQueue::get("resync");
-//$queue->createQueue();
+define('COUPON_STATUS_DELIVERED', 1);
+define('COUPON_STATUS_USED', 3);
 
-// Get all data for your queue
-//$lotsa_data = mymodule_logic_get_data();
 
-// Fill the queue
-// foreach ($lotsa_data as $one_data) {
-//$queue->createItem([]);
-//}
-
-// Run the queue
-//drupal_queue_cron_run();
-//}
 function coupon_services_resources() {
   return array(
     'myswingshare' => array(
@@ -853,6 +841,54 @@ function coupon_create_swingshare_lottery_list() {
   drupal_set_message('发放中奖名单成功');
 }
 
+function _coupon_check_coupon_available_by_uid($uid, $time) {
+  $query = new EntityFieldQuery();
+  $rows = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'coupon')
+    ->fieldCondition('field_status', 'value', COUPON_STATUS_DELIVERED, '=')
+    ->fieldCondition('field_uid', 'uid', $uid, '=')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_coupon_valid_period', 'value', $time, '<=')
+    ->fieldCondition('field_coupon_valid_period', 'value2', $time, '>=')
+    ->fieldOrderBy('field_coupon_valid_period', 'value2', 'ASC')
+    ->range(0, 1)
+    ->execute();
+  if (isset($rows['node'])) {
+    return array_shift($rows['node']);
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Consume a coupon
+ * @param $cid
+ * @param $nid
+ * @param $uid
+ * @param $order_id
+ * @param $product_type
+ * @return bool|int
+ */
+function coupon_consume_a_coupon($cid, $nid, $uid, $order_id, $product_type) {
+  db_update('field_data_field_status')
+    ->fields(array(
+      'field_status_value' => COUPON_STATUS_USED
+    ))
+    ->condition('entity_id', $cid, '=')
+    ->execute();
+  cache_clear_all($cid, 'cache_entity_node');
+  
+  $rec = new stdClass();
+  $rec->couponid = $cid;
+  $rec->nid = $nid;
+  $rec->created = REQUEST_TIME;
+  $rec->uid = $uid;
+  $rec->type = $product_type;
+  $rec->sorderid = $order_id;
+  return drupal_write_record('coupon_usage', $rec);
+}
+
 /**
  * Custom form for coupon configuration.
  * @param $form
@@ -931,8 +967,8 @@ function coupon_batch_create_form_submit($form, &$form_state) {
     $u = user_load_by_name($form_state['values']['mobile']);
     if ($u && $u->status == 1) {
       coupon_helper_deliver_a_coupon($u->uid,
-        $form_state['values']['start_date'],
-        $form_state['values']['end_date']
+        strtotime($form_state['values']['start_date']),
+        strtotime($form_state['values']['end_date'])
       );
       drupal_set_message('发放成功');
     }
@@ -950,8 +986,8 @@ function coupon_batch_create_form_submit($form, &$form_state) {
         ->execute();
       if (!empty($users) && isset($users['user'])) {
         coupon_helper_deliver_coupons($users['user'],
-          $form_state['values']['start_date'],
-          $form_state['values']['end_date']
+          strtotime($form_state['values']['start_date']),
+          strtotime($form_state['values']['end_date'])
         );
       }
       drupal_set_message('发放成功');

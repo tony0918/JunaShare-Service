@@ -121,7 +121,7 @@ function product_make_a_purchase($nid) {
     $query = db_select('node', 'n');
     $query->condition('n.nid', $nid, '=')
       ->condition('n.status', NODE_PUBLISHED, '=')
-      ->condition('n.type', 'product', '=')
+      ->condition('n.type', YIGOU_PRODUCT_CONTENT_TYPE, '=')
       ->fields('n');
     // 库存表
     $query->join('field_data_field_total_num', 'f2', 'f2.entity_id = n.nid');
@@ -137,7 +137,7 @@ function product_make_a_purchase($nid) {
     $query = db_select('node', 'n');
     $query->condition('n.nid', $nid, '=')
       ->condition('n.status', NODE_PUBLISHED, '=')
-      ->condition('n.type', 'product', '=')
+      ->condition('n.type', YIGOU_PRODUCT_CONTENT_TYPE, '=')
       ->fields('n');
     $query->join('field_data_field_product_valid_period', 'f1', 'f1.entity_id = n.nid');
     $query->condition('f1.field_product_valid_period_value', REQUEST_TIME, '<=')
@@ -185,6 +185,99 @@ function product_make_a_purchase($nid) {
   return ['message' => '购买成功', 'nid' => $nid, 'data' => $order];
 }
 
+function product_share_product_apply($nid) {
+  global $user;
+  if (empty($user->uid)) {
+    return services_error(t('用户未登录.'), 403);
+  }
+
+  $u = user_load($user->uid);
+  if (empty($u->field_certed) || (empty($u->field_certed['und'][0]['value']))) {
+    return services_error(t('请先完成认证'), 406);
+  }
+  elseif ($u->field_certed['und'][0]['value'] == 2) {
+    return services_error(t('认证资料审核中'), 406);
+  }
+
+  // 确定该商品已经被收入盒子，如果已经收入，就没有时间限制了
+  $in_box = db_select('product_box', 'pb')
+    ->condition('pb.uid', $user->uid, '=')
+    ->condition('pb.nid', $nid, '=')
+    ->fields('pb', array('id'))
+    ->execute()
+    ->fetchAssoc('nid');
+
+  $node = NULL;
+  if ($in_box) {
+    // 在盒子中
+    $query = db_select('node', 'n');
+    $query->condition('n.nid', $nid, '=')
+      ->condition('n.status', NODE_PUBLISHED, '=')
+      ->condition('n.type', SHARE_PRODUCT_CONTENT_TYPE, '=')
+      ->fields('n');
+    // 库存表
+    $query->join('field_data_field_total_num', 'f2', 'f2.entity_id = n.nid');
+    $query->addField('f2', 'field_total_num_value', 'stock');
+
+    $node = $query->execute()->fetchAssoc('n.nid');
+  }
+  else {
+    // 不在盒子中
+    $query = db_select('node', 'n');
+    $query->condition('n.nid', $nid, '=')
+      ->condition('n.status', NODE_PUBLISHED, '=')
+      ->condition('n.type', SHARE_PRODUCT_CONTENT_TYPE, '=')
+      ->fields('n');
+    $query->join('field_data_field_product_valid_period', 'f1', 'f1.entity_id = n.nid');
+    $query->condition('f1.field_product_valid_period_value', REQUEST_TIME, '<=')
+      ->condition('f1.field_product_valid_period_value2', REQUEST_TIME, '>=');
+    // 库存表
+    $query->join('field_data_field_total_num', 'f2', 'f2.entity_id = n.nid');
+    $query->addField('f2', 'field_total_num_value', 'stock');
+
+    $node = $query->execute()->fetchAssoc('n.nid');
+  }
+
+  if (!$node) {
+    return services_error(t('商品限时结束.'), 406);
+  }
+
+  // 得到所有订单
+  $orders = _product_get_orders($nid);
+  $num_of_orders = count($orders);
+  if ($num_of_orders > 0 && in_array($user->uid, array_keys($orders))) {
+    // 该用户已经购买过该商品
+    return services_error(t('对不起，您已申领过该商品'), 406);
+  }
+
+  $stock = (int) $node['stock'];
+  if ($num_of_orders >= $stock) {
+    // 如果订单数额 >= 总库存数，售罄
+    return services_error(t('商品已领完.'), 406);
+  }
+
+  $coupon = _coupon_check_coupon_available_by_uid($user->uid, REQUEST_TIME);
+
+  if (!$coupon) {
+    return services_error(t('领取失败，您没有白领券'), 406);
+  }
+
+  $order = _order_create_a_order($user->uid, $nid, SHARE_PRODUCT_CONTENT_TYPE, 0);
+  coupon_consume_a_coupon($coupon->nid, $nid, $user->uid, $order->sorderid, SHARE_PRODUCT_CONTENT_TYPE);
+
+  // 删除盒子中收藏的白领商品
+  db_delete('product_box')
+    ->condition('uid', $user->uid)
+    ->condition('nid', $nid)
+    ->execute();
+  return ['message' => '申请成功', 'nid' => $nid, 'data' => $order];
+}
+
+/**
+ * Get all orders related to nid.
+ * @param $nid
+ * @return mixed
+ */
 function _product_get_orders($nid) {
   $query = db_select('product_order', 'po')
     ->condition('po.nid', $nid, '=')
@@ -193,6 +286,11 @@ function _product_get_orders($nid) {
   return $query->execute()->fetchAllAssoc('uid');
 }
 
+/**
+ * To check whether the user has purchased or not.
+ * @param $uid
+ * @return mixed
+ */
 function _check_user_purchased_today($uid) {
   $start = strtotime('today 00:00:00');
   $end = strtotime('today 23:59:59');
@@ -201,5 +299,5 @@ function _check_user_purchased_today($uid) {
     ->condition('po.uid', $uid, '=')
     ->condition('po.product_type', YIGOU_PRODUCT_CONTENT_TYPE, '=')
     ->condition('po.created', array($start, $end), 'BETWEEN');
-  return $query->execute()->fetchAllAssoc('id');
+  return count($query->execute()->fetchAllAssoc('id'));
 }
