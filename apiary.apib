@@ -261,6 +261,20 @@ HOST: http://api-prod.junashare.com/
         + data (array[BoxItem])
         + remain_boxproduct_num: `2` - 我的盒子还剩下的空间
 
+## Add Item to Box [/juna/product/addtobox.json]
+
+### Add to box [POST]
++ Request (application/json)
+
+    {
+        "nid": 21
+    }
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + message: `加入盒子成功`
+        + nid: `21`
+
 # Group Notification
 
 ## Getui Id [/api/v1.0/getui_user_binding]

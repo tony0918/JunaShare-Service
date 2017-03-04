@@ -1590,12 +1590,22 @@ function prepare_sku_product_object($nid) {
     'brand_links' => array(),
   );
   foreach ($sku_product->field_product_main_kv[LANGUAGE_NONE] as $key => $value) {
-    $output['main_kv'][] = product_image_field_formatter($value);
+    $output['main_kv'][] = array(
+      'fid' => $value['fid'],
+      'self' => file_create_url($value['uri']),
+      'filemine' => $value['filemime'],
+      'filesize' => $value['filesize'],
+      'width' => $value['width'],
+      'height' => $value['height']
+    );
   }
-  foreach ($sku_product->field_product_brand_link[LANGUAGE_NONE] as $key => $value) {
-    $output['brand_links'][$key]['title'] = $value['title'];
-    $output['brand_links'][$key]['url'] = $value['url'];
+  if (isset($sku_product->field_product_brand_link[LANGUAGE_NONE])) {
+    foreach ($sku_product->field_product_brand_link[LANGUAGE_NONE] as $key => $value) {
+      $output['brand_links'][$key]['title'] = $value['title'];
+      $output['brand_links'][$key]['url'] = $value['url'];
+    }
   }
+
   return $output;
 }
 
@@ -1621,12 +1631,24 @@ function product_image_field_formatter($field) {
  * @return array
  */
 function prepare_product_node_fields($node) {
+  $query = db_select('product_box', 'pb')
+    ->fields('pb', array('id'))
+    ->condition('nid', $node->nid, '=');
+  $num = count($query->execute()->fetchAll());
+
+  $query = db_select('product_order', 'po')
+    ->condition('po.nid', $node->nid, '=')
+    ->condition('po.status', ORDER_STATUS_CANCEL, '<>')
+    ->fields('po', array('uid'));
+  $remaining = ((int) $node->field_total_num[LANGUAGE_NONE][0]['value'])
+    - count($query->execute()->fetchAll());
+
   return array(
     'nid' => $node->nid,
     'label' => $node->title,
     'stock' => $node->field_total_num[LANGUAGE_NONE][0]['value'],
-    'remaining' => $node->field_remain_num[LANGUAGE_NONE][0]['value'],
-    'num_in_box' => $node->num_in_box[LANGUAGE_NONE][0]['value'],
+    'remaining' => $remaining,
+    'num_in_box' => $num,
     'type_machine_name' => $node->type,
     'type' => product_convert_type_machine_name_to_chinese($node->type),
   );

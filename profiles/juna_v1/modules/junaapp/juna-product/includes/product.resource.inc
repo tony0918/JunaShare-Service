@@ -31,7 +31,7 @@ function product_my_box() {
       $row['created'] = format_date($rows[$node->nid]->created, 'custom', 'Y-m-d H:i:s');
       switch ($node->type) {
         // 显示在我的盒子中的价值，如果是壹购商品，就用壹购实体的价格，如果是白领商品或者其他商品，就用SKU实体的市场价格
-        case 'product':
+        case YIGOU_PRODUCT_CONTENT_TYPE:
           $row['price'] = $node->field_price[LANGUAGE_NONE][0]['value'];
           break;
         default:
@@ -185,6 +185,11 @@ function product_make_a_purchase($nid) {
   return ['message' => '购买成功', 'nid' => $nid, 'data' => $order];
 }
 
+/**
+ * Apply a Share Product.
+ * @param $nid
+ * @return array|mixed
+ */
 function product_share_product_apply($nid) {
   global $user;
   if (empty($user->uid)) {
