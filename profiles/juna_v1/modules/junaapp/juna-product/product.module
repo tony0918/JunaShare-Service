@@ -1652,5 +1652,22 @@ function prepare_product_node_fields($node) {
     'stock' => $node->field_total_num[LANGUAGE_NONE][0]['value'],
     'remaining' => $node->field_remain_num[LANGUAGE_NONE][0]['value'],
     'num_in_box' => $node->num_in_box[LANGUAGE_NONE][0]['value'],
+    'type_machine_name' => $node->type,
+    'type' => product_convert_type_machine_name_to_chinese($node->type),
   );
+}
+
+/**
+ * Convert node type from machine name to chinese name.
+ * @param $machine_name
+ * @return mixed
+ */
+function product_convert_type_machine_name_to_chinese($machine_name) {
+  $product_types = array(
+    'share_product' => '白领商品',
+    'product' => '壹购商品',
+    'swingshare' => '摇享商品',
+    'yaoxiang_product' => '摇享商品'
+  );
+  return in_array($machine_name, array_keys($product_types)) ? $product_types[$machine_name] : $machine_name;
 }

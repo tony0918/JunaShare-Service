@@ -28,6 +28,7 @@ function product_my_box() {
         $row['provider'] = prepare_product_provider_object($node->field_seller[LANGUAGE_NONE][0]['nid']);
       }
       $row['in_box'] = 1;
+      $row['created'] = format_date($rows[$node->nid]->created, 'custom', 'Y-m-d H:i:s');
       switch ($node->type) {
         // 显示在我的盒子中的价值，如果是壹购商品，就用壹购实体的价格，如果是白领商品或者其他商品，就用SKU实体的市场价格
         case 'product':

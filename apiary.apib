@@ -82,7 +82,10 @@ HOST: http://api-prod.junashare.com/
 + in_box: `0` - 商品是否已经被当前用户加入盒子，1为已经加入，0为未加入，未登入状态始终为0
 
 ## BoxItem (ShareProduct)
-+ price: `7.90` - 在我的盒子中
++ price: `7.90` - 在我的盒子中显示地价格
++ created: `2016-10-27 14:53:53` - 加入盒子的时间
++ type_machine_name: `product` - 商品类型的机器名
++ type: `壹购商品` - 商品类型的中文名
 
 ## ShareProductTimePeriod (object)
 + start: `1488254400` - 开始时间
@@ -230,6 +233,8 @@ HOST: http://api-prod.junashare.com/
         + `3` - 待收货订单
         + `6` - 待评价订单
     + page: `1` - 分页
+
++ Response 200 (application/json)
 
 ## Order [/juna/order/{id}.json]
 
