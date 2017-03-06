@@ -100,6 +100,26 @@ function orders_schema() {
         'default' => 0,
         'description' => '订单更新时间'
       ),
+      'delivery_time' => array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => '订单发货时间'
+      ),
+      'arrival_time' => array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => '订单签收时间'
+      ),
+      'payment_time' => array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => '订单支付时间'
+      ),
+      'comment' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'description' => '对订单的评价'
+      ),
     ),
     'primary key' => array('id'),
     'indexes' => array(
@@ -252,6 +272,37 @@ function orders_update_7008() {
     ));
   }
 }
+
+/**
+ * Adding new fields delivery_time and arrival_time to product_order.
+ */
+function orders_update_7009() {
+  $table = 'product_order';
+  if (!db_field_exists($table, 'delivery_time')) {
+    db_add_field($table, 'delivery_time', array('type' => 'int', 'description' => '订单发货时间', 'default' => 0));
+  }
+  if (!db_field_exists($table, 'arrival_time')) {
+    db_add_field($table, 'arrival_time', array('type' => 'int', 'description' => '订单签收时间', 'default' => 0));
+  }
+  return t('New fields delivery_time and arrival_time have been added.');
+}
+
+/**
+ * Adding new field comment to product_order.
+ * @return null|string
+ */
+function orders_update_7010() {
+  $table = 'product_order';
+  if (!db_field_exists($table, 'comment')) {
+    db_add_field($table, 'comment', array(
+      'type' => 'varchar',
+      'length' => 255,
+      'description' => '对订单的评价'
+    ));
+  }
+  return t('New field comment has been added.');
+}
+
 
 function orders_uninstall() {
   db_query("DELETE FROM {variable} WHERE name LIKE 'alipay_%'");

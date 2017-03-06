@@ -115,3 +115,38 @@ function orders_order_resource_retrieve($oid) {
 function orders_mask_user_mobile($mobile) {
   return substr_replace($mobile, '****', 3, 4);
 }
+
+/**
+ * Update an order status.
+ * @param $sorderid
+ * @param $status sign-off and comment
+ * @param string $comment
+ * @return array|mixed
+ */
+function orders_update_order_status($sorderid, $status, $comment = '') {
+  global $user;
+  if (!$user->uid) {
+    return services_error(t('用户未登录'), 406);
+  }
+  $query = db_update('product_order')
+    ->condition('sorderid', $sorderid, '=')
+    ->condition('uid', $user->uid, '=');
+  switch ($status) {
+    case 'sign-off':
+      $query->fields(array(
+        'status' => ORDER_STATUS_WAIT_FOR_COMMENT,
+        'arrival_time' => REQUEST_TIME
+      ))->execute();
+      return ['success' => 1, 'message' => t('操作成功')];
+      break;
+    case 'comment':
+      $query->fields(array(
+        'status' => ORDER_STATUS_PROVIDED_COMMENT,
+        'comment' => $comment,
+        'updated' => REQUEST_TIME
+      ))->execute();
+      return ['success' => 1, 'message' => t('提交评论成功')];
+      break;
+  }
+  return ['success' => 0, 'message' => 'status参数错误'];
+}

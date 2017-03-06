@@ -97,12 +97,13 @@ function orders_admin_list($form, &$form_state) {
       'field' => 'po.created',
       'sort' => 'desc',
     ),
+    'delivery_time' => t('Delivery Time'),
   );
 
   $query = db_select('product_order', 'po')
     ->extend('PagerDefault')->limit(100)
     ->extend('TableSort')->orderByHeader($header)
-    ->fields('po', array('sorderid', 'nid', 'uid', 'created', 'status'));
+    ->fields('po', array('sorderid', 'nid', 'uid', 'created', 'status', 'delivery_time', 'arrival_time'));
 
   $query->join('node', ' n', 'po.nid = n.nid');
   $query->condition('n.status', NODE_PUBLISHED, '=');
@@ -152,6 +153,7 @@ function orders_admin_list($form, &$form_state) {
     $rows[$key]['order_type'] = $order_types[$value->type];
     $rows[$key]['coupon_id'] = l($value->couponid, "node/$value->couponid");
     $rows[$key]['created'] = format_date($value->created);
+    $rows[$key]['delivery_time'] = format_date($value->delivery_time);
   }
 
   $form = orders_admin_order_list_filter_form($form, $form_state);
@@ -267,7 +269,7 @@ function orders_admin_juna_orders_detail_edit_form($form, &$form_state, $oid) {
 function orders_admin_juna_orders_detail_edit_form_submit($form, &$form_state) {
   $fields = array(
     'status' => $form_state['values']['order_status'],
-    'updated' => REQUEST_TIME,
+    'delivery_time' => REQUEST_TIME,
   );
   if (ORDER_STATUS_DELIVERED == $form_state['values']['order_status']) {
     $fields = array_merge($fields, array(

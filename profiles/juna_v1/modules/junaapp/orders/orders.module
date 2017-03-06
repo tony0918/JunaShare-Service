@@ -106,7 +106,39 @@ function orders_services_resources() {
           ),
         ),
         'access arguments' => array('access content'),
-      )
+      ),
+      'actions' => array(
+        'update' => array(
+          'file' => array('type' => 'inc', 'module' => 'orders', 'name' => 'includes/orders.resource'),
+          'help' => t('Update order status.'),
+          'description' => 'Update an order status.',
+          'access arguments' => array('access content'),
+          'callback' => 'orders_update_order_status',
+          'args' => array(
+            array(
+              'name' => 'sorderid',
+              'type' => 'string',
+              'description' => '订单id',
+              'source' => array('data' => 'sorderid'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'status',
+              'type' => 'string',
+              'description' => '订单状态',
+              'source' => array('data' => 'status'),
+              'optional' => FALSE,
+            ),
+            array(
+              'name' => 'comment',
+              'type' => 'string',
+              'description' => '订单评价',
+              'source' => array('data' => 'comment'),
+              'optional' => TRUE,
+            ),
+          ),
+        ),
+      ),
     ),
   );
 }
@@ -128,7 +160,7 @@ function _order_create_a_order($uid, $nid, $product_type, $price) {
   $order->amount = 1;
   $order->price = $price;
   $order->total_price = $price;
-  $order->sorderid = '1' . date('YmdHis') . mt_rand(10000, 99999999);
+  $order->sorderid = date('YmdHis') . mt_rand(10000, 99999999);
   $order->status = (YIGOU_PRODUCT_CONTENT_TYPE == $product_type) ? ORDER_STATUS_UNPAID : ORDER_STATUS_UNDELIVERED;
   drupal_write_record('product_order', $order);
   return $order;

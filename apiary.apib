@@ -332,3 +332,20 @@ HOST: http://api-prod.junashare.com/
         + price: `0` - 实际价格
         + uri: `http://api-dev.junashare.com/sites/default/files/product_image_on_order/%E8%AE%A2%E5%8D%95%402x.png` - 商品图片
         + express_fee: `0` - 快递费
+
+## Order Status [/juna/order/update.json]
+
+### Update An Order Status [POST]
+
++ Request (application/json)
+
+    {
+        "status": "comment",
+        "sorderid":"2017020423053234465275",
+        "comment": "This is comment"
+    }
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + success: 1
+        + message: `操作成功`
