@@ -60,7 +60,7 @@ function orders_order_resource_retrieve($oid) {
   }
 
   $query = db_select('product_order', 'po')
-    ->condition('po.id', $oid, '=')
+    ->condition('po.sorderid', $oid, '=')
     ->fields('po', array('id', 'created', 'total_price', 'express_provider', 'express_id', 'sorderid', 'status'));
 
   $query->join('node', 'n', 'po.nid = n.nid');
