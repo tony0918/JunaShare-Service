@@ -1,0 +1,106 @@
+<?php
+function coupon_schema(){
+	$schema['coupon'] = array (
+    'fields' => array (
+      'id' => array (
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'title' => array (
+        'type' => 'varchar',
+        'length' => '32',
+        'description'=>'标题'
+      ),
+      'status' => array (
+        'type' => 'int',
+        'not null' => TRUE,
+        'description'=>'白领券状态',
+        'default' => 0
+      ),
+     
+      'created' => array (
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' =>'加入时间'
+      ),
+      'starttime' => array (
+        'type' => 'varchar',
+        'length' => '32',
+        'description'=>'开始时间'
+      ),
+      'endtime' => array (
+        'type' => 'varchar',
+        'length' => '32',
+        'description'=>'结束时间'
+      ),
+      'sendtime' => array (
+        'type' => 'varchar',
+        'length' => '32',
+        'description'=>'发放时间'
+      ),
+      'uid'=>array(
+      	'type'=>'int',
+      	'not null' => TRUE,
+      	'description' => '用户id',
+      	'unsigned'=>TRUE
+      	)
+      
+    ),
+    'primary key' => array ('id'),
+  );
+  $schema['coupon_usage'] = array (
+    'fields' => array (
+      'id' => array (
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'title' => array (
+        'type' => 'varchar',
+        'length' => '32',
+        'description'=>'商品名称'
+      ),
+      'type' => array (
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'description'=>'类型',
+        'default' => 0,
+        'length' => '16'
+      ),
+     
+      'created' => array (
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' =>'加入时间'
+      ),
+      'couponid' => array (
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' =>'白领券id'
+      ),
+      'uid'=>array(
+        'type'=>'int',
+        'not null' => TRUE,
+        'description' => '用户id',
+        'unsigned'=>TRUE
+        ),
+      'nid'=>array(
+        'type'=>'int',
+        'not null' => TRUE,
+        'description' => '商品id',
+        'unsigned'=>TRUE
+        )
+      
+      
+    ),
+    'primary key' => array ('id'),
+  );
+  return $schema;
+}
+
+function coupon_update_7001(){
+   if (!db_table_exists('coupon_usage')) {
+    db_create_table('coupon_usage', drupal_get_schema_unprocessed('coupon', 'coupon_usage'));
+  }
+}
