@@ -349,3 +349,30 @@ HOST: http://api-prod.junashare.com/
     + Attributes (object)
         + success: 1
         + message: `操作成功`
+
+# Group User
+
+## User Logout [/juna/user/logout.json]
+
+### Logout a user session [POST]
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + uid: 0
+        + hostname: `116.233.92.188`
+        + roles
+            + 1: `anonymous user`
+        + cache: 0
+
+## User Login [/juna/user/login.json]
+
+### Login a user session [POST]
+
++ Request (application/json)
+
+        {
+            "name": "xxxx",
+            "pass": "xxxxxxxx"
+        }
+
++ Response 200 (application/json)

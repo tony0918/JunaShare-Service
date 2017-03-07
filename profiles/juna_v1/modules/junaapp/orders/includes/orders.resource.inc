@@ -16,7 +16,8 @@ function orders_lists($status = NULL) {
   $query = db_select('product_order', 'po')
     ->condition('po.uid', $user->uid, '=')
     ->fields('po')->orderBy('po.created', 'DESC')
-    ->extend('PagerDefault')->limit(SINGLE_PAGE_LIMIT);
+    ->extend('PagerDefault')
+    ->limit(SINGLE_PAGE_LIMIT);
   if (!is_null($status)) {
     // 如果传递status，过滤不同状态的订单
     $query->condition('po.status', $status, '=');
