@@ -202,9 +202,9 @@ HOST: http://api-prod.junashare.com/
 ### Do a Yigou Purchase [POST]
 + Request (application/json)
 
-    {
-        "nid": "120"
-    }
+        {
+            "nid": "120"
+        }
 
 + Response 200 (application/json)
     + Attributes (object)
@@ -229,9 +229,9 @@ HOST: http://api-prod.junashare.com/
 ### Apply a Share Product [POST]
 + Request (application/json)
 
-    {
-        "nid": 21
-    }
+        {
+            "nid": 21
+        }
 
 + Response 200 (application/json)
     + Attributes (object)
@@ -266,9 +266,9 @@ HOST: http://api-prod.junashare.com/
 ### Add to box [POST]
 + Request (application/json)
 
-    {
-        "nid": 21
-    }
+        {
+            "nid": 21
+        }
 
 + Response 200 (application/json)
     + Attributes (object)
@@ -280,12 +280,12 @@ HOST: http://api-prod.junashare.com/
 ## Getui Id [/api/v1.0/getui_user_binding]
 
 ### Binding Getui cid with uid [POST]
-+ Parameters
-    + uid: `9` - 用户id
++ Request (application/json)
 
-        该接口需要在用户已经登入的情况下请求，需要带上cookie和csrf的头部信息。如果在用户实体中已经有getui_id字段说明已经绑定
-
-    + cid: `xxxxxxxx` - 个推设备ID
+        {
+            uid: 9, // 用户id，该接口需要在用户已经登入的情况下请求，需要带上cookie和csrf的头部信息。如果在用户实体中已经有getui_id字段说明已经绑定
+            cid: xxxxxxxx // 个推设备ID
+        }
 
 + Response 200 (application/json)
     + Attributes (object)
@@ -339,11 +339,11 @@ HOST: http://api-prod.junashare.com/
 
 + Request (application/json)
 
-    {
-        "status": "comment",
-        "sorderid":"2017020423053234465275",
-        "comment": "This is comment"
-    }
+        {
+            "status": "comment", // 可选参数有sign-off(签收)和comment(评论)
+            "sorderid":"2017020423053234465275",
+            "comment": "This is comment" // 传递sign-off是可以不传递这个参数
+        }
 
 + Response 200 (application/json)
     + Attributes (object)
