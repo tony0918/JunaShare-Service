@@ -1564,7 +1564,7 @@ function users_mobilecode($mobile, $type) {
     calcrequesttime($starts, $ends, "手机验证码");
     services_error(t('手机号码不能为空.'), 406);
   }
-  if (!preg_match("/^1[3578]{1}[0-9]{8}$/", $mobile)) {
+  if (!preg_match("/^1[3578]{1}[0-9]{9}$/", $mobile)) {
     $ends = microtime_float();
     calcrequesttime($starts, $ends, "手机验证码");
     services_error(t('手机号错误.'), 406);
