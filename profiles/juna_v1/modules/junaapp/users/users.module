@@ -9,6 +9,9 @@ function users_permission() {
     'administer juna users list' => array(
       'title' => t('Access juna user list'),
     ),
+    'access user portal' => array(
+      'title' => t('Access user portal'),
+    ),
   );
 
   return $perms;
@@ -410,13 +413,28 @@ function users_menu() {
     'access arguments' => array('administer payment'),
     'type' => MENU_LOCAL_TASK,
   );
+  $items['admin/juna/users/index'] = array(
+    'title' => 'User Portal',
+    'description' => 'User Portal',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'file' => 'includes/users.pages.inc',
+  );
   $items['admin/juna/users'] = array(
+    'title' => 'User Portal',
+    'description' => 'User Portal',
+    'page callback' => 'users_user_portal_index',
+    'access arguments' => array('access user portal'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/users.pages.inc',
+  );
+  $items['admin/juna/users/list'] = array(
     'title' => '用户认证查询',
     'description' => '用户认证查询',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('users_juna_admin_list'),
     'access arguments' => array('administer juna users list'),
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
     'file' => 'includes/users.pages.inc',
   );
   return $items;

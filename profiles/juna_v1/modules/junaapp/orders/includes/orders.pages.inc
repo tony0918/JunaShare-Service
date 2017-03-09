@@ -1,6 +1,14 @@
 <?php
 
 /**
+ * Implementation of admin/juna/orders menu callback.
+ * @return null|string
+ */
+function orders_admin_juna_orders_index() {
+  return t('Welcome to order management portal.');
+}
+
+/**
  * Implementation of orders_admin_order_list_filter_form().
  * @param $form
  * @param $form_state

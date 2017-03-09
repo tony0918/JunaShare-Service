@@ -1,5 +1,36 @@
 <?php
 
+function users_user_portal_index() {
+  $variables = array(
+    'title' => t('User Status Overview'),
+    'type' => 'ul',
+    'attributes' => array(),
+    'items' => array(),
+  );
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'user')
+    ->propertyCondition('status', 1);
+  $num_rows = $query->count()->execute();
+
+  $query2 = clone($query)->fieldCondition('field_certed', 'value', 1, '=');
+  $num_rows_1 = $query2->count()->execute();
+
+  $items = array(
+    array(
+      'data' => t('总用户数： @user_num', array('@user_num' => $num_rows)),
+    ),
+    array(
+      'data' => t('已认证用户数：@user_num_1', array('@user_num_1' => $num_rows_1)),
+    ),
+  );
+
+  $variables['items'] = $items;
+
+  return theme_item_list($variables);
+
+}
+
 /**
  * Implementation of form users_juna_admin_list.
  * @param $form
@@ -25,10 +56,9 @@ function users_juna_admin_list($form, &$form_state) {
       0 => t('未认证'),
       1 => t('已认证'),
       2 => t('认证中'),
-      3 => t('All')
+      3 => t('全部')
     ),
-    '#empty_value' => '请选择',
-    '#default_value' => empty($_SESSION['users_juna_admin_list_filter']['cert']) ? '' : $_SESSION['users_juna_admin_list_filter']['cert'],
+    '#default_value' => ($_SESSION['users_juna_admin_list_filter']['cert'] >= 0) ? $_SESSION['users_juna_admin_list_filter']['cert'] : 3,
   );
   $form['filters']['submit'] = array('#type' => 'submit', '#value' => t('Filter'));
 
@@ -47,7 +77,8 @@ function users_juna_admin_list($form, &$form_state) {
       'type' => 'field',
       'specifier' => array('field' => 'field_status', 'column' => 'value')
     ),
-    'cert_pic' => t('Cert Pic'),
+    'access' => t('Last Access'),
+    'created' => t('Register'),
   );
 
   $query = new EntityFieldQuery();
@@ -60,8 +91,8 @@ function users_juna_admin_list($form, &$form_state) {
     $query->propertyCondition('name', $_SESSION['users_juna_admin_list_filter']['mobile'], '=');
   }
 
-  if (!empty($_SESSION['users_juna_admin_list_filter']['cert'])
-    && in_array($_SESSION['users_juna_admin_list_filter']['cert'], [1, 2, 3])
+  if (isset($_SESSION['users_juna_admin_list_filter']['cert'])
+    && in_array($_SESSION['users_juna_admin_list_filter']['cert'], [0, 1, 2])
   ) {
     $query->fieldCondition('field_certed', 'value', $_SESSION['users_juna_admin_list_filter']['cert'], '=');
   }
@@ -78,9 +109,11 @@ function users_juna_admin_list($form, &$form_state) {
       $rows[$key]['full_name'] = empty($value->field_username) ? '' : $value->field_username[LANGUAGE_NONE][0]['safe_value'];
       $rows[$key]['company'] = empty($value->field_company_name) ? '' : $value->field_company_name[LANGUAGE_NONE][0]['safe_value'];
       $rows[$key]['cert'] = empty($value->field_certed) ? '' : $cert_arr[$value->field_certed[LANGUAGE_NONE][0]['value']];
-      $rows[$key]['cert_pic'] = empty($value->field_cert) ? '' : l('Show', file_create_url($value->field_cert[LANGUAGE_NONE][0]['uri']), array('attributes' => array('target' => '_blank')));
+      $rows[$key]['access'] = format_date($value->access);
+      $rows[$key]['created'] = format_date($value->created, 'short');
     }
   }
+  $form['filters']['#title'] .= ' ' . t('Total Matched Record') . ' (' . count($rows) . ')';
   $form['nodes'] = array(
     '#theme' => 'table',
     '#header' => $header,

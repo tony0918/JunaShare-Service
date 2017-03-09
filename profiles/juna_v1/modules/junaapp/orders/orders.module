@@ -378,14 +378,6 @@ function orders_menu() {
 }
 
 /**
- * Implementation of admin/juna/orders menu callback.
- * @return null|string
- */
-function orders_admin_juna_orders_index() {
-  return t('Welcome to order management portal.');
-}
-
-/**
  * Implementation of hook_permission().
  * @return array
  */
