@@ -20,7 +20,11 @@ function orders_services_resources() {
           'help' => t('订单列表'),
           'callback' => 'orders_lists',
           'access arguments' => array('access content'),
-          'file' => array('type' => 'inc', 'module' => 'orders', 'name' => 'includes/orders.resource'),
+          'file' => array(
+            'type' => 'inc',
+            'module' => 'orders',
+            'name' => 'includes/orders.resource'
+          ),
           'args' => array(
             array(
               'name' => 'status',
@@ -94,7 +98,11 @@ function orders_services_resources() {
     'order' => array(
       'retrieve' => array(
         'help' => 'Retrieves an order',
-        'file' => array('type' => 'inc', 'module' => 'orders', 'name' => 'includes/orders.resource'),
+        'file' => array(
+          'type' => 'inc',
+          'module' => 'orders',
+          'name' => 'includes/orders.resource'
+        ),
         'callback' => 'orders_order_resource_retrieve',
         'args' => array(
           array(
@@ -109,7 +117,11 @@ function orders_services_resources() {
       ),
       'actions' => array(
         'update' => array(
-          'file' => array('type' => 'inc', 'module' => 'orders', 'name' => 'includes/orders.resource'),
+          'file' => array(
+            'type' => 'inc',
+            'module' => 'orders',
+            'name' => 'includes/orders.resource'
+          ),
           'help' => t('Update order status.'),
           'description' => 'Update an order status.',
           'access arguments' => array('access content'),
@@ -209,13 +221,6 @@ function orders_alipay_callback($appdata) {
 function orders_menu() {
   $items = array();
 
-  $items['buy'] = array(
-    'title' => '支付宝购买测试',
-    'description' => '支付宝购买测试',
-    'page callback' => 'orders_alipay_buy',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
   $items['payment/notify'] = array(
     'title' => '支付宝购买测试',
     'description' => '支付宝购买测试',
@@ -241,13 +246,6 @@ function orders_menu() {
     'title' => '支付宝购买测试',
     'description' => '支付宝购买测试',
     'page callback' => 'orders_lists',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-  $items['orders/test'] = array(
-    'title' => '支付宝购买测试',
-    'description' => '支付宝购买测试',
-    'page callback' => 'orders_test',
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
@@ -278,66 +276,6 @@ function orders_menu() {
     'page arguments' => array('orders_weixin_settings_form'),
     'access arguments' => array('administer payment'),
     'type' => MENU_LOCAL_TASK,
-  );
-
-  $items['admin/config/content/ckeditor/add'] = array(
-    'title' => 'Add a new CKEditor profile',
-    'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ckeditor_admin_profile_form', 'add'),
-    'file' => 'includes/ckeditor.admin.inc',
-    'access arguments' => array('administer ckeditor'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['admin/config/content/ckeditor/clone/%ckeditor_profile'] = array(
-    'title' => 'Clone the CKEditor profile',
-    'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ckeditor_admin_profile_clone_form', 'clone', 5),
-    'file' => 'includes/ckeditor.admin.inc',
-    'access arguments' => array('administer ckeditor'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['admin/config/content/ckeditor/edit/%ckeditor_profile'] = array(
-    'title' => 'Edit the CKEditor profile',
-    'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ckeditor_admin_profile_form', 'edit', 5),
-    'file' => 'includes/ckeditor.admin.inc',
-    'access arguments' => array('administer ckeditor'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['admin/config/content/ckeditor/delete/%ckeditor_profile'] = array(
-    'title' => 'Delete the CKEditor profile',
-    'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ckeditor_admin_profile_delete_form', 5),
-    'file' => 'includes/ckeditor.admin.inc',
-    'access arguments' => array('administer ckeditor'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['admin/config/content/ckeditor/addg'] = array(
-    'title' => 'Add the CKEditor Global profile',
-    'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ckeditor_admin_global_profile_form', 'add'),
-    'file' => 'includes/ckeditor.admin.inc',
-    'access arguments' => array('administer ckeditor'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['admin/config/content/ckeditor/editg'] = array(
-    'title' => 'Edit the CKEditor Global profile',
-    'description' => 'Configure the rich text editor.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ckeditor_admin_global_profile_form', 'edit'),
-    'file' => 'includes/ckeditor.admin.inc',
-    'access arguments' => array('administer ckeditor'),
-    'type' => MENU_CALLBACK,
   );
 
   // Menus for order management.
@@ -401,20 +339,6 @@ function orders_weixin_notify() {
 
 function orders_payementweixin($order) {
   module_load_include('inc', 'orders', 'includes/config');
-  /*if(empty($_POST)){
-      echo json_encode(['errcode' => '10012','msg' => getConfig()['10012'],'data' => []]);
-  }
-  $mustkey = ['orderid'];
-  foreach($_POST as $k =>$v){
-      if(!in_array($v, $mustkey)){
-          echo json_encode(['errcode' => '10013','msg' => getConfig()['10013'],'data' => []]);exit;
-      }
-  }
-  $orderid = $_POST['orderid'];
-  $order = db_query('SELECT * from {product_order} WHERE id=:id',array(':id' => $orderid)) -> fetch();
-  if(empty($order)){
-      echo json_encode(['errcode' => '10014','msg' => getConfig()['10014'],'data' => []]);exit;
-  }*/
   $newtime = $order->created + 30 * 60;
   $now = REQUEST_TIME;
   if ($now > $newtime) {
@@ -486,158 +410,6 @@ function orders_payementweixin($order) {
 
 }
 
-function orders_test() {
-  $alipay_settings = unserialize(variable_get('alipay_settings'));
-  require_once 'alipay/AopSdk.php';
-  $c = new AopClient;
-  $c->gatewayUrl = "https://openapi.alipay.com/gateway.do";
-  $c->appId = $alipay_settings['app_id'];
-  $c->rsaPrivateKey = $alipay_settings['private_key'];
-  $c->format = "json";
-  $c->charset = "utf-8";
-  //$c -> gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
-  //$c -> appId = "2016102900776032";
-  //$c->alipayrsaPublicKey = $alipay_settings['public_key'];
-  //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.open.public.template.message.industry.modify
-  // $request = new AlipayTradeQueryRequest ();
-  //$request->setBizContent("{" .
-  //"    \"out_trade_no\":\"20150320010101001\"," .
-  //"    \"trade_no\":\"2014112611001004680 073956707\"" .
-  //"  }");
-  //$request = new AlipayTradeAppPayRequest ();
-  //$request->setBizContent("{" .
-  //"    \"out_trade_no\":\"20150320010101001\"," .
-  //"    \"trade_no\":\"2014112611001004680 073956707\"" .
-  //"  }");
-  //$result = $c->sdkExecute ( $request); exit;
-  //var_dump($result);exit;
-  $req = new AlipayTradeAppPayRequest();
-
-  $content = [
-    'product_code' => 'QUICK_MSECURITY_PAY',
-    'subject' => 'test',
-    'total_amount' => 0.01,
-    'out_trade_no' => mt_rand(100000, 9999999)
-  ];
-  //print_r($content);exit;
-  $biz_content = json_encode($content);
-  //SDK已经封装掉了公共参数，这里只需要传入业务参数
-  //此次只是参数展示，未进行字符串转义，实际情况下请转义
-  $req->setBizContent($biz_content);
-  $req->setReturnUrl("http://api.junashare.com/payment/callback");
-  $req->setNotifyUrl($alipay_settings['notify_url']);
-  $response = $c->pageExecute($req, 'GET');
-  var_dump($response);
-  exit;
-  return $response;
-//var_dump($response);exit;
-  //var_dump($alipay_settings);exit;
-  module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_rsa.function');
-  module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_core.function');
-  $config = [];
-  $order = db_query("SELECT * FROM {product_order} WHERE id=:id", array(':id' => 1))->fetch();
-  $config['app_id'] = $alipay_settings['app_id'];
-  $config['method'] = 'alipay.trade.app.pay';
-  $config['charset'] = 'utf-8';
-  $config ['sign_type'] = 'RSA';
-  $node = node_load($order->nid);
-
-  $content = [
-    "goods_type" => "1",
-    "product_code" => "QUICK_MSECURITY_PAY",
-    "seller_id" => $alipay_settings['seller_id'],
-    "subject" => $node->title,
-    "timeout_express" => "30m",
-    "total_amount" => "0.01",
-    "out_trade_no" => $order->id
-  ];
-  //print_r($content);exit;
-  $biz_content = json_encode($content);
-  $config['biz_content'] = $biz_content;
-  $private_key = $alipay_settings['private_key'];
-  $signparam = [
-    'app_id' => '2015052600090779',
-    //$alipay_settings['app_id'],
-    'biz_content' => '{"timeout_express":"30m","seller_id":"","product_code":"QUICK_MSECURITY_PAY","total_amount":"0.01","subject":"1","body":"我是测试数据","out_trade_no":"IQJZSRC1YMQB5HU"}',
-    //$biz_content,
-    'charset' => 'utf-8',
-    'format' => 'json',
-    'method' => 'alipay.trade.app.pay',
-    'notify_url' => 'http://domain.merchant.com/payment_notify',
-    'sign_type' => 'RSA',
-    'timestamp' => date('Y-m-d H:i:s', $order->created),
-    'version' => '1.0',
-
-
-  ];
-  //print_r($alipay_settings);exit;
-  //$signstr = http_build_query($signparam);
-  //$signstr = createLinkstring($signparam);
-  //$sign = rsaSign($signstr,$alipay_settings['private_key']);
-  //$config['sign'] = $sign;
-  $config['timestamp'] = date('Y-m-d H:i:s', $order->created);
-  $config['version'] = '1.0';
-  $config['notify_url'] = $alipay_settings['notify_url'];
-  $config['sign_type'] = 'RSA';
-  //$client = new AopClient();
-  //$sign = $client -> rsaSign($signparam,$private_key);
-  module_load_include('inc', 'orders', 'alipay/server/php/lib/alipay_submit.class');
-
-  /* *
-   * 配置文件
-   * 版本：3.4
-   * 日期：2016-03-08
-   * 说明：
-   * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
-   * 该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
-
-   * 安全校验码查看时，输入支付密码后，页面呈灰色的现象，怎么办？
-   * 解决方法：
-   * 1、检查浏览器配置，不让浏览器做弹框屏蔽设置
-   * 2、更换浏览器或电脑，重新登录查询。
-   */
-
-//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-// 合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://openhome.alipay.com/platform/keyManage.htm?keyType=partner
-//$alipay_config['partner']       = $alipay_settings['seller_id'];
-
-// 卖家支付宝账号，以2088开头由16位纯数字组成的字符串，一般情况下收款账号就是签约账号
-//$alipay_config['seller_user_id']=$alipay_config['partner'];
-  $alipay_config['key'] = $alipay_settings['private_key'];
-//商户的私钥,此处填写原始私钥去头去尾，RSA公私钥生成：https://doc.open.alipay.com/doc2/detail.htm?spm=a219a.7629140.0.0.nBDxfy&treeId=58&articleId=103242&docType=1
-  $alipay_config['private_key'] = $alipay_settings['private_key'];
-
-//支付宝的公钥，查看地址：https://openhome.alipay.com/platform/keyManage.htm?keyType=partner
-  $alipay_config['alipay_public_key'] = $alipay_settings['public_key'];//'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB';
-
-// 服务器异步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问
-  $alipay_config['notify_url'] = $alipay_settings['notify_url'];
-
-// 签名方式
-  $alipay_config['sign_type'] = strtoupper('RSA');
-
-// 退款日期 时间格式 yyyy-MM-dd HH:mm:ss
-//date_default_timezone_set('PRC');//设置当前系统服务器时间为北京时间，PHP5.1以上可使用。
-//$alipay_config['refund_date']=date("Y-m-d H:i:s",time());;
-
-// 调用的接口名，无需修改
-  $alipay_config['service'] = 'alipay.trade.app.pay';
-
-//字符编码格式 目前支持 gbk 或 utf-8
-  $alipay_config['input_charset'] = strtolower('utf-8');
-
-//ca证书路径地址，用于curl中ssl校验
-//请保证cacert.pem文件在当前文件夹目录中
-  $alipay_config['cacert'] = getcwd() . '/cacert.pem';
-
-//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-  $alipay_config['transport'] = 'http';
-//↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
-  $alipaySubmit = new AlipaySubmit($alipay_config);
-  $html_text = $alipaySubmit->buildRequestForm($signparam, "get", "确认");
-  return $html_text;
-}
 
 function orders_pre_pay($orderid, $payment_type) {
   $order = db_query('SELECT * FROM {product_order} WHERE id=:id', array(':id' => $orderid))->fetch();
@@ -690,39 +462,11 @@ function _alipay_pre_pay($order) {
     'total_fee' => $order->total_price * 100,
 
   )));
-  array(
-    'total_amount' => '0.01',
-    'buyer_id' => '2088202805360242',
-    'trade_no' => '2017022821001004240203554563',
-    'notify_time' => '2017-02-28 19:47:49',
-    'subject' => '【测试】多力多滋 玉米片烟熏烤味198.4g*2',
-    'sign_type' => 'RSA',
-    'buyer_logon_id' => 'lif***@163.com',
-    'auth_app_id' => '2016111602886056',
-    'charset' => 'utf-8',
-    'notify_type' => 'trade_status_sync',
-    'invoice_amount' => '0.01',
-    'out_trade_no' => '2017022819472319358421',
-    'trade_status' => 'TRADE_SUCCESS',
-    'gmt_payment' => '2017-02-28 19:47:49',
-    'version' => '1.0',
-    'point_amount' => '0.00',
-    'sign' => 'hODpe+034P87OuCSHB2zgLwGsxRizkYnenw1LbGg84XenBdwRS3iLUNBIrL8o30ljuA9dpsTPNjlKnUVS6zZL5f8UccVUHTbd9UQeN12HPFn8IHhFTNBeEJ8AZ9ZuqwRDyWIDAoxuWRCnXpjde9CZMv7dCkhmmoyDGEhIBJmwh0=',
-    'gmt_create' => '2017-02-28 19:47:48',
-    'buyer_pay_amount' => '0.01',
-    'receipt_amount' => '0.01',
-    'passback_params' => '%7B%22uid%22%3A%22135%22%2C%22nid%22%3A%222%22%2C%22orderid%22%3A%222017022819472319358421%22%2C%22total_fee%22%3A1%7D',
-    'fund_bill_list' => '[{"amount":"0.01","fundChannel":"ALIPAYACCOUNT"}]',
-    'app_id' => '2016111602886056',
-    'seller_id' => '2088421944340625',
-    'notify_id' => '859b5c3805b4133c87b837f77bf101fhuq',
-    'seller_email' => 'heidy.huang@junashare.com',
-  );
   $content = [
     'subject' => $node->title,
     'out_trade_no' => $order->sorderid,
     'timeout_express' => '30m',
-    'total_amount' => '0.01',
+    'total_amount' => $order->amount,
     'seller_id' => $alipay_settings['seller_id'],
     'product_code' => 'QUICK_MSECURITY_PAY',
     'goods_type' => '1',
@@ -1074,206 +818,6 @@ function orders_update($orderid, $update_data) {
   return ['success' => 1];
 }
 
-/**
- * 生成支付宝订单
- */
-function orders_alipay_buy() {
-  /*module_load_include( 'inc','orders','alipay/server/php/lib/alipay_core.funcction');
-   module_load_include( 'inc','orders','alipay/server/php/lib/alipay_md5.funcction');
-   module_load_include( 'inc','orders','alipay/server/php/lib/alipay_submit.class');
-   module_load_include( 'inc','orders','alipay/server/php/lib/alipay_rsa.function');
-
-   $alipay_config['partner']		= '2088421944340625';
-
-// 卖家支付宝账号，以2088开头由16位纯数字组成的字符串，一般情况下收款账号就是签约账号
-
-   $alipay_config['seller_user_id']=$alipay_config['partner'];
-
-// MD5密钥，安全检验码，由数字和字母组成的32位字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
-   $alipay_config['key']			= file_get_contents(getcwd().'/rsa_private_key.pem');
-// 服务器异步通知页面路径，需http://格式的完整路径，不能加?id=123这类自定义参数,必须外网可以正常访问
-   $alipay_config['notify_url']="http://商户网关网址/refund_fastpay_by_platform_pwd-PHPUTF-8/notify_url.php";
-
-// 签名方式
-   $alipay_config['sign_type']    = strtoupper('MD5');
-
-// 退款日期 时间格式 yyyy-MM-dd HH:mm:ss
-//date_default_timezone_set('PRC');//设置当前系统服务器时间为北京时间，PHP5.1以上可使用。
-   $alipay_config['refund_date']=date("Y-m-d H:i:s",time());;
-
-// 调用的接口名，无需修改
-   $alipay_config['service']='alipay.trade.pay';
-
-//字符编码格式 目前支持 gbk 或 utf-8
-   $alipay_config['input_charset']= strtolower('utf-8');
-
-//ca证书路径地址，用于curl中ssl校验
-//请保证cacert.pem文件在当前文件夹目录中
-   $alipay_config['cacert']    = getcwd().'\\cacert.pem';
-
-//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-   $alipay_config['transport']    = 'http';
-   // echo rsaSign('app_id=2015052600090779&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A%220.01%22%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22out_trade_no%22%3A%22IQJZSRC1YMQB5HU%22%7D&charset=utf-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fdomain.merchant.com%2Fpayment_notify&sign_type=RSA&timestamp=2016-08-25%2020%3A26%3A31&version=1.0', $alipay_config['key']);exit;
-
-   $parameter = array(
-       "service" => 'alipay.trade.pay',
-       "partner" => $alipay_config['partner'],
-       "notify_url"	=> 'http://商户网关网址/refund_fastpay_by_platform_pwd-PHPUTF-8/notify_url.php',
-       "seller_user_id"	=> $alipay_config['seller_user_id'],
-       "refund_date"	=>  $alipay_config['refund_date'],
-       "batch_no"	=> '1',
-       "batch_num"	=> '1',
-       "detail_data"	=> '',
-       "_input_charset"	=>'utf-8'
-
-   );*/
-  /*    $s = 'app_id=2014072300007148&biz_content={"button":[{"actionParam":"ZFB_HFCZ","actionType":"out","name":"话费充值"},{"name":"查询","subButton":[{"actionParam":"ZFB_YECX","actionType":"out","name":"余额查询"},{"actionParam":"ZFB_LLCX","actionType":"out","name":"流量查询"},{"actionParam":"ZFB_HFCX","actionType":"out","name":"话费查询"}]},{"actionParam":"http://m.alipay.com","actionType":"link","name":"最新优惠"}]}&charset=GBK&method=alipay.mobile.public.menu.add&sign_type=RSA&timestamp=2014-07-24 03:07:50&version=1.0';
-      $sign = md5($s);*/
-  /*  $parameter['sign'] = rsaSign($s,$alipay_config['key']);
-//建立请求
-   $alipaySubmit = new AlipaySubmit($alipay_config);
-    $html_text = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
-    echo $html_text;exit;*/
-  require_once('alipay/AopSdk.php');
-  $c = new AopClient;
-//$c->gatewayUrl = "https://openapi.alipay.com/gateway.do";
-//$c->appId = "2016111602886056";
-  $c->gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
-  $c->appId = "2016102900776032";
-  $private_key = file_get_contents(getcwd() . '/rsa_private_key.pem');
-  $private_key = str_replace("-----BEGIN RSA PRIVATE KEY-----", "", $private_key);
-  $private_key = str_replace("-----END RSA PRIVATE KEY-----", "", $private_key);
-  $private_key = str_replace("\n", "", $private_key);
-  $c->rsaPrivateKey = $private_key;
-//$private_key="-----BEGIN RSA PRIVATE KEY-----".PHP_EOL .$private_key. PHP_EOL."-----END RSA PRIVATE KEY-----";
-//var_dump($private_key);
-  $c->rsaPrivateKeyFilePath = getcwd() . '/rsa_private_key.pem';
-  $c->format = "json";
-  $c->charset = "UTF-8";
-  $alipay_public_key = file_get_contents(getcwd() . '/rsa_public_key.pem');
-  $alipay_public_key = str_replace("-----BEGIN PUBLIC KEY-----", "", $alipay_public_key);
-  $alipay_public_key = str_replace("-----END PUBLIC KEY-----", "", $alipay_public_key);
-  $alipay_public_key = str_replace("\n", "", $alipay_public_key);
-//$c ->rsaPrivateKeyFilePath = getcwd().'/rsa_private_key.pem';
-//$alipay_public_key='-----BEGIN PUBLIC KEY-----'.PHP_EOL.wordwrap($alipay_public_key, 64, "\n", true) .PHP_EOL.'-----END PUBLIC KEY-----';
-//echo $alipay_public_key;
-  $c->alipayPublicKey = file_get_contents(getcwd() . '/rsa_public_key.pem');
-//$c->alipayrsaPublicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB';
-//实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.open.public.template.message.industry.modify
-//$c -> alipayPublicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB';
-  /*$request = new AlipayTradeQueryRequest ();
-  $request->setBizContent("{" .
-  "    \"out_trade_no\":\"20150320010101001\"," .
-  "    \"trade_no\":\"2014112611001004680 073956707\"" .
-  "  }");
-  $result = $c->execute ( $request); */
-  $request = new AlipayUserInfoAuthRequest ();
-  /*$request->setBizContent("{" .
-  "    \"grant_type\":\"authorization_code\"," .
-  "    \"code\":\"1cc19911172e4f8aaa509c8fb5d12F56\"," .
-  "    \"refresh_token\":\"201509BBdcba1e3347de4e75ba3fed2c9abebE36\"" .
-  "  }");*/
-  $request->setBizContent("{" .
-    "      \"scopes\":[" .
-    "        \"auth_base\"" .
-    "      ]," .
-    "    \"state\":\"init\"" .
-    "  }");
-  $result = $c->pageExecute($request, 'GET');
-  header('Location:' . $result);
-  var_dump($result);
-  exit;
-  $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
-  $resultCode = $result->$responseNode->code;
-  var_dump($result);
-  if (!empty($resultCode) && $resultCode == 10000) {
-    echo "成功";
-  }
-  else {
-    echo "失败";
-  }
-  print_r($response);
-  exit;
-  $aop = new AopClient ();
-  $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
-  $aop->appId = '2016111602886056';
-  $aop->rsaPrivateKeyFilePath = getcwd() . '/rsa_private_key.pem';
-  $private_key = file_get_contents(getcwd() . '/rsa_private_key.pem');
-
-  $public_key = file_get_contents(getcwd() . '/rsa_public_key.pem');
-  /*$public_key=str_replace("-----BEGIN RSA PRIVATE KEY-----","",$public_key);
-  $public_key=str_replace("-----END RSA PRIVATE KEY-----","",$public_key);
-  $public_key=str_replace("\n","",$public_key);*/
-
-  //$aop->alipayrsaPublicKey = $private_key;
-  $aop->alipayPublicKey = $public_key;
-  $aop->apiVersion = '1.0';
-  //var_dump(file_exists($aop->rsaPrivateKeyFilePath));
-  $aop->postCharset = 'UTF-8';
-  $aop->format = 'json';
-  //$aop -> signType = 'RSA';
-  $request = new AlipayTradePayRequest ();
-  $request->setNotifyUrl('http://api.junashare.com/payment/notify');
-  $request->setBizContent("{" .
-    "    \"out_trade_no\":\"20150320010101001\"," .
-    "    \"scene\":\"bar_code,wave_code\"," .
-    "    \"auth_code\":\"28763443825664394\"," .
-    "    \"subject\":\"Iphone6 16G\"," .
-    "    \"seller_id\":\"2088102146225135\"," .
-    "    \"total_amount\":88.88," .
-    "    \"discountable_amount\":8.88," .
-    "    \"undiscountable_amount\":80.00," .
-    "    \"body\":\"Iphone6 16G\"," .
-    "      \"goods_detail\":[{" .
-    "                \"goods_id\":\"apple-01\"," .
-    "        \"alipay_goods_id\":\"20010001\"," .
-    "        \"goods_name\":\"ipad\"," .
-    "        \"quantity\":1," .
-    "        \"price\":2000," .
-    "        \"goods_category\":\"34543238\"," .
-    "        \"body\":\"特价手机\"," .
-    "        \"show_url\":\"http://www.alipay.com/xxx.jpg\"" .
-    "        }]," .
-    "    \"operator_id\":\"yx_001\"," .
-    "    \"store_id\":\"NJ_001\"," .
-    "    \"terminal_id\":\"NJ_T_001\"," .
-    "    \"alipay_store_id\":\"2016041400077000000003314986\"," .
-    "    \"extend_params\":{" .
-    "      \"sys_service_provider_id\":\"2088511833207846\"," .
-    "      \"hb_fq_num\":\"3\"," .
-    "      \"hb_fq_seller_percent\":\"100\"" .
-    "    }," .
-    "    \"timeout_express\":\"90m\"," .
-    "    \"royalty_info\":{" .
-    "      \"royalty_type\":\"ROYALTY\"," .
-    "        \"royalty_detail_infos\":[{" .
-    "                    \"serial_no\":1," .
-    "          \"trans_in_type\":\"userId\"," .
-    "          \"batch_no\":\"123\"," .
-    "          \"out_relation_id\":\"20131124001\"," .
-    "          \"trans_out_type\":\"userId\"," .
-    "          \"trans_out\":\"2088101126765726\"," .
-    "          \"trans_in\":\"2088101126708402\"," .
-    "          \"amount\":0.1," .
-    "          \"desc\":\"分账测试1\"," .
-    "          \"amount_percentage\":\"100\"" .
-    "          }]" .
-    "    }," .
-    "    \"sub_merchant\":{" .
-    "      \"merchant_id\":\"19023454\"" .
-    "    }" .
-    "  }");
-  $result = $aop->execute($request);
-  $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
-  $resultCode = $result->$responseNode->code;
-  print_r($result);
-  if (!empty($resultCode) && $resultCode == 10000) {
-    echo "成功";
-  }
-  else {
-    echo "失败";
-  }
-}
 
 /**
  * 支付宝退款
@@ -1386,133 +930,3 @@ function orders_expire_unpaid_order_by_uid($uid) {
   return $result;
 }
 
-function orders_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'seller_node_form') {
-    // print_r($form_state['node']);
-    /*
-    <script type="text/javascript">
-
- //为地图注册click事件获取鼠标点击出的经纬度坐标
- var clickEventListener = map.on('click', function(e) {
-     document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
- });
- var auto = new AMap.Autocomplete({
-     input: "tipinput"
- });
- AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
- function select(e) {
-     if (e.poi && e.poi.location) {
-         map.setZoom(15);
-         map.setCenter(e.poi.location);
-     }
- }
-</script>
-<script type="text/javascript">
- //地图加载
- var map = new AMap.Map("container", {
-     resizeEnable: true
- });
- //输入提示
- var autoOptions = {
-     input: "tipinput"
- };
- var auto = new AMap.Autocomplete(autoOptions);
- var placeSearch = new AMap.PlaceSearch({
-     map: map
- });  //构造地点查询类
- AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
- function select(e) {
-     placeSearch.setCity(e.poi.adcode);
-     placeSearch.search(e.poi.name);  //关键字查询查询
- }
-</script>*/
-//    $form['contact_information'] = array(
-//
-//      '#markup' => '',
-//      '#prefix' => '<div id="maps" style="height:500px;">',
-//      '#suffix' => '</div>',
-//      '#weight' => 10
-//
-//    );
-    /*
-    <script>
-        var marker, map = new AMap.Map("container", {
-            resizeEnable: true,
-            center: [116.397428, 39.90923],
-            zoom: 13
-        });
-        AMap.event.addDomListener(document.getElementById('addMarker'), 'click', function() {
-            addMarker();
-        }, false);
-        AMap.event.addDomListener(document.getElementById('updateMarker'), 'click', function() {
-            marker && updateMarker();
-        }, false);
-        AMap.event.addDomListener(document.getElementById('clearMarker'), 'click', function() {
-            if (marker) {
-                marker.setMap(null);
-                marker = null;
-            }
-        }, false);
-
-        // 实例化点标记
-        function addMarker() {
-            if (marker) {
-                return;
-            }
-            marker = new AMap.Marker({
-                icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-                position: [116.405467, 39.907761]
-            });
-            marker.setMap(map);
-        }
-
-        function updateMarker() {
-            // 自定义点标记内容
-            var markerContent = document.createElement("div");
-
-            // 点标记中的图标
-            var markerImg = document.createElement("img");
-            markerImg.className = "markerlnglat";
-            markerImg.src = "http://webapi.amap.com/theme/v1.3/markers/n/mark_r.png";
-            markerContent.appendChild(markerImg);
-
-            // 点标记中的文本
-            var markerSpan = document.createElement("span");
-            markerSpan.className = 'marker';
-            markerSpan.innerHTML = "Hi，我换新装备啦！";
-            markerContent.appendChild(markerSpan);
-
-            marker.setContent(markerContent); //更新点标记内容
-            marker.setPosition([116.391467, 39.927761]); //更新点标记位置
-        }
-    </script>
-    05ffecae96c4cc9b02d31186fe67d5e0*/
-//    drupal_add_js('http://webapi.amap.com/maps?v=1.3&key=73d66e3914afe6e65a55602ae48c9b65&plugin=AMap.Autocomplete,AMap.PlaceSearch', array(
-//      'type' => 'external',
-//      'scope' => 'footer'
-//    ));
-//    drupal_add_js('http://cache.amap.com/lbs/static/addToolbar.js', array('type' => 'external', 'scope' => 'footer'));
-//    if (!empty($form_state['node']->nid)) {
-//      drupal_add_js('var mark,map = new AMap.Map("maps", {resizeEnable: true,center: [' . $form_state['node']->field_lnt['und'][0]['value'] . ', ' . $form_state['node']->field_lat['und'][0]['value'] . '],zoom:13});', array(
-//        'type' => 'inline',
-//        'scope' => 'footer'
-//      ));
-//      drupal_add_js('new AMap.Marker({map: map,position: [' . $form_state['node']->field_lnt['und'][0]['value'] . ', ' . $form_state['node']->field_lat['und'][0]['value'] . '],icon: new AMap.Icon({size: new AMap.Size(40, 50), image: "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png",imageOffset: new AMap.Pixel(0, -60)})});', array(
-//        'type' => 'inline',
-//        'scope' => 'footer'
-//      ));
-//    }
-//    else {
-//      drupal_add_js('var map = new AMap.Map("maps", {resizeEnable: true,zoom:9,center: [121.29, 31.14],});', array(
-//        'type' => 'inline',
-//        'scope' => 'footer'
-//      ));
-//    }
-//
-//    drupal_add_js(' var clickEventListener = map.on("click", function(e) {document.getElementById("edit-field-lnt-und-0-value").value = e.lnglat.getLng(); document.getElementById("edit-field-lat-und-0-value").value=e.lnglat.getLat()});var auto = new AMap.Autocomplete({input: "edit-field-addr-und-0-value"});AMap.event.addListener(auto, "select", select);function select(e) {if (e.poi && e.poi.location) {map.setZoom(15);map.setCenter(e.poi.location);}}', array(
-//      'type' => 'inline',
-//      'scope' => 'footer'
-//    ));
-
-  }
-}
