@@ -228,6 +228,14 @@ function orders_menu() {
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
   );
+  $items['refund/%'] = array(
+    'title' => '支付宝退款',
+    'description' => '支付宝购买测试',
+    'page callback' => 'orders_refund',
+    'access callback' => TRUE,
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
   $items['payment/weixin_notify'] = array(
     'title' => '支付宝购买测试',
     'description' => '支付宝购买测试',
@@ -466,7 +474,7 @@ function _alipay_pre_pay($order) {
     'subject' => $node->title,
     'out_trade_no' => $order->sorderid,
     'timeout_express' => '30m',
-    'total_amount' => $order->amount,
+    'total_amount' => $order->total_price,
     'seller_id' => $alipay_settings['seller_id'],
     'product_code' => 'QUICK_MSECURITY_PAY',
     'goods_type' => '1',
@@ -818,35 +826,39 @@ function orders_update($orderid, $update_data) {
   return ['success' => 1];
 }
 
+function orders_refund($id){
+  $order = db_query('SELECT * from product_order where sorderid='.$id)->fetch();
+_alipay_refund($order);
+}
 
 /**
  * 支付宝退款
  */
-function _alipay_refund() {
+function _alipay_refund($order) {
+  $alipaysetting = unserialize(variable_get('alipay_settings'));
   require_once('alipay/AopSdk.php');
   $aop = new AopClient ();
   $aop->gatewayUrl = 'https://openapi.alipay.com/gateway.do';
-  $aop->appId = 'your app_id';
-  $aop->rsaPrivateKeyFilePath = 'merchant_private_key_file';
-  $aop->alipayPublicKey = 'alipay_public_key_file';
+  $aop->appId = $alipaysetting['app_id'];
+  //$aop->rsaPrivateKeyFilePath = 'merchant_private_key_file';
+  //$aop->alipayPublicKey = 'alipay_public_key_file';
   $aop->apiVersion = '1.0';
-  $aop->postCharset = 'GBK';
+  $aop->postCharset = 'UTF-8';
+  $aop -> signType = 'RSA';
+  $aop->rsaPrivateKey = $alipaysetting['private_key'];
+  $aop->format = "json";
+  $aop->charset = "utf-8";
+  $aop->alipayrsaPublicKey = $alipaysetting['public_key'];
   $aop->format = 'json';
+  $aop ->timestamp = date('Y-m-d H:i:s');
   $request = new AlipayTradeRefundRequest ();
-  $request->setBizContent("{" .
-    "    \"out_trade_no\":\"20150320010101001\"," .
-    "    \"trade_no\":\"2014112611001004680073956707\"," .
-    "    \"refund_amount\":200.12," .
-    "    \"refund_reason\":\"正常退款\"," .
-    "    \"out_request_no\":\"HZ01RF001\"," .
-    "    \"operator_id\":\"OP001\"," .
-    "    \"store_id\":\"NJ_S_001\"," .
-    "    \"terminal_id\":\"NJ_T_001\"" .
-    "  }");
+  $data = ['trade_no'=>$order-> alipay_order_id,'refund_amount' => $order -> total_price,'refund_reason' => '正常退款'];
+  $request->setBizContent(json_encode($data));
   $result = $aop->execute($request);
 
   $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
   $resultCode = $result->$responseNode->code;
+  var_export($result);
   if (!empty($resultCode) && $resultCode == 10000) {
     echo "成功";
   }
