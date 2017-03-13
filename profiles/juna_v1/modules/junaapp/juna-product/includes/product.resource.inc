@@ -197,7 +197,9 @@ function product_share_product_apply($nid) {
   }
 
   $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
-  if (8 < $hour && $hour >= 0) {
+  if (8 > $hour && $hour >= 0) {
+    watchdog('juna_service::product_share_product_apply', '商品限时结束::@sanity_check',
+      array('@sanity_check' => $hour), WATCHDOG_DEBUG);
     return services_error(t('商品限时结束.'), 406);
   }
 
