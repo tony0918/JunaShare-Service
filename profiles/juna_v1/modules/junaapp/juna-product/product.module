@@ -674,6 +674,7 @@ function product_buy($nid) {
     if (strtotime($node->field_endtime['und'][0]['value']) <= REQUEST_TIME) {
       $ends = microtime_float();
       calcrequesttime($starts, $ends, $node->type . "商品购买");
+      watchdog('debug',print_r($node,true));
       return services_error(t('商品限时结束.'), 406);
     }
   }
