@@ -1020,12 +1020,17 @@ function coupon_admin_juna_coupon_index() {
  * @return mixed
  */
 function coupon_admin_coupon_filter_form($form, &$form_state) {
+  $timezone = variable_get('date_default_timezone', @date_default_timezone_get());
   if (!isset($_SESSION['coupon_filters'])) {
     $_SESSION['coupon_filters'] = array(
       'coupon_status' => '0',
-      'mobile' => ''
+      'mobile' => '',
+      'start' => '',
+      'end' => ''
     );
   }
+  $start = isset($_SESSION['coupon_filters']['start']) ? $_SESSION['coupon_filters']['start'] : '';
+  $end = isset($_SESSION['coupon_filters']['end']) ? $_SESSION['coupon_filters']['end'] : '';
   $form['filters'] = array(
     '#type' => 'fieldset',
     '#title' => t('Show only items where'),
@@ -1048,6 +1053,26 @@ function coupon_admin_coupon_filter_form($form, &$form_state) {
     '#title' => t('Mobile Number'),
     '#autocomplete_path' => 'user/autocomplete',
     '#default_value' => $_SESSION['coupon_filters']['mobile'],
+  );
+  $form['filters']['start'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('Start'),
+    '#date_type' => DATE_DATETIME,
+    '#date_format' => DATE_FORMAT_DATETIME,
+    '#date_increment' => 1,
+    '#date_timezone' => $timezone,
+    '#default_value' => $start,
+    '#date_year_range' => '-3:+3',
+  );
+  $form['filters']['end'] = array(
+    '#type' => 'date_popup',
+    '#title' => t('End'),
+    '#date_type' => DATE_DATETIME,
+    '#date_format' => DATE_FORMAT_DATETIME,
+    '#date_timezone' => $timezone,
+    '#default_value' => $end,
+    '#date_year_range' => '-3:+3',
+    '#date_increment' => 1,
   );
   $form['submit'] = array(
     '#type' => 'submit',

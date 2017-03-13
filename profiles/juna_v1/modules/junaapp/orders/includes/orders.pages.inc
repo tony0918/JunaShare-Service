@@ -18,7 +18,6 @@ function orders_admin_order_list_filter_form($form, &$form_state) {
   $mobile = isset($_SESSION['order_list_filters']['mobile']) ? $_SESSION['order_list_filters']['mobile'] : '';
   $nid = isset($_SESSION['order_list_filters']['nid']) ? $_SESSION['order_list_filters']['nid'] : '';
   $timezone = variable_get('date_default_timezone', @date_default_timezone_get());
-  $format = 'Y-m-d';
   $start = isset($_SESSION['order_list_filters']['start']) ? $_SESSION['order_list_filters']['start'] : '';
   $end = isset($_SESSION['order_list_filters']['end']) ? $_SESSION['order_list_filters']['end'] : '';
   $order_status = isset($_SESSION['order_list_filters']['order_status']) ? $_SESSION['order_list_filters']['order_status'] : '';
@@ -33,7 +32,7 @@ function orders_admin_order_list_filter_form($form, &$form_state) {
     '#type' => 'date_popup',
     '#title' => t('Start'),
     '#date_type' => DATE_DATETIME,
-    '#data_format' => $format,
+    '#date_format' => DATE_FORMAT_DATETIME,
     '#date_timezone' => $timezone,
     '#default_value' => $start,
     '#date_year_range' => '-3:+3',
@@ -42,7 +41,7 @@ function orders_admin_order_list_filter_form($form, &$form_state) {
     '#type' => 'date_popup',
     '#title' => t('End'),
     '#date_type' => DATE_DATETIME,
-    '#data_format' => $format,
+    '#date_format' => DATE_FORMAT_DATETIME,
     '#date_timezone' => $timezone,
     '#default_value' => $end,
     '#date_year_range' => '-3:+3',
@@ -73,6 +72,12 @@ function orders_admin_order_list_filter_form($form, &$form_state) {
   $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Filter')
+  );
+  $form['actions']['export'] = array(
+    '#type' => 'button',
+    '#value' => t('Export'),
+    '#executes_submit_callback' => TRUE,
+    '#submit' => array('orders_order_list_export'),
   );
   return $form;
 }
@@ -108,49 +113,13 @@ function orders_admin_list($form, &$form_state) {
     'delivery_time' => t('Delivery Time'),
   );
 
-  $query = db_select('product_order', 'po')
-    ->extend('PagerDefault')->limit(100)
-    ->extend('TableSort')->orderByHeader($header)
-    ->fields('po', array('sorderid', 'nid', 'uid', 'created', 'status', 'delivery_time', 'arrival_time'));
-
-  $query->join('node', ' n', 'po.nid = n.nid');
-  $query->condition('n.status', NODE_PUBLISHED, '=');
-  $query->fields('n', array('title', 'type'));
-
-  $query->join('users', 'u', 'po.uid=u.uid');
-  $query->addField('u', 'name');
-
-  $query->leftJoin('coupon_usage', 'cu', 'cu.sorderid=po.sorderid');
-  $query->addField('cu', 'couponid');
-
-  if (isset($_SESSION['order_list_filters']['mobile']) && !empty(trim($_SESSION['order_list_filters']['mobile']))) {
-    $query->condition('u.name', trim($_SESSION['order_list_filters']['mobile']), '=');
+  if (!isset($_SESSION['order_list_filters'])) {
+    $_SESSION['order_list_filters'] = array();
   }
 
-  if (isset($_SESSION['order_list_filters']['nid']) && !empty(trim($_SESSION['order_list_filters']['nid']))) {
-    $query->condition('po.nid', trim($_SESSION['order_list_filters']['nid']), '=');
-  }
-
-  if (isset($_SESSION['order_list_filters']['order_type'])
-    && in_array($_SESSION['order_list_filters']['order_type'], array_keys($order_types))
-  ) {
-    $query->condition('po.product_type', $_SESSION['order_list_filters']['order_type'], '=');
-  }
-
-  if (isset($_SESSION['order_list_filters']['order_status'])
-    && in_array($_SESSION['order_list_filters']['order_status'] - 1, array_keys($status_name))
-  ) {
-    $query->condition('po.status', $_SESSION['order_list_filters']['order_status'] - 1);
-  }
-
-  if (isset($_SESSION['order_list_filters']['start']) && !empty(trim($_SESSION['order_list_filters']['start']))) {
-    $query->condition('po.created', strtotime($_SESSION['order_list_filters']['start']), '>=');
-  }
-
-  if (isset($_SESSION['order_list_filters']['end']) && !empty(trim($_SESSION['order_list_filters']['end']))) {
-    $query->condition('po.created', strtotime($_SESSION['order_list_filters']['end']), '<=');
-  }
-
+  $query = _orders_order_list_filter_build_query($_SESSION['order_list_filters']);
+  $query->extend('PagerDefault')->limit(100)
+    ->extend('TableSort')->orderByHeader($header);
   $result = $query->execute()->fetchAll();
   $rows = [];
   foreach ($result as $key => $value) {
@@ -161,7 +130,7 @@ function orders_admin_list($form, &$form_state) {
     $rows[$key]['order_type'] = $order_types[$value->type];
     $rows[$key]['coupon_id'] = l($value->couponid, "node/$value->couponid");
     $rows[$key]['created'] = format_date($value->created);
-    $rows[$key]['delivery_time'] = format_date($value->delivery_time);
+    $rows[$key]['delivery_time'] = $value->delivery_time ? format_date($value->delivery_time) : '';
   }
 
   $form = orders_admin_order_list_filter_form($form, $form_state);
@@ -185,7 +154,13 @@ function orders_admin_list_submit($form, &$form_state) {
   $_SESSION['order_list_filters'] = $form_state['values'];
 }
 
-
+/**
+ * The order detail and edit page.
+ * @param $form
+ * @param $form_state
+ * @param $oid
+ * @return mixed
+ */
 function orders_admin_juna_orders_detail_edit_form($form, &$form_state, $oid) {
   $query = db_select('product_order', 'po')
     ->condition('po.sorderid', $oid, '=')
@@ -274,6 +249,11 @@ function orders_admin_juna_orders_detail_edit_form($form, &$form_state, $oid) {
   return $form;
 }
 
+/**
+ * Implementation of the order edit form submit callback.
+ * @param $form
+ * @param $form_state
+ */
 function orders_admin_juna_orders_detail_edit_form_submit($form, &$form_state) {
   $fields = array(
     'status' => $form_state['values']['order_status'],
@@ -296,4 +276,104 @@ function orders_admin_juna_orders_detail_edit_form_submit($form, &$form_state) {
     array(),
     302,
   );
+}
+
+/**
+ * Build a filter query depends on filter form values.
+ * @param $values
+ * @return $this|\SelectQueryInterface
+ */
+function _orders_order_list_filter_build_query($values) {
+  $status_name = array('待付款', '已付款', '待发货', '待收货', '已评价', '交易完成', '待评价', '已取消');
+  $order_types = array('share_product' => '申领', 'product' => '购买', 'swingshare' => '摇享');
+  $query = db_select('product_order', 'po')
+    ->fields('po', array('sorderid', 'nid', 'uid', 'created', 'status', 'delivery_time', 'arrival_time'));
+
+  $query->join('node', ' n', 'po.nid = n.nid');
+  $query->condition('n.status', NODE_PUBLISHED, '=');
+  $query->fields('n', array('title', 'type'));
+
+  $query->join('users', 'u', 'po.uid=u.uid');
+  $query->addField('u', 'name');
+
+  if (!empty($values['mobile'])) {
+    $query->condition('u.name', trim($values['mobile']), '=');
+  }
+
+  if (!empty($values['nid'])) {
+    $query->condition('po.nid', trim($values['nid']), '=');
+  }
+
+  if (isset($values['order_type']) && in_array($values['order_type'], array_keys($order_types))) {
+    $query->condition('po.product_type', $values['order_type'], '=');
+  }
+
+  if (isset($values['order_status']) && in_array($values['order_status'] - 1, array_keys($status_name))) {
+    $query->condition('po.status', $values['order_status'] - 1);
+  }
+
+  if (isset($values['start']) && !empty(trim($values['start']))) {
+    $query->condition('po.created', strtotime($values['start']), '>=');
+  }
+
+  if (isset($values['end']) && !empty(trim($values['end']))) {
+    $query->condition('po.created', strtotime($values['end']), '<=');
+  }
+
+  $query->leftJoin('field_data_field_username', 'fdfu', 'po.uid = fdfu.entity_id');
+  $query->addField('fdfu', 'field_username_value');
+
+  $query->leftJoin('field_data_field_company_name', 'fdfcn', 'po.uid = fdfcn.entity_id');
+  $query->addField('fdfcn', 'field_company_name_value');
+
+  $query->leftJoin('field_data_field_company_address', 'fdfca', 'po.uid = fdfca.entity_id');
+  $query->addField('fdfca', 'field_company_address_value');
+
+  $query->leftJoin('coupon_usage', 'cu', 'cu.sorderid=po.sorderid');
+  $query->addField('cu', 'couponid');
+
+  return $query;
+}
+
+/**
+ * Implementation of order list export callback.
+ * @param $form
+ * @param $form_state
+ */
+function orders_order_list_export($form, &$form_state) {
+  $query = _orders_order_list_filter_build_query($form_state['values']);
+  $result = $query->execute()->fetchAllAssoc('sorderid');
+  _orders_export_to_cvs('订单记录', $result);
+}
+
+function _orders_export_to_cvs($filename, $data = array()) {
+  $fp = fopen('php://output', 'w');
+  fputs($fp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+  $header = array('手机', '名字', '公司名字', '公司地址', '商品名称');
+  // 将数据通过fputcsv写到文件句柄
+  fputcsv($fp, $header);
+  $cnt = 0;
+  $limit = 8000;
+  header('Content-Type: application/vnd.ms-excel; charset=UTF-8');
+  header('Content-Disposition: attachment;filename="' . urlencode($filename) . '.csv');
+  header('Cache-Control: max-age=0');
+  header("Content-Transfer-Encoding: binary");
+  // 打开PHP文件句柄，php://output 表示直接输出到浏览器
+  foreach ($data as $key => $value) {
+    if ($limit == $cnt) { // 刷新一下输出buffer，防止由于数据过多造成问题
+      ob_flush();
+      flush();
+      $cnt = 0;
+    }
+    $content = array(
+      $value->name,
+      $value->field_username_value,
+      $value->field_company_name_value,
+      $value->field_company_address_value,
+      $value->title
+    );
+    fputcsv($fp, $content);
+  }
+  fclose($fp);
+  exit;
 }
