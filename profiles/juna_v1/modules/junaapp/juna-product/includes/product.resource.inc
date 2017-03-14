@@ -328,7 +328,7 @@ function product_yaoxiang_product_enrollment() {
   $record = new stdClass();
   $record->uid = $user->uid;
   $record->nid = $node->nid;
-  $record->swingnum = 'NO.' . count($enrollments) + 1;
+  $record->swingnum = 'NO.' . (count($enrollments) + 1);
   $record->created = REQUEST_TIME;
   $record->pdate = format_date(REQUEST_TIME, 'custom', 'Y-m-d');
   $record->title = $node->type;
