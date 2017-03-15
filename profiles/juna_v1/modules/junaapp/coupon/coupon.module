@@ -119,9 +119,9 @@ function coupon_swingsharelists($page) {
       $page = 1;
     }
   }
-  $limit = 10;
+  $limit = 100;
   $offset = ($page - 1) * $limit;
-  $query = db_query_range("SELECT  status,pdate,nid,swingnum  FROM {user_wingshare_log} WHERE uid=:uid ", $offset, $limit, [':uid' => $user->uid]);//获取符合条件的所有产品的nid
+  $query = db_query_range("SELECT  status,pdate,nid,swingnum  FROM {user_wingshare_log} WHERE uid=:uid ORDER BY ID DESC", $offset, $limit, [':uid' => $user->uid]);//获取符合条件的所有产品的nid
   $results = $query->fetchAll();
   $pdate = date('Y-n-j');
   foreach ($results as $k => $v) {
