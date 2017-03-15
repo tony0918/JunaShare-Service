@@ -5,10 +5,17 @@
  * @param null $status
  * @return array|mixed
  */
-function orders_lists($status = NULL) {
+function orders_lists($status = NULL, $page = 1) {
   global $user;
   if (!$user->uid) {
     return services_error(t('用户未登录'), 406);
+  }
+
+  if ($page > 0) {
+    $page--;
+  }
+  else {
+    $page = 0;
   }
 
   orders_expire_unpaid_order_by_uid($user->uid);
@@ -16,8 +23,7 @@ function orders_lists($status = NULL) {
   $query = db_select('product_order', 'po')
     ->condition('po.uid', $user->uid, '=')
     ->fields('po')->orderBy('po.created', 'DESC')
-    ->extend('PagerDefault')
-    ->limit(SINGLE_PAGE_LIMIT);
+    ->range($page * SINGLE_PAGE_LIMIT, SINGLE_PAGE_LIMIT);
   if (!is_null($status)) {
     // 如果传递status，过滤不同状态的订单
     $query->condition('po.status', $status, '=');
