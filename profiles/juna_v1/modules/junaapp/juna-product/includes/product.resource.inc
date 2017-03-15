@@ -159,7 +159,7 @@ function product_make_a_purchase($nid) {
   // 得到所有订单
   $orders = _product_get_orders($nid);
   $num_of_orders = count($orders);
-  if ($num_of_orders > 0 && in_array($user->uid, array_keys($orders))) {
+  if ($num_of_orders > 0 && in_array($user->uid, array_keys($orders)) && !_users_is_developer($user->uid)) {
     // 该用户已经购买过该商品
     return services_error(t('对不起，您已购买过该商品'), 406);
   }
@@ -170,7 +170,7 @@ function product_make_a_purchase($nid) {
     return services_error(t('商品已售罄.'), 406);
   }
 
-  if (_check_user_purchased_today($user->uid)) {
+  if (!_users_is_developer($user->uid) && _check_user_purchased_today($user->uid)) {
     return services_error(t('对不起，您今天已购买过其他商品.'), 406);
   }
 
@@ -258,7 +258,7 @@ function product_share_product_apply($nid) {
   $orders = _product_get_orders($nid);
   $num_of_orders = count($orders);
   if ($num_of_orders > 0 && in_array($user->uid, array_keys($orders))) {
-    // 该用户已经购买过该商品
+    // 该用户已经申领过该商品
     return services_error(t('对不起，您已申领过该商品'), 406);
   }
 
@@ -283,6 +283,90 @@ function product_share_product_apply($nid) {
     ->condition('nid', $nid)
     ->execute();
   return ['message' => '申请成功', 'nid' => $nid, 'data' => $order];
+}
+
+/**
+ * Enroll a yaoxiang product.
+ * @return array|mixed
+ */
+function product_yaoxiang_product_enrollment() {
+  global $user;
+  if (!$user->uid) {
+    return services_error(t('用户未登录'), 403);
+  }
+
+  $u = user_load($user->uid);
+  if (empty($u->field_certed) || (empty($u->field_certed['und'][0]['value']))) {
+    return services_error(t('请先完成认证'), 406);
+  }
+  elseif ($u->field_certed['und'][0]['value'] == 2) {
+    return services_error(t('认证资料审核中'), 406);
+  }
+
+  $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
+  if (8 <= $hour && $hour < 22 && !_users_is_developer($user->uid)) {
+    return services_error(t('摇享已结束.'), 406);
+  }
+
+  $coupon = _coupon_check_coupon_available_by_uid($user->uid, REQUEST_TIME);
+  if (!$coupon) {
+    return services_error(t('领取失败，您没有白领券'), 406);
+  }
+
+
+  $node = _product_get_current_yaoxiang();
+  if (empty($node)) {
+    return services_error(t('暂无摇享商品'), 406);
+  }
+  $node = array_pop($node);
+
+  $enrollments = _get_all_yaoxiang_enrollment_by_nid($node->nid);
+  if (in_array($user->uid, array_keys($enrollments))) {
+    return services_error(t('您今天已参加摇享'), 406);
+  }
+
+  $record = new stdClass();
+  $record->uid = $user->uid;
+  $record->nid = $node->nid;
+  $record->swingnum = 'NO.' . (count($enrollments) + 1);
+  $record->created = REQUEST_TIME;
+  $record->pdate = format_date(REQUEST_TIME, 'custom', 'Y-m-d');
+  $record->title = $node->type;
+  $record->status = 0;
+  $record->couponid = $coupon->nid;
+  drupal_write_record('user_wingshare_log', $record);
+
+  coupon_freeze_a_coupon($coupon->nid);
+
+  return ['data' => $record];
+}
+
+/**
+ * Helper function to get current available yaoxiang product.
+ * @return mixed
+ */
+function _product_get_current_yaoxiang() {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->entityCondition('bundle', array(YAOXIANG_PRODUCT_CONTENT_TYPE, NEW_YAOXIANG_PRODUCT_CONTENT_TYPE))
+    ->fieldCondition('field_product_valid_period', 'value', REQUEST_TIME, '<=')
+    ->fieldCondition('field_product_valid_period', 'value2', REQUEST_TIME, '>=')
+    ->range(0, 1);
+  $result = $query->execute();
+  return $result['node'];
+}
+
+/**
+ * Helper function to get all of enrollment by product nid.
+ * @param $nid
+ * @return mixed
+ */
+function _get_all_yaoxiang_enrollment_by_nid($nid) {
+  $query = db_select('user_wingshare_log', 'uwl');
+  $query->condition('uwl.nid', $nid, '=')
+    ->fields('uwl');
+  return $query->execute()->fetchAllAssoc('uid');
 }
 
 /**

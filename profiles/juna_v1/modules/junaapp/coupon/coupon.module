@@ -1,5 +1,6 @@
 <?php
 define('COUPON_STATUS_DELIVERED', 1);
+define('COUPON_STATUS_FROZEN', 2);
 define('COUPON_STATUS_USED', 3);
 
 
@@ -893,6 +894,20 @@ function coupon_consume_a_coupon($cid, $nid, $uid, $order_id, $product_type) {
   $rec->type = $product_type;
   $rec->sorderid = $order_id;
   return drupal_write_record('coupon_usage', $rec);
+}
+
+/**
+ * Freeze a coupon
+ * @param $cid
+ */
+function coupon_freeze_a_coupon($cid) {
+  db_update('field_data_field_status')
+    ->fields(array(
+      'field_status_value' => COUPON_STATUS_FROZEN
+    ))
+    ->condition('entity_id', $cid, '=')
+    ->execute();
+  cache_clear_all($cid, 'cache_entity_node');
 }
 
 /**

@@ -1,6 +1,8 @@
 <?php
 define('YIGOU_PRODUCT_CONTENT_TYPE', 'product');
 define('SHARE_PRODUCT_CONTENT_TYPE', 'share_product');
+define('YAOXIANG_PRODUCT_CONTENT_TYPE', 'swingshare');
+define('NEW_YAOXIANG_PRODUCT_CONTENT_TYPE', 'yaoxiang_product');
 
 function product_services_resources() {
   return array(
@@ -223,8 +225,10 @@ function product_services_resources() {
         ),
         'swingshare' => array(
           'help' => t('参与摇享'),
-          'callback' => 'product_swingshare_accept',
+          'description' => 'Enroll a Yaoxiang',
+          'callback' => 'product_yaoxiang_product_enrollment',
           'access arguments' => array('access content'),
+          'file' => array('type' => 'inc', 'module' => 'product', 'name' => 'includes/product.resource'),
         ),
       ),
     ),
@@ -434,95 +438,6 @@ function product_swingsahredetail() {
   return ['data' => $node, 'remaintime' => $remaintime];
 }
 
-/**
- *参与摇享
- */
-function product_swingshare_accept() {
-  $starts = microtime_float();
-  global $user;
-  if (!$user->uid) {
-    return services_error(t('用户未登录'), 403);
-  }
-  $u = user_load($user->uid);
-  /*if(empty($u -> field_certed) || (empty($u -> field_certed['und'][0]['value']))){
-      return services_error(t('请先进行用户认证'),406);
-  }*/
-  $now = REQUEST_TIME;
-  $hour = date('G', $now);
-  if ($hour < 8 || $hour > 22) {
-    return services_error(t('只能在8-22点参与摇享'), 406);
-  }
-  //判断用户是否有可用白领券
-  $query = new EntityFieldQuery();
-  $result = $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'coupon')
-    ->fieldCondition('field_status', 'value', 1, '=')
-    ->fieldCondition('field_uid', 'uid', $user->uid, '=')
-    ->propertyCondition('status', NODE_PUBLISHED)
-    ->fieldCondition('field_starttime', 'value', date('Y-m-d', $now), '<=')
-    ->fieldCondition('field_endtime', 'value', date('Y-m-d'), '>=')
-    ->fieldOrderBy('field_endtime', 'value', 'DESC')
-    ->execute();
-  $couponids = [];
-  //print_r($result);exit;
-  if (empty($result)) {
-    return services_error(t('您暂无白领券不能参加摇享'), 406);
-  }
-  else {
-    $couponids = array_keys($result['node']);
-  }
-  //print_r(node_load_multiple($couponids));exit;
-  //exit;
-  $date = date('Y-n-j');
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node');
-  $query->propertyCondition('status', NODE_PUBLISHED);
-  $query->entityCondition('bundle', array('swingshare'));
-  $query->fieldCondition('field_starttime', 'value', date('Y-m-d H:i:s'), '<=');
-  $query->fieldCondition('field_endtime', 'value', date('Y-m-d H:i:s'), '>=');
-  $results = $query->execute();
-  $nids = [];
-  if (!empty($results)) {
-    $nids = array_keys($results['node']);
-  }
-  if (empty($nids)) {
-    return services_error(t('暂无摇享商品'), 406);
-  }
-  $data = node_load($nids[0]);
-  $isexist = db_query('SELECT * FROM {user_wingshare_log} WHERE uid=:uid and nid=:nid and pdate=:pdate', array(
-    ':uid' => $user->uid,
-    ':nid' => $nids[0],
-    ':pdate' => $date
-  ))->fetchAll();
-  if (!empty($isexist)) {
-    return services_error(t('您今天已参加'), 406);
-  }
-  $r = db_query('SELECT count(id) as maxid FROM {user_wingshare_log} WHERE pdate=:pdate', array(':pdate' => $date))->fetch();
-  if ($r->maxid) {
-    $rid = $r->maxid + 1;
-  }
-  else {
-    $rid = 1;
-  }
-  $record = new stdClass();
-  $record->uid = $user->uid;
-  $record->nid = $nids[0];
-  $record->swingnum = 'NO.' . $rid;
-  $record->created = REQUEST_TIME;
-  $record->pdate = $date;
-  $record->title = $data->title;
-  $record->status = 0;
-  $record->couponid = $couponids[0];
-  drupal_write_record('user_wingshare_log', $record);
-  $coupons = node_load($couponids[0]);
-  $coupons->field_status['und'][0]['value'] = 2;
-  node_save($coupons);
-
-  $ends = microtime_float();
-  calcrequesttime($starts, $ends, "参与摇享，人员{$user->uid}");
-  return ['data' => $record];
-}
-
 function product_theme() {
   return array(
     'help_info' => array(
@@ -674,7 +589,7 @@ function product_buy($nid) {
     if (strtotime($node->field_endtime['und'][0]['value']) <= REQUEST_TIME) {
       $ends = microtime_float();
       calcrequesttime($starts, $ends, $node->type . "商品购买");
-      watchdog('debug',print_r($node,true));
+      watchdog('debug', print_r($node, TRUE));
       return services_error(t('商品限时结束.'), 406);
     }
   }
