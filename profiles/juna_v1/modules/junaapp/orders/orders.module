@@ -858,7 +858,7 @@ function _alipay_refund($order) {
 
   $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
   $resultCode = $result->$responseNode->code;
-  var_export($result);
+  //var_export($result);
   if (!empty($resultCode) && $resultCode == 10000) {
     echo "成功";
   }
