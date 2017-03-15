@@ -98,6 +98,7 @@ function product_schema() {
     ),
     'indexes' => array(
       'idx_couponid' => array('couponid'),
+      'idx_uid' => array('uid'),
     ),
   );
 
@@ -145,7 +146,15 @@ function product_update_7004() {
   }
 }
 
-
+/**
+ * Adding index idx_uid to user_wingshare_log.
+ */
+function product_update_7005() {
+  $table = 'user_wingshare_log';
+  if (db_table_exists($table)) {
+    db_add_index($table, 'idx_uid', array('uid'));
+  }
+}
 
 
 

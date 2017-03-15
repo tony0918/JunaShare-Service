@@ -88,6 +88,11 @@ function orders_order_resource_retrieve($oid) {
   $query->leftJoin('file_managed', 'fm', 'f4.field_product_image_on_order_fid = fm.fid');
   $query->addField('fm', 'uri');
 
+  $query->leftJoin('field_data_field_product_main_kv', 'f7', 'f7.entity_id = f3.field_related_sku_product_nid');
+  $query->condition('f7.delta', 0);
+  $query->leftJoin('file_managed', 'fm2', 'f7.field_product_main_kv_fid = fm2.fid');
+  $query->addField('fm2', 'uri', 'main_kv');
+
   $data = $query->execute()->fetchAssoc();
   if ('product' != $data['type']) {
     $data['price'] = 0;
@@ -101,6 +106,7 @@ function orders_order_resource_retrieve($oid) {
   );
   $data['type'] = $product_types[$data['type']];
   $data['uri'] = file_create_url($data['uri']);
+  $data['main_kv'] = file_create_url($data['main_kv']);
   $data['created'] = format_date($data['created'], 'custom', 'Y-m-d H:i:s');
   $data['mobile'] = orders_mask_user_mobile($data['mobile']);
   $data['express_fee'] = 0;

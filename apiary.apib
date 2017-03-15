@@ -267,6 +267,19 @@ HOST: http://api-prod.junashare.com/
             + couponid: 40
             + id: 52
 
+## My Yaoxiang List [/juna/myswingshare.json{?page}]
+
+### Get My Yaoxiang List [GET]
++ Response 200 (application/json)
+    + Attributes (object)
+        + data (array[object])
+            + status
+            + pdate
+            + nid
+            + swingnum
+            + pictures
+            + remaintime
+
 # Group Box
 
 ## My Box List [/juna/mybox.json]
@@ -347,6 +360,7 @@ HOST: http://api-prod.junashare.com/
         + market_price: `10` - 价值，市场价值
         + price: `0` - 实际价格
         + uri: `http://api-dev.junashare.com/sites/default/files/product_image_on_order/%E8%AE%A2%E5%8D%95%402x.png` - 商品图片
+        + main_kv - 订单评价页面上的大图，选取商品大图的第一张
         + express_fee: `0` - 快递费
 
 ## Order Status [/juna/order/update.json]

@@ -10,22 +10,25 @@ function coupon_services_resources() {
       'operations' => array(
         'index' => array(
           'help' => t('我的摇享'),
-          'callback' => 'coupon_swingsharelists',
+          'callback' => 'coupon_my_yaoxiang_list',
           'access arguments' => array('access content'),
+          'file' => array(
+            'type' => 'inc',
+            'module' => 'coupon',
+            'name' => 'includes/coupon.resource'
+          ),
           'args' => array(
             array(
               'name' => 'page',
               'optional' => TRUE,
-              'source' => array('param' => 'page'),
-              'description' => t('页码'),
               'type' => 'int',
+              'description' => 'The zero-based index of the page to get, defaults to 0.',
+              'default value' => 1,
+              'source' => array('param' => 'page'),
             ),
-
-          ),
+          )
         ),
-
       )
-
     ),
     'mycoupon' => array(
       'operations' => array(
@@ -99,67 +102,6 @@ function coupon_prizelist($yaoxiang_nid) {
     }
   }
   return theme('lucky_draw_result', $info);
-}
-
-/**
- *我的摇享
- */
-function coupon_swingsharelists($page) {
-  $starts = microtime_float();
-  global $user;
-  if (!$user->uid) {
-    return services_error(t('用户未登陆'), 403);
-  }
-  if (!isset($page)) {
-    $page = 1;
-  }
-  else {
-    $page = intval($page);
-    if ($page <= 1) {
-      $page = 1;
-    }
-  }
-  $limit = 100;
-  $offset = ($page - 1) * $limit;
-  $query = db_query_range("SELECT  status,pdate,nid,swingnum  FROM {user_wingshare_log} WHERE uid=:uid ORDER BY ID DESC", $offset, $limit, [':uid' => $user->uid]);//获取符合条件的所有产品的nid
-  $results = $query->fetchAll();
-  $pdate = date('Y-n-j');
-  foreach ($results as $k => $v) {
-    $hour = date('G');
-    $remaintime = 0;
-    //print_r($v);
-    if ($hour >= 8 && $hour < 22 && $v->pdate == $pdate) {
-      //echo "aa";
-      $results[$k]->status = 2;
-      $remaintime = strtotime('22:00:00') - REQUEST_TIME;
-    }
-    $node = node_load($v->nid);
-    if (!empty($node->field_pictures['und'])) {
-      foreach ($node->field_pictures['und'] as $kk => $vv) {
-        $results[$k]->pictures = file_create_url($vv['uri']);
-        //print_r($box[$k]);
-        /*if (!file_exists(drupal_realpath(image_style_path('345_140', $vv['uri'])))) {
-          //image_style_create_derivative("140_140", $vv['uri'], $vv['uri']);
-          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-          //$data[$k] ->field_pictures['und'][$kk]['thumb'] = image_style_url('140_140',$vv['uri']);
-          @file_get_contents(image_style_url('345_140', $vv['uri']));
-        } else {
-
-        }
-        $boxdata[$k]->field_pictures['und'][$kk]['thumb'] = file_create_url(image_style_path('345_140', $vv['uri']));*/
-      }
-
-    }
-    else {
-      $results[$k]->pictures = '';
-    }
-    $results[$k]->remaintime = $remaintime;
-
-  }
-  $ends = microtime_float();
-  calcrequesttime($starts, $ends, "我的摇享for用户{$user->uid}");
-  return ['data' => $results];
-
 }
 
 function coupon_mylists($type, $page) {
