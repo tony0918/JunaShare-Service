@@ -97,7 +97,7 @@ class Yaoxiang__1_0 extends ResourceNode {
   public function additionalHateoas($data) {
     $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
     $remaining = 0;
-    if ($hour > 8 && $hour < 22) {
+    if ($hour >= 8 && $hour < 22) {
       $remaining = strtotime('today 22:00:00') - REQUEST_TIME;
     }
     return ['remaining' => $remaining];
