@@ -113,7 +113,7 @@ function orders_order_resource_retrieve($oid) {
   $data['type'] = $product_types[$data['type']];
   $data['uri'] = file_create_url($data['uri']);
   $data['main_kv'] = file_create_url($data['main_kv']);
-  $data['created'] = format_date($data['created'], 'custom', 'Y-m-d H:i:s');
+  $data['created'] = format_date($data['created'], 'custom', 'Y-m-d');
   $data['mobile'] = orders_mask_user_mobile($data['mobile']);
   $data['express_fee'] = 0;
 

@@ -196,13 +196,6 @@ function product_share_product_apply($nid) {
     return services_error(t('用户未登录.'), 403);
   }
 
-  $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
-  if (8 > $hour && $hour >= 0) {
-    watchdog('juna_service::product_share_product_apply', '商品限时结束::@sanity_check',
-      array('@sanity_check' => $hour), WATCHDOG_DEBUG);
-    return services_error(t('商品限时结束.'), 406);
-  }
-
   $u = user_load($user->uid);
   if (empty($u->field_certed) || (empty($u->field_certed['und'][0]['value']))) {
     return services_error(t('请先完成认证'), 406);
@@ -218,6 +211,11 @@ function product_share_product_apply($nid) {
     ->fields('pb', array('id'))
     ->execute()
     ->fetchAssoc('nid');
+
+  $coupon = _coupon_check_coupon_available_by_uid($user->uid, REQUEST_TIME);
+  if (!$coupon) {
+    return services_error(t('领取失败，您没有白领券'), 406);
+  }
 
   $node = NULL;
   if ($in_box) {
@@ -235,6 +233,13 @@ function product_share_product_apply($nid) {
   }
   else {
     // 不在盒子中
+    $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
+    if (8 > $hour && $hour >= 0) {
+      watchdog('juna_service::product_share_product_apply', '商品限时结束::@sanity_check',
+        array('@sanity_check' => $hour), WATCHDOG_DEBUG);
+      return services_error(t('商品限时结束.'), 406);
+    }
+
     $query = db_select('node', 'n');
     $query->condition('n.nid', $nid, '=')
       ->condition('n.status', NODE_PUBLISHED, '=')
@@ -268,12 +273,6 @@ function product_share_product_apply($nid) {
     return services_error(t('商品已领完.'), 406);
   }
 
-  $coupon = _coupon_check_coupon_available_by_uid($user->uid, REQUEST_TIME);
-
-  if (!$coupon) {
-    return services_error(t('领取失败，您没有白领券'), 406);
-  }
-
   $order = _order_create_a_order($user->uid, $nid, SHARE_PRODUCT_CONTENT_TYPE, 0);
   coupon_consume_a_coupon($coupon->nid, $nid, $user->uid, $order->sorderid, SHARE_PRODUCT_CONTENT_TYPE);
 
@@ -304,7 +303,7 @@ function product_yaoxiang_product_enrollment() {
   }
 
   $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
-  if (8 <= $hour && $hour < 22 && !_users_is_developer($user->uid)) {
+  if (8 > $hour && $hour >= 22 && !_users_is_developer($user->uid)) {
     return services_error(t('摇享已结束.'), 406);
   }
 

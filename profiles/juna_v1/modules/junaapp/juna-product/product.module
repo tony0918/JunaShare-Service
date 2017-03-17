@@ -235,24 +235,47 @@ function product_services_resources() {
   );
 }
 
+/**
+ * Implementation of hook_menu()
+ * @return array
+ */
 function product_menu() {
   $items = array();
-  $items['admin/applylist'] = array(
-    'title' => '申领列表',
-    'access arguments' => array('administer apply list'),
+  $items['admin/juna/product'] = array(
+    'title' => 'Product Portal',
+    'description' => 'Manage product.',
+    'access arguments' => array('access product portal'),
     'type' => MENU_NORMAL_ITEM,
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('product_applylist'),
+    'page callback' => 'product_admin_juna_product_index',
+    'file' => 'includes/product.pages.inc',
   );
-  $items['tonytest/%'] = array(
-    'title' => '申领列表',
-    'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,
-    'page callback' => 'product_tobox',
-    'page arguments' => array(1),
-    'file' => 'includes/product.resource.inc',
+  $items['admin/juna/product/index'] = array(
+    'title' => 'Product Portal',
+    'description' => 'Manage product.',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/juna/product/list'] = array(
+    'title' => 'Product List',
+    'access arguments' => array('access product list'),
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'product_admin_juna_product_list',
+    'file' => 'includes/product.pages.inc',
   );
   return $items;
+}
+
+/**
+ * Implementation of hook_permission()
+ * @return array
+ */
+function product_permission() {
+  $perms = array(
+    'access product portal' => array(
+      'title' => t('Access product protal'),
+    ),
+  );
+
+  return $perms;
 }
 
 /**
@@ -1232,131 +1255,6 @@ $records -> id = $record['id'];
 drupal_write_record('users_mobile_verifycode',$records,'id');
 
 }*/
-
-function product_applylist($form, &$form_state) {
-  $now = REQUEST_TIME;
-  $form['starttime'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('开始时间'),
-
-    '#default_value' => empty($_SESSION['product_applylist_filter']['starttime']) ? '' : $_SESSION['product_applylist_filter']['starttime'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-    '#description' => '日期格式为1990-2-1'
-
-  );
-  $form['endtime'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('结束时间时间'),
-
-    '#default_value' => empty($_SESSION['product_applylist_filter']['endtime']) ? '' : $_SESSION['product_applylist_filter']['endtime'],
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-    '#description' => '日期格式为1990-2-1'
-
-  );
-  $form['uid'] = array(
-
-    '#type' => 'textfield',
-
-    '#title' => t('用户id'),
-
-    '#default_value' => empty($_SESSION['product_applylist_filter']['uid']) ? '' : $_SESSION['product_applylist_filter']['uid'],
-
-
-    '#size' => 60,
-
-    '#maxlength' => 128,
-
-
-  );
-
-  $form['submit'] = array('#type' => 'submit', '#value' => t('搜索'));
-  $form['export'] = array('#type' => 'submit', '#value' => t('导出搜索结果'));
-  $header = array(
-    'id' => array('data' => t('id'), 'field' => 'usl.id', 'sort' => 'desc'),
-    'nid' => array('data' => t('商品id'), 'field' => 'usl.nid'),
-    'uid' => array('data' => t('用户id'), 'field' => 'usl.uid'),
-    'productname' => t('商品名称'),
-    'created' => t('申领时间'),
-    'mobile' => t('手机号'),
-  );
-  $query = db_select('product_order', 'usl')
-    ->extend('PagerDefault')
-    ->extend('TableSort')
-    ->fields('usl', array('id', 'nid', 'uid'))
-    ->orderByHeader($header);
-  $query->leftJoin('node', 'n', 'n.nid=usl.nid');
-  $query->fields('n', array('title'));
-  $query->fields('usl', array('created'));
-  $query->leftJoin('users', 'u', 'usl.uid=u.uid');
-  $query->fields('u', array('name'));
-  $query->condition('usl.product_type', 'share_product');
-  $filters = ['usl.product_type', 'product_share'];
-  if (!empty($_SESSION['product_applylist_filter'])) {
-    $filters = $_SESSION['product_applylist_filter'];
-
-  }
-  $valid = ['starttime', 'endtime', 'uid'];
-  foreach ($filters as $k => $v) {
-    if (in_array($k, $valid)) {
-      if ($k == 'starttime') {
-        $query->condition('usl.created', strtotime($v), '>=');
-      }
-      elseif ($k == 'endtime') {
-        $query->condition('usl.created', strtotime(date('Y-m-d 23:59:59', strtotime($v))), '<=');
-      }
-      else {
-        $query->condition('usl.' . $k, $v);
-      }
-    }
-
-  }
-  $result = $query->execute();
-  $rows = [];
-  $destination = drupal_get_destination();
-  while ($record = $result->fetchAssoc()) {
-    $record['nid'] = array(
-      'data' => array(
-        '#type' => 'link',
-        '#title' => $record['nid'],
-        '#href' => '/node/' . $record['nid'],
-        '#options' => array('query' => $destination),
-        //'#query' => $,
-      )
-    );
-    $record['uid'] = array(
-      'data' => array(
-        '#type' => 'link',
-        '#title' => $record['uid'],
-        '#href' => '/user/' . $record['uid'],
-        '#options' => array('query' => $destination),
-        //'#query' => $,
-      )
-    );
-    $record['created'] = date('Y-m-d H:i:s', $record['created']);
-    $rows[] = $record;
-  }
-  //print_r($rows);exit;
-  $form['nodes'] = array(
-    '#theme' => 'table',
-    '#header' => $header,
-    '#rows' => $rows,
-    '#empty' => t('暂无申请记录'),
-  );
-  $form['pager'] = array('#markup' => theme('pager'));
-  return $form;
-}
 
 function _exportData() {
   $query = db_select('product_order', 'usl');

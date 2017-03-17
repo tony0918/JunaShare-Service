@@ -61,6 +61,9 @@ projects[themekey][type] = module
 projects[privatemsg][version] = 1.4
 projects[privatemsg][type] = module
 
+projects[node_clone][version] = 1.0
+projects[node_clone][type] = module
+
 ;projects[field_collection][version] = 1.0-beta12
 ;projects[field_collection][type] = module
 
@@ -119,10 +122,6 @@ projects[privatemsg][type] = module
 ;projects[ultimate_cron][type] = module
 
 ;projects[url][patch][] = "https://drupal.org/files/0001-entity_metadata_wrapper.patch"
-
-;projects[views][version] = 3.11
-;projects[views][type] = module
-
 
 ; Development Modules
 projects[devel][version] = 1.5

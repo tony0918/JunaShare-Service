@@ -345,12 +345,12 @@ HOST: http://api-prod.junashare.com/
 
 + Response 200 (application/json)
     + Attributes (object)
-        + id: `309` - 订单的内部id号，对订单操作的必要的id号
+        + id: `309` - 订单的内部id号
         + created: `2017-02-15 12:17:38` - 下单时间
         + total_price: `0` - 实付款（含运费）
         + express_provider: `天天快递` - 快递公司
         + express_id: `580346274219` - 快递单号
-        + sorderid: `2017021512173913401600` - 显示的订单号
+        + sorderid: `2017021512173913401600` - 订单号
         + status: `0` - 订单的各种状态，与订单列表中的状态相对应，0为待付款，2为待发货，3为待收货，6为待评价
         + title: `皇冠 丹麦曲奇原味 90g` - 商品名字
         + type: `白领商品` - 订单类型
@@ -372,7 +372,7 @@ HOST: http://api-prod.junashare.com/
         {
             "status": "comment", // 可选参数有sign-off(签收)和comment(评论)
             "sorderid":"2017020423053234465275",
-            "comment": "This is comment" // 传递sign-off是可以不传递这个参数
+            "comment": "This is comment" // 传递sign-off时可以不传递这个参数
         }
 
 + Response 200 (application/json)
