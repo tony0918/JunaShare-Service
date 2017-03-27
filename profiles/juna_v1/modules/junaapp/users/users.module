@@ -1748,7 +1748,7 @@ function users_cron() {
 }
 
 function _users_is_developer($uid) {
-  return in_array($uid, array(138, 128));
+  return in_array($uid, array(138, 128, 139));
 }
 
 

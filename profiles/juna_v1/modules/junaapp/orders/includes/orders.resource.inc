@@ -47,6 +47,12 @@ function orders_lists($status = NULL, $page = 1) {
   );
   foreach ($data as $k => $v) {
     $data[$k]->product_type = $product_types[$v->product_type];
+    if ($v->status == 0) {
+      $data[$k]->remaining_time = ((int) $v->created + 1800) - REQUEST_TIME;
+    }
+    else {
+      $data[$k]->remaining_time = 0;
+    }
     $data[$k]->status = $status_arr[$v->status];
     if ($v->uri) {
       $data[$k]->uri = file_create_url($v->uri);

@@ -843,13 +843,24 @@ function coupon_consume_a_coupon($cid, $nid, $uid, $order_id, $product_type) {
  * @param $cid
  */
 function coupon_freeze_a_coupon($cid) {
-  db_update('field_data_field_status')
-    ->fields(array(
-      'field_status_value' => COUPON_STATUS_FROZEN
-    ))
-    ->condition('entity_id', $cid, '=')
-    ->execute();
-  cache_clear_all($cid, 'cache_entity_node');
+  $transaction = db_transaction();
+  try {
+    db_update('field_data_field_status')
+      ->fields(array(
+        'field_status_value' => COUPON_STATUS_FROZEN
+      ))
+      ->condition('entity_id', $cid, '=')
+      ->execute();
+    db_update('node')->fields(array(
+      'changed' => REQUEST_TIME
+    ))->condition('nid', $cid, '=')
+      ->execute();
+    cache_clear_all($cid, 'cache_entity_node');
+  } catch (Exception $e) {
+    $transaction->rollback();
+    @watchdog('juna_services::coupon_freeze_a_coupon', 'COUPON::FREEZE_ERROR::@cid',
+      array('@cid' => $cid), WATCHDOG_DEBUG);
+  }
 }
 
 /**
@@ -1092,6 +1103,14 @@ function coupon_coupon_list() {
       if (!empty($u)) {
         $query->fieldCondition('field_uid', 'uid', $u->uid, '=');
       }
+    }
+    if (isset($_SESSION['coupon_filters']['start']) && $_SESSION['coupon_filters']['start']) {
+      $query->fieldCondition('field_coupon_valid_period', 'value',
+        strtotime($_SESSION['coupon_filters']['start']), '>=');
+    }
+    if (isset($_SESSION['coupon_filters']['end']) && $_SESSION['coupon_filters']['end']) {
+      $query->fieldCondition('field_coupon_valid_period', 'value2',
+        strtotime($_SESSION['coupon_filters']['end']), '<=');
     }
   }
 

@@ -193,6 +193,7 @@ function product_make_a_purchase($nid) {
 function product_share_product_apply($nid) {
   global $user;
   if (empty($user->uid)) {
+    @watchdog('juna_service::product_share_product_apply', 'ERROR::', array(), WATCHDOG_DEBUG);
     return services_error(t('用户未登录.'), 403);
   }
 
@@ -235,7 +236,7 @@ function product_share_product_apply($nid) {
     // 不在盒子中
     $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
     if (8 > $hour && $hour >= 0) {
-      watchdog('juna_service::product_share_product_apply', '商品限时结束::@sanity_check',
+      watchdog('juna_service::product_share_product_apply', 'ERROR::商品限时结束::@sanity_check',
         array('@sanity_check' => $hour), WATCHDOG_DEBUG);
       return services_error(t('商品限时结束.'), 406);
     }
