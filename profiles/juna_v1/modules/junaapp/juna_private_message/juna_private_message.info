@@ -1,0 +1,7 @@
+name = Juna Coupon
+description = juna私信
+core = 7.x
+package = juna
+project = 7.x
+
+dependencies[] = privatemsg
