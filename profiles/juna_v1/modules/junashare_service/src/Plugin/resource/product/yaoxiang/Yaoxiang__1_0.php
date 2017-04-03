@@ -78,16 +78,16 @@ class Yaoxiang__1_0 extends ResourceNode {
   public function isParticipate($interpreter) {
     $output = array('is_participate' => 0, 'total_participation' => 0);
     $user = $interpreter->getAccount();
-    if ($user->uid && module_exists('product')) {
+    if (module_exists('product')) {
       $query = db_select('user_wingshare_log', 'u')
         ->condition('u.nid', $interpreter->getWrapper()->value()->vid, '=')
         ->fields('u', array('uid', 'nid'))->execute();
       $num = $query->rowCount();
-      if ($num > 0) {
+      $output['total_participation'] = $num;
+      if ($user->uid && $num > 0) {
         $rows = $query->fetchAllAssoc('uid');
         if (in_array($user->uid, array_keys($rows))) {
           $output['is_participate'] = 1;
-          $output['total_participation'] = $num;
         }
       }
     }
