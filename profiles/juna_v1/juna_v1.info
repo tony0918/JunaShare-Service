@@ -26,3 +26,5 @@ dependencies[] = juna_coupon_feature
 dependencies[] = junashare_service
 dependencies[] = orders
 dependencies[] = users
+dependencies[] = juna_private_message
+dependencies[] = clone

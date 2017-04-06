@@ -96,6 +96,13 @@ HOST: http://api-prod.junashare.com/
 + selected: `0` - 是否高亮，0不高亮，1高亮
 + remain: `0` - 剩余时间秒数
 
+## PrivateMessage (object)
++ mid: 1 - 私信的id
++ is_new: 1 - 是否已读，1为未读，0为已读
++ subject: `abcde` - 私信主题
++ body: `foobar` - 私信内容
++ timestamp: `2017-04-06 23:36` - 私信发布的时间
+
 # Group Banner
 
 ## Banner List [/api/v1.0/banner{?fields,filter}]
@@ -406,3 +413,26 @@ HOST: http://api-prod.junashare.com/
         }
 
 + Response 200 (application/json)
+
+# Group Private Message
+
+## My Private Message [/juna/mymessage.json]
+
+### Get My Private Message List [GET]
+
++ Response 200 (application/json)
+    + Attributes (array[PrivateMessage])
+
+## Mark Message as already Read [/juna/mymessage/update.json]
+
+### Set Read State [POST]
+
++ Request (application/json)
+
+        {
+            "mid": 1
+        }
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + data: 1

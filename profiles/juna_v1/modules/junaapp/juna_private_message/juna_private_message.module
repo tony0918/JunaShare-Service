@@ -1,4 +1,8 @@
 <?php
+/**
+ * Implementation of hook_services_resources()
+ * @return array
+ */
 function juna_private_message_services_resources() {
   return array(
     'mymessage' => array(
@@ -11,12 +15,17 @@ function juna_private_message_services_resources() {
             array(
               'name' => 'page',
               'optional' => TRUE,
-              'type' => 'int',
-              'description' => 'The zero-based index of the page to get, defaults to 0.',
-              'default value' => 1,
               'source' => array('param' => 'page'),
+              'description' => t('页码'),
+              'type' => 'int',
+              'default value' => 1,
             ),
-          )
+          ),
+          'file' => array(
+            'type' => 'inc',
+            'module' => 'juna_private_message',
+            'name' => 'includes/juna_private_message.resource'
+          ),
         ),
       ),
       'actions' => array(
@@ -26,52 +35,20 @@ function juna_private_message_services_resources() {
           'access arguments' => array('access content'),
           'args' => array(
             array(
-              'name' => 'tid',
+              'name' => 'mid',
               'optional' => FALSE,
-              'source' => array('data' => 'tid'),
-              'description' => t('私信thred id'),
+              'source' => array('data' => 'mid'),
+              'description' => t('私信thread id'),
               'type' => 'int',
             ),
+          ),
+          'file' => array(
+            'type' => 'inc',
+            'module' => 'juna_private_message',
+            'name' => 'includes/juna_private_message.resource'
           ),
         )
       ),
     ),
   );
-}
-
-function juna_private_message_setread_message($tid){
-  global $user;
-  if(!$user->uid){
-    return services_error(t('用户未登陆'), 403);
-  }
-  $query = db_select('pm_index', 'pt');
-  $query->condition('pt.thread_id', $tid)
-    ->fields('pt', array('mid'));
-  $res = $query -> execute()->fetchAllAssoc('mid');
-  $mid = [];
-  foreach($res as $k =>$v){
-    privatemsg_message_change_status($v->mid,PRIVATEMSG_READ);
-  }
-
-  return ['data'=>1];
-  //var_dump($thread);
-}
-/**
- * Implementation of /luckdraw/result/%nid
- * @param $yaoxiang_nid
- * @return string
- */
-function juna_private_message_my_message($page=1) {
-  global $user;
-  if(!$user->uid){
-    return services_error(t('用户未登陆'), 403);
-  }
-  if ($page > 1) {
-    $page--;
-  }
-  else {
-    $page = 1;
-  }
-  $list = privatemsg_sql_list($user)->execute()->fetchAll();
-  return ['data'=>$list];
 }

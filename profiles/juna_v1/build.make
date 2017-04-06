@@ -61,8 +61,12 @@ projects[themekey][type] = module
 projects[privatemsg][version] = 1.4
 projects[privatemsg][type] = module
 
-projects[node_clone][version] = 1.0
-projects[node_clone][type] = module
+;https://www.drupal.org/project/node_clone
+projects[clone][version] = 1.0
+projects[clone][type] = module
+
+projects[services][version] = 3.19
+projects[services][type] = module
 
 ;projects[field_collection][version] = 1.0-beta12
 ;projects[field_collection][type] = module
@@ -111,9 +115,6 @@ projects[node_clone][type] = module
 
 ;projects[variable][version] = 2.5
 ;projects[variable][type] = module
-
-;projects[view_unpublished][version] = 1.2
-;projects[view_unpublished][type] = module
 
 ;projects[xautoload][version] = 4.5
 ;projects[xautoload][type] = module
