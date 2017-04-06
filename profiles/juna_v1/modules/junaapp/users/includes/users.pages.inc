@@ -26,9 +26,73 @@ function users_user_portal_index() {
   );
 
   $variables['items'] = $items;
+  $form = drupal_get_form('users_juna_export_user_form');
+  return theme_item_list($variables) . drupal_render($form);
 
-  return theme_item_list($variables);
+}
 
+/**
+ * Build export form
+ * @return mixed
+ */
+function users_juna_export_user_form() {
+  $form['export']['export_certed_user_info'] = array(
+    '#type' => 'submit',
+    '#value' => t('Export Certed User Info'),
+    '#submit' => array('export_certed_user_info_submit'),
+  );
+  return $form;
+}
+
+function export_certed_user_info_submit() {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'user')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_certed', 'value', 1, '=');
+  $result = $query->execute();
+
+  $uids = array_keys($result['user']);
+  $rows = entity_load('user', $uids);
+  $arr = array();
+  foreach ($rows as $key => $value) {
+    $arr[$key]['uid'] = $value->uid;
+    $arr[$key]['mobile'] = $value->name;
+    $arr[$key]['full_name'] = empty($value->field_username) ? '' : $value->field_username[LANGUAGE_NONE][0]['safe_value'];
+    $arr[$key]['company'] = empty($value->field_company_name) ? '' : $value->field_company_name[LANGUAGE_NONE][0]['safe_value'];
+    $arr[$key]['address'] = empty($value->field_company_address) ? '' : $value->field_company_address[LANGUAGE_NONE][0]['safe_value'];
+    $arr[$key]['image'] = empty($value->field_cert) ? '' : file_create_url($value->field_cert[LANGUAGE_NONE][0]['uri']);
+  }
+
+  $fp = fopen('php://output', 'w');
+  fputs($fp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+  $header = array('id', '手机', '名字', '公司名字', '公司地址', 'images');
+  // 将数据通过fputcsv写到文件句柄
+  fputcsv($fp, $header);
+  $cnt = 0;
+  $limit = 8000;
+  header('Content-Type: application/vnd.ms-excel; charset=UTF-8');
+  header('Content-Disposition: attachment;filename="' . urlencode('user_info') . '.csv');
+  header('Cache-Control: max-age=0');
+  header("Content-Transfer-Encoding: binary");
+  // 打开PHP文件句柄，php://output 表示直接输出到浏览器
+  foreach ($arr as $key => $value) {
+    if ($limit == $cnt) { // 刷新一下输出buffer，防止由于数据过多造成问题
+      ob_flush();
+      flush();
+      $cnt = 0;
+    }
+    $content = array(
+      $value['uid'],
+      $value['mobile'],
+      $value['full_name'],
+      $value['company'],
+      $value['address'],
+      $value['image']
+    );
+    fputcsv($fp, $content);
+  }
+  fclose($fp);
+  exit;
 }
 
 /**
