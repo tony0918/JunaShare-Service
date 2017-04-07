@@ -1,4 +1,8 @@
 <?php
+define('MESSAGE_TYPE_SERVICE', 1);
+define('MESSAGE_TYPE_NOTIFICATION', 2);
+define('MESSAGE_TYPE_CAMPAIGN', 3);
+
 /**
  * Implementation of hook_services_resources()
  * @return array
