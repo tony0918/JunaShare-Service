@@ -560,7 +560,7 @@ function orders_notify() {
         if ($orderobj->total_price == $_POST['total_amount'] && $_POST['seller_id'] == $alipay_settings['seller_id'] && $_POST['app_id'] == $alipay_settings['app_id']) {
           $order = new stdClass();
           $order->sorderid = $attach->orderid;
-          $order->status = 1;
+          $order->status = ORDER_STATUS_UNDELIVERED;
           $order->alipay_order_id = $trade_no;
           $order->payment_type = 1;
           drupal_write_record('product_order', $order, 'sorderid');
