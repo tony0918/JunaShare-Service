@@ -44,6 +44,7 @@ function juna_private_message_my_message($page) {
     $value->message_type = MESSAGE_TYPE_NOTIFICATION;
     $value->body = check_plain($value->body);
     $value->timestamp = format_date($value->timestamp, 'custom', 'Y-m-d H:i');
+    unset($value->recipient);
   }
   return ['data' => $list];
 }

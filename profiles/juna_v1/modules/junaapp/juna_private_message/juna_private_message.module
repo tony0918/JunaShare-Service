@@ -12,7 +12,7 @@ function juna_private_message_services_resources() {
     'mymessage' => array(
       'operations' => array(
         'index' => array(
-          'help' => t('我的私信'),
+          'help' => t('获取我的私信'),
           'callback' => 'juna_private_message_my_message',
           'access arguments' => array('access content'),
           'args' => array(
