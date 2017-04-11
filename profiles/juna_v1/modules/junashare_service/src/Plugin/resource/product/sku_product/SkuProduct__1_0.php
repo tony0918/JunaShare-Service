@@ -40,7 +40,10 @@ class SkuProduct__1_0 extends ResourceNode {
 //    $public_fields['short_desc'] = array('property' => 'field_product_short_description');
     $public_fields['detail_desc'] = array(
       'property' => 'field_product_description',
-      'sub_property' => 'value'
+      'sub_property' => 'value',
+      'process_callbacks' => array(
+        array($utility, 'skuProductDetailWrapper')
+      )
     );
     $public_fields['main_kv'] = array(
       'property' => 'field_product_main_kv',

@@ -45,4 +45,14 @@ final class JunashareServiceUtilities {
       'styles' => isset($value['image_styles']) ? $value['image_styles'] : new \stdClass()
     );
   }
+
+  /**
+   * Adding additional div to wrap the html content
+   * to fix dynamic height of webview issue in IOS.
+   * @param $value
+   * @return string
+   */
+  public function skuProductDetailWrapper($value) {
+    return theme_sku_product_detail_wrapper($value);
+  }
 }
