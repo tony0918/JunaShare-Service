@@ -28,3 +28,4 @@ dependencies[] = orders
 dependencies[] = users
 dependencies[] = juna_private_message
 dependencies[] = clone
+dependencies[] = juna_private_message_feature
