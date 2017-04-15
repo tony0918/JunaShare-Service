@@ -1565,6 +1565,11 @@ function users_user_cert($username, $companyname, $companyaddress, $cert_type, $
   }
   $ends = microtime_float();
   calcrequesttime($starts, $ends, $user->uid . "用户认证");
+  if (module_exists('privatemsg')) {
+    $title = '身份认证申请';
+    $body = '您提交的认证信息正在审核中，我们会在24小时内处理完毕，请耐心等待。';
+    privatemsg_new_thread(array($userobj), $title, $body, array('author' => user_load(1)));
+  }
   return ['success' => 1, 'data' => $userobj];
 }
 
