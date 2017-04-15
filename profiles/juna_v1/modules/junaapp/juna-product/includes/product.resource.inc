@@ -159,10 +159,10 @@ function product_make_a_purchase($nid) {
   // 得到所有订单
   $orders = _product_get_orders($nid);
   $num_of_orders = count($orders);
-  if ($num_of_orders > 0 && in_array($user->uid, array_keys($orders)) && !_users_is_developer($user->uid)) {
-    // 该用户已经购买过该商品
-    return services_error(t('对不起，您已购买过该商品'), 406);
-  }
+//  if ($num_of_orders > 0 && in_array($user->uid, array_keys($orders)) && !_users_is_developer($user->uid)) {
+//    // 该用户已经购买过该商品
+//    return services_error(t('对不起，您已购买过该商品'), 406);
+//  }
 
   $stock = (int) $node['stock'];
   if ($num_of_orders >= $stock) {
@@ -170,9 +170,9 @@ function product_make_a_purchase($nid) {
     return services_error(t('商品已售罄.'), 406);
   }
 
-  if (!_users_is_developer($user->uid) && _check_user_purchased_today($user->uid)) {
-    return services_error(t('对不起，您今天已购买过其他商品.'), 406);
-  }
+//  if (!_users_is_developer($user->uid) && _check_user_purchased_today($user->uid)) {
+//    return services_error(t('对不起，您今天已购买过其他商品.'), 406);
+//  }
 
   $order = _order_create_a_order($user->uid, $nid, YIGOU_PRODUCT_CONTENT_TYPE, $node['price']);
 
