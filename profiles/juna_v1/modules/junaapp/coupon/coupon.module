@@ -480,9 +480,9 @@ function coupon_swingshare_lottery($id) {
   $nodes->field_status['und'][0]['value'] = 3;
   node_save($nodes);
   if ($count['total'] == ($num - 1)) {
-    $unprized = db_query('SELECT * FROM {user_wingshare_log} WHERE nid=:nid AND id!=:id', array(
+    $unprized = db_query('SELECT * FROM {user_wingshare_log} WHERE nid=:nid AND status=:status', array(
       ':nid' => $query['nid'],
-      ':id' => $id
+      ':status' => 0
     ))->fetchAll();
     foreach ($unprized as $k => $v) {
       $n = node_load($v->couponid);
