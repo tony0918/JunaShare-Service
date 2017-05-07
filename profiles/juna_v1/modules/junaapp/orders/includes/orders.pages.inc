@@ -5,7 +5,8 @@
  * @return null|string
  */
 function orders_admin_juna_orders_index() {
-  return t('Welcome to order management portal.');
+  $form = drupal_get_form('orders_juna_export_comments_form');
+  return drupal_render($form);
 }
 
 /**
@@ -371,6 +372,76 @@ function _orders_export_to_cvs($filename, $data = array()) {
       $value->field_company_name_value,
       $value->field_company_address_value,
       $value->title
+    );
+    fputcsv($fp, $content);
+  }
+  fclose($fp);
+  exit;
+}
+
+
+/**
+ * Build export form
+ * @return mixed
+ */
+function orders_juna_export_comments_form() {
+  $form['export']['export_comments'] = array(
+    '#type' => 'submit',
+    '#value' => t('Export Comments'),
+    '#submit' => array('orders_export_comments_submit'),
+  );
+  return $form;
+}
+
+/**
+ * export form submit callback
+ */
+function orders_export_comments_submit() {
+  $query = db_select('product_order', 'po')
+    ->condition('po.comment', '', '!=')
+    ->fields('po', array('id', 'comment'))
+    ->orderBy('id', 'DESC')
+    ->range(0, 8000);
+
+  $query->join('node', 'n', 'po.nid = n.nid');
+  $query->fields('n', array('title'));
+
+  $query->join('users', 'u', 'po.uid = u.uid');
+  $query->addField('u', 'name', 'mobile');
+
+  $query->join('field_data_field_username', 'f1', 'po.uid = f1.entity_id');
+  $query->addField('f1', 'field_username_value', 'full_name');
+
+  $query->join('field_data_field_company_name', 'f2', 'po.uid = f2.entity_id');
+  $query->addField('f2', 'field_company_name_value', 'company');
+
+  $rows = $query->execute()->fetchAllAssoc('id');
+
+  $fp = fopen('php://output', 'w');
+  fputs($fp, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+  $header = array('Order Id', 'Product', 'Name', 'Company', 'Mobile', 'Comment');
+  // 将数据通过fputcsv写到文件句柄
+  fputcsv($fp, $header);
+  $cnt = 0;
+  $limit = 8000;
+  header('Content-Type: application/vnd.ms-excel; charset=UTF-8');
+  header('Content-Disposition: attachment;filename="' . urlencode('comments') . '.csv');
+  header('Cache-Control: max-age=0');
+  header("Content-Transfer-Encoding: binary");
+  // 打开PHP文件句柄，php://output 表示直接输出到浏览器
+  foreach ($rows as $key => $value) {
+    if ($limit == $cnt) { // 刷新一下输出buffer，防止由于数据过多造成问题
+      ob_flush();
+      flush();
+      $cnt = 0;
+    }
+    $content = array(
+      $value->id,
+      $value->title,
+      $value->full_name,
+      $value->company,
+      $value->mobile,
+      $value->comment
     );
     fputcsv($fp, $content);
   }

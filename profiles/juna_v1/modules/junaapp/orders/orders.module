@@ -937,6 +937,11 @@ function cancelOrder($data) {
   node_save($node);
 }
 
+/**
+ * Expire user unpaid order.
+ * @param $uid
+ * @return mixed
+ */
 function orders_expire_unpaid_order_by_uid($uid) {
   $result = db_update('product_order')
     ->fields(array(
