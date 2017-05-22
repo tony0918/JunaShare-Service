@@ -122,7 +122,7 @@ function users_juna_admin_list($form, &$form_state) {
       2 => t('认证中'),
       3 => t('全部')
     ),
-    '#default_value' => ($_SESSION['users_juna_admin_list_filter']['cert'] >= 0) ? $_SESSION['users_juna_admin_list_filter']['cert'] : 3,
+    '#default_value' => (isset($_SESSION['users_juna_admin_list_filter']['cert']) && $_SESSION['users_juna_admin_list_filter']['cert'] >= 0) ? $_SESSION['users_juna_admin_list_filter']['cert'] : 3,
   );
   $form['filters']['submit'] = array('#type' => 'submit', '#value' => t('Filter'));
 
@@ -144,6 +144,10 @@ function users_juna_admin_list($form, &$form_state) {
     'access' => t('Last Access'),
     'created' => t('Register'),
   );
+
+  if (user_access('user_admin_permissions')) {
+    $header['operation'] = t('Operation');
+  }
 
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'user')
@@ -167,14 +171,18 @@ function users_juna_admin_list($form, &$form_state) {
     $uids = array_keys($result['user']);
     $re = entity_load('user', $uids);
     $cert_arr = array('未认证', '已认证', '认证中');
+    $op = user_access('user_admin_permissions');
     foreach ($re as $key => $value) {
-      $rows[$key]['uid'] = l($value->uid, "user/$value->uid/edit", array('attributes' => array('target' => '_blank')));
+      $rows[$key]['uid'] = l($value->uid, "user/$value->uid", array('attributes' => array('target' => '_blank')));
       $rows[$key]['mobile'] = $value->name;
       $rows[$key]['full_name'] = empty($value->field_username) ? '' : $value->field_username[LANGUAGE_NONE][0]['safe_value'];
       $rows[$key]['company'] = empty($value->field_company_name) ? '' : $value->field_company_name[LANGUAGE_NONE][0]['safe_value'];
       $rows[$key]['cert'] = empty($value->field_certed) ? '' : $cert_arr[$value->field_certed[LANGUAGE_NONE][0]['value']];
       $rows[$key]['access'] = format_date($value->access);
       $rows[$key]['created'] = format_date($value->created, 'short');
+      if ($op) {
+        $rows[$key]['operation'] = l('Edit', "user/$value->uid/edit", array('attributes' => array('target' => '_blank')));
+      }
     }
   }
   $form['filters']['#title'] .= ' ' . t('Total Matched Record') . ' (' . count($rows) . ')';

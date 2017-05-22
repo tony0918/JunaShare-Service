@@ -379,21 +379,6 @@ function users_services_resources() {
             ),
           ),
         ),
-        'resend_welcome_email' => array(
-          'access callback' => '_users_resource_access',
-          'access arguments' => array('resend_welcome_email'),
-          'access arguments append' => TRUE,
-          'callback' => '_users_resource_resend_welcome_email',
-          'args' => array(
-            array(
-              'name' => 'uid',
-              'optional' => FALSE,
-              'source' => array('path' => 0),
-              'type' => 'int',
-              'description' => 'The id of the user whose welcome email to resend.',
-            ),
-          ),
-        ),
       ),
     ),
   );
@@ -1174,45 +1159,9 @@ function _users_resource_password_reset($uid) {
   return TRUE;
 }
 
-/**
- * Send a welcome email for the specified user.
- */
-function _users_resource_resend_welcome_email($uid) {
-  global $language;
 
-  $account = user_load($uid);
-  if (empty($account)) {
-    return services_error(t('There is no user with ID @uid.', array('@uid' => $uid)), 404);
-  }
+function users_form_alter() {
 
-  $user_register = variable_get('user_register', 2);
-  switch ($user_register) {
-    case USER_REGISTER_ADMINISTRATORS_ONLY:
-      $op = 'register_admin_created';
-      break;
-    case USER_REGISTER_VISITORS:
-      $op = 'register_no_approval_required';
-      break;
-    case USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL:
-      $op = 'register_pending_approval';
-  }
-
-  // Mail the welcome emaiil using current language.
-  $mail = _users_mail_notify($op, $account, $language);
-  if (!empty($mail)) {
-    watchdog('user', 'Welcome message has been re-sent to %name at %email.', array(
-      '%name' => $account->name,
-      '%email' => $account->mail
-    ));
-  }
-  else {
-    watchdog('user', 'There was an error re-sending welcome message to %name at %email', array(
-      '%name' => $account->name,
-      '%email' => $account->mail
-    ));
-  }
-  // Everything went right.
-  return TRUE;
 }
 
 /**
