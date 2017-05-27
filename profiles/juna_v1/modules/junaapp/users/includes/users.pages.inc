@@ -45,6 +45,7 @@ function users_juna_export_user_form() {
 }
 
 function export_certed_user_info_submit() {
+  set_time_limit(0);
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'user')
     ->propertyCondition('status', 1)
@@ -199,4 +200,27 @@ function users_juna_admin_list($form, &$form_state) {
 function users_juna_admin_list_submit($form, &$form_state) {
   $_SESSION['users_juna_admin_list_filter']['mobile'] = trim($form_state['values']['mobile']);
   $_SESSION['users_juna_admin_list_filter']['cert'] = trim($form_state['values']['cert']);
+}
+
+function users_juna_mock_users() {
+  $arr = array(
+    130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
+    144, 147,
+    150, 151, 152, 153, 155, 156, 157, 158, 159,
+    176, 177, 178,
+    180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
+  );
+  $tmp = array();
+  for ($i = 0; $i < 1000; $i++) {
+    $tmp[] = $arr[array_rand($arr)] . mt_rand(100, 999) . 'O' . mt_rand(1000, 9999);
+  }
+  foreach ($tmp as $key => $value) {
+    $account = new stdClass();
+    $account->is_new = TRUE;
+    $account->mail = $value . '@mockuser.junashare.com';
+    $account->name = $value;
+    $account->status = 1;
+    user_save($account);
+  }
+  return 'ok';
 }

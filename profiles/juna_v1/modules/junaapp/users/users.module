@@ -422,6 +422,16 @@ function users_menu() {
     'weight' => 1,
     'file' => 'includes/users.pages.inc',
   );
+  $items['admin/juna/users/mock/users'] = array(
+    'title' => 'Create fake users',
+    'description' => 'Create fake users',
+    'page callback' => 'users_juna_mock_users',
+    'page arguments' => array('users_juna_admin_list'),
+    'access arguments' => array('administer juna users list'),
+    'type' => MENU_CALLBACK,
+    'weight' => 1,
+    'file' => 'includes/users.pages.inc',
+  );
   return $items;
 }
 
@@ -439,8 +449,7 @@ function users_forgot_password($mobile, $pass, $code) {
   }
   if (strlen($pass) < 6) {
     return services_error(t('密码至少6位'), 406);
-  }
-  elseif (strlen($pass) > 25) {
+  } elseif (strlen($pass) > 25) {
     return services_error(t('密码最多25位'), 406);
   }
   $query = db_select('users_mobile_verifycode', 'g');
@@ -488,8 +497,7 @@ function users_change_password($mobile, $pass, $code) {
   }
   if (strlen($pass) < 6) {
     return services_error(t('密码至少6位'), 406);
-  }
-  elseif (strlen($pass) > 25) {
+  } elseif (strlen($pass) > 25) {
     return services_error(t('密码最多25位'), 406);
   }
   $query = db_select('users_mobile_verifycode', 'g');
@@ -671,8 +679,7 @@ function _users_resource_create($account) {
   $account = _services_arg_value($account, 'account');
   if (strlen($account['pass']) < 6) {
     return services_error(t('密码不能少于6位'), 406);
-  }
-  elseif (strlen($account['pass']) > 25) {
+  } elseif (strlen($account['pass']) > 25) {
     return services_error(t('密码最多25位'), 406);
   }
   // Load the required includes for saving profile information
@@ -693,8 +700,7 @@ function _users_resource_create($account) {
     if (is_array($account['pass'])) {
       $pass1 = $account['pass']['pass1'];
       $pass2 = $account['pass']['pass2'];
-    }
-    else {
+    } else {
       $pass1 = $account['pass'];
       $pass2 = $account['pass'];
     }
@@ -747,8 +753,7 @@ function _users_resource_create($account) {
   // Error if needed.
   if ($errors = form_get_errors()) {
     return services_error(implode(" ", $errors), 406, array('form_errors' => $errors));
-  }
-  else {
+  } else {
     $records = new stdClass();
     $records->isused = 1;
     $records->id = $record['id'];
@@ -767,8 +772,8 @@ function _users_resource_create($account) {
     $current_user->session_name = session_name();
     $current_user->token = drupal_get_token('services');
     _users_resource_update_services_users($user['uid'], time());
-    watchdog('newusers', print_r($current_user, TRUE));
-    watchdog('abc', print_R($_SERVER, TRUE));
+//    watchdog('newusers', print_r($current_user, TRUE));
+//    watchdog('abc', print_R($_SERVER, TRUE));
     $tuser = $current_user;
     return $tuser;
   }
@@ -812,18 +817,16 @@ function _users_resource_update($uid, $account) {
   if (array_key_exists('picture_upload', $account)) {
     if (is_array($account['picture_upload'])) {
       // Check if it's an array and convert to object.
-      $account['picture_upload'] = (object) $account['picture_upload'];
-    }
-    elseif (is_int($account['picture_upload'])) {
+      $account['picture_upload'] = (object)$account['picture_upload'];
+    } elseif (is_int($account['picture_upload'])) {
       // Check if it's an integer and get the file object.
       $file_validate = file_validate_is_image($file = file_load($account['picture_upload']));
       if (empty($file_validate)) {
         $account['picture_upload'] = $file;
       }
-    }
-    elseif (is_string($account['picture_upload'])) {
+    } elseif (is_string($account['picture_upload'])) {
       // Check if it's an string and get the file object.
-      $file_validate = file_validate_is_image($file = file_load((int) $account['picture_upload']));
+      $file_validate = file_validate_is_image($file = file_load((int)$account['picture_upload']));
       if (empty($file_validate)) {
         $account['picture_upload'] = $file;
       }
@@ -870,12 +873,11 @@ function _users_resource_update($uid, $account) {
   // Error if needed.
   if ($errors = form_get_errors()) {
     return services_error(implode(" ", $errors), 406, array('form_errors' => $errors));
-  }
-  else {
+  } else {
     module_load_include('module', 'services');
-    $account = (object) $account;
+    $account = (object)$account;
     services_remove_users_data($account);
-    $account = (array) $account;
+    $account = (array)$account;
     _users_resource_update_services_users($uid, time());
     return $account;
   }
@@ -898,8 +900,7 @@ function _users_resource_update_services_users($uid, $time) {
         'changed' => $time,
       ))
       ->execute();
-  }
-  else {
+  } else {
     db_update('services_user')
       ->fields(array(
           'uid' => $uid,
@@ -1058,8 +1059,7 @@ function _users_resource_request_new_password($name) {
       '%email' => $account->mail
     ));
     return TRUE;
-  }
-  else {
+  } else {
     return FALSE;
   }
 }
@@ -1081,14 +1081,12 @@ function _users_resource_users_pass_reset_login($uid, $timestamp, $hashed_pass) 
           '%other_users' => $user->name,
           '%resetting_users' => $reset_link_account->name
         )), 405);
-      }
-      else {
+      } else {
         // Invalid one-time link specifies an unknown user.
         return services_error(t('The one-time login link you clicked is invalid.'), 406);
       }
     }
-  }
-  else {
+  } else {
     // Time out, in seconds, until login URL expires. Defaults to 24 hours =
     // 86400 seconds.
     $timeout = variable_get('user_password_reset_timeout', 86400);
@@ -1099,8 +1097,7 @@ function _users_resource_users_pass_reset_login($uid, $timestamp, $hashed_pass) 
       // No time out for first time login.
       if ($account->login && $current - $timestamp > $timeout) {
         return services_error(t('You have tried to use a one-time login link that has expired. Please request a new one.'), 406);
-      }
-      elseif ($account->uid && $timestamp >= $account->login && $timestamp <= $current && $hashed_pass == user_pass_rehash($account->pass, $timestamp, $account->login, $account->uid)) {
+      } elseif ($account->uid && $timestamp >= $account->login && $timestamp <= $current && $hashed_pass == user_pass_rehash($account->pass, $timestamp, $account->login, $account->uid)) {
         // Set the new user.
         $user = $account;
         // user_login_finalize() also updates the login timestamp of the
@@ -1117,12 +1114,10 @@ function _users_resource_users_pass_reset_login($uid, $timestamp, $hashed_pass) 
           'pass_reset_token' => $token,
           'message' => t('You have just used your one-time login link. It is no longer necessary to use this link to log in. <strong>Please change your password</strong>.')
         );
-      }
-      else {
+      } else {
         return services_error(t('You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one.'), 406);
       }
-    }
-    else {
+    } else {
       // Deny access, no more clues.
       // Everything will be in the watchdog's URL for the administrator to check.
       return services_error(t('Access denied.'), 403);
@@ -1148,8 +1143,7 @@ function _users_resource_password_reset($uid) {
       '%name' => $account->name,
       '%email' => $account->mail
     ));
-  }
-  else {
+  } else {
     watchdog('user', 'There was an error re-sending password reset instructions mailed to %name at %email', array(
       '%name' => $account->name,
       '%email' => $account->mail
@@ -1225,8 +1219,7 @@ function _users_resource_access($op = 'view', $args = array()) {
     case 'register':
       if (!$user->uid && variable_get('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL) != USER_REGISTER_ADMINISTRATORS_ONLY) {
         return TRUE;
-      }
-      else {
+      } else {
         return user_access('administer users');
       }
     case 'password_reset':
@@ -1296,16 +1289,14 @@ function _users_resource_flood_control_precheck($username) {
   // since there may be only one apparent IP for all users at an institution.
   if (!flood_is_allowed('failed_login_attempt_ip', variable_get('user_failed_login_ip_limit', 50), variable_get('user_failed_login_ip_window', 3600))) {
     $flood_state['flood_control_triggered'] = 'ip';
-  }
-  else {
+  } else {
     $account = db_query("SELECT * FROM {users} WHERE name = :name AND status = 1", array(':name' => $username))->fetchObject();
     if ($account) {
       if (variable_get('user_failed_login_identifier_uid_only', FALSE)) {
         // Register flood events based on the uid only, so they apply for any
         // IP address. This is the most secure option.
         $identifier = $account->uid;
-      }
-      else {
+      } else {
         // The default identifier is a combination of uid and IP address. This
         // is less secure but more resistant to denial-of-service attacks that
         // could lock out all users with public user names.
@@ -1350,14 +1341,12 @@ function _users_resource_flood_control_postcheck($flood_state) {
     if (isset($flood_state['flood_control_triggered'])) {
       if ($flood_state['flood_control_triggered'] == 'user') {
         services_error(t('Account is temporarily blocked.'), 406);
-      }
-      else {
+      } else {
         // We did not find a uid, so the limit is IP-based.
         services_error(t('This IP address is temporarily blocked.'), 406);
       }
     }
-  }
-  elseif (isset($flood_state['flood_control_users_identifier'])) {
+  } elseif (isset($flood_state['flood_control_users_identifier'])) {
     // Clear past failures for this user so as not to block a user who might
     // log in and out more than once in an hour.
     flood_clear_event('failed_login_attempt_users', $flood_state['flood_control_users_identifier']);
@@ -1454,8 +1443,7 @@ function _junausers_upload_file() {
     // Required to be able to reference this file.
     file_usage_add($file, 'juna_userss', 'user', $user->uid);
 
-  }
-  else {
+  } else {
     services_error(t('未知错误'), 500);
     exit;
   }
@@ -1501,7 +1489,7 @@ function users_user_cert($username, $companyname, $companyaddress, $cert_type, $
   $account->field_username['und']['0']['value'] = $username;
   $account->field_company_name['und'][0]['value'] = $companyname;
   $account->field_company_address['und'][0]['value'] = $companyaddress;
-  $account->field_cert['und'][0] = (array) $tmp;
+  $account->field_cert['und'][0] = (array)$tmp;
   $account->field_cert_type['und'][0]['value'] = $cert_type;
   $account->field_certed['und'][0]['value'] = 2;
   $account->field_position['und'][0]['value'] = $postion;
@@ -1578,8 +1566,7 @@ function users_mobilecode($mobile, $type) {
     $ends = microtime_float();
     calcrequesttime($starts, $ends, "手机验证码");
     return array('success' => 1, 'msg' => '验证码发送成功');
-  }
-  else {
+  } else {
     //发送验证码
     module_load_include('inc', 'users', 'includes/sms');
     $code = generateCode();
@@ -1602,8 +1589,7 @@ function users_mobilecode($mobile, $type) {
       $ends = microtime_float();
       calcrequesttime($starts, $ends, "手机验证码");
       return array('success' => 1, 'msg' => '验证码发送成功');
-    }
-    else {
+    } else {
       $ends = microtime_float();
       calcrequesttime($starts, $ends, "手机验证码");
       services_error(t('验证码发送失败.'), 406);
@@ -1630,8 +1616,7 @@ function users_user_insert(&$edit, $account, $category) {
   if (strtolower($ext) == 'json') {
     if (strlen($_POST['pass']) < 6) {
       services_error(t('密码至少6位.'), 406);
-    }
-    elseif (strlen($_POST['pass']) > 25) {
+    } elseif (strlen($_POST['pass']) > 25) {
       services_error(t('密码最多25位.'), 406);
     }
 //_services_arg_value
@@ -1675,8 +1660,7 @@ function users_user_insert(&$edit, $account, $category) {
 function users_certedinfo($uid) {
   if (isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
     $csrf_token = $_SERVER['HTTP_X_CSRF_TOKEN'];
-  }
-  elseif (isset($_REQUEST['services_token'])) {
+  } elseif (isset($_REQUEST['services_token'])) {
     $csrf_token = $_REQUEST['services_token'];
   }
   if (!drupal_valid_token($csrf_token, 'services')) {
