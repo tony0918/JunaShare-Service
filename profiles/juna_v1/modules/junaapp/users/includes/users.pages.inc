@@ -194,6 +194,9 @@ function users_juna_admin_list($form, &$form_state) {
     '#empty' => t('暂无用户.'),
   );
   $form['pager'] = array('#markup' => theme('pager'));
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'users') . '/users.css',
+  );
   return $form;
 }
 
