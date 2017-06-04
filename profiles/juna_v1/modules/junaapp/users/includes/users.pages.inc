@@ -206,24 +206,64 @@ function users_juna_admin_list_submit($form, &$form_state) {
 }
 
 function users_juna_mock_users() {
-  $arr = array(
-    130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
-    144, 147,
-    150, 151, 152, 153, 155, 156, 157, 158, 159,
-    176, 177, 178,
-    180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
-  );
-  $tmp = array();
-  for ($i = 0; $i < 1000; $i++) {
-    $tmp[] = $arr[array_rand($arr)] . mt_rand(100, 999) . 'O' . mt_rand(1000, 9999);
-  }
-  foreach ($tmp as $key => $value) {
-    $account = new stdClass();
-    $account->is_new = TRUE;
-    $account->mail = $value . '@mockuser.junashare.com';
-    $account->name = $value;
-    $account->status = 1;
-    user_save($account);
+//  $arr = array(
+//    130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
+//    144, 147,
+//    150, 151, 152, 153, 155, 156, 157, 158, 159,
+//    176, 177, 178,
+//    180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
+//  );
+//  $tmp = array();
+//  for ($i = 0; $i < 1000; $i++) {
+//    $tmp[] = $arr[array_rand($arr)] . mt_rand(100, 999) . 'O' . mt_rand(1000, 9999);
+//  }
+//  foreach ($tmp as $key => $value) {
+//    $account = new stdClass();
+//    $account->is_new = TRUE;
+//    $account->mail = $value . '@mockuser.junashare.com';
+//    $account->name = $value;
+//    $account->status = 1;
+//    user_save($account);
+//  }
+
+  // Make certed user.
+  $csv = drupal_realpath(file_default_scheme() . '://csv/user2.csv');
+
+  if (file_exists($csv)) {
+    $csv = fopen($csv, 'r');
+
+    while (!feof($csv)) {
+      $data = fgetcsv($csv);
+      $uid = (int)filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
+      $uri = file_default_scheme() . '://csv/userimgs/' . $data[4] . '.jpg';
+      $file = db_select('file_managed', 'fm')
+        ->condition('fm.uri', $uri)
+        ->fields('fm')->execute()->fetchAssoc();
+      if ($file && isset($file['fid'])) {
+        $file = file_load($file['fid']);
+        file_usage_add($file, 'users', 'user', $uid);
+      } else {
+        $file = new stdClass();
+        $file->fid = NULL;
+        $file->uri = $uri;
+        $file->filename = drupal_basename($uri);
+        $file->filemime = file_get_mimetype($uri);
+        $file->uid = $uid;
+        $file->status = FILE_STATUS_PERMANENT;
+        file_save($file);
+      }
+      $account = user_load($uid);
+      $account->field_username['und']['0']['value'] = $data[1];
+      $account->field_company_name['und'][0]['value'] = $data[2];
+      $account->field_company_address['und'][0]['value'] = $data[3];
+      $account->field_cert['und'][0] = (array)$file;
+      $account->field_cert_type['und'][0]['value'] = 1;
+      $account->field_certed['und'][0]['value'] = 1;
+      $edit['pass'] = '123456';
+      user_save($account, $edit);
+    }
+
+    fclose($csv);
   }
   return 'ok';
 }
