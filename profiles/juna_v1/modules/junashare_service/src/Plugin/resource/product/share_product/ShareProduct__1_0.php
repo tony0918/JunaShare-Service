@@ -70,6 +70,10 @@ class ShareProduct__1_0 extends ResourceNode {
       'callback' => array($this, 'getInBoxStatus')
     );
 
+    $public_fields['share'] = array(
+      'callback' => array($this, 'shareInfo')
+    );
+
     // Clean up some fields.
     unset($public_fields['self']);
     $public_fields['id']['methods'] = array();
@@ -84,6 +88,18 @@ class ShareProduct__1_0 extends ResourceNode {
    */
   protected function dataProviderClassName() {
     return 'Drupal\junashare_service\Plugin\resource\DataProvider\DataProviderShareProductNode';
+  }
+
+  public function shareInfo($interpreter) {
+    $node = $interpreter->getWrapper()->value();
+    return array(
+      'wechat' => array(
+        'title' => $node->title,
+        'description' => '还不快来享什么免费领取。',
+        'url' => url('node/' . $node->nid, array('absolute' => TRUE)),
+        'img' => file_create_url('public://tubiao5@2x.png'),
+      ),
+    );
   }
 
   public function getProductNumberInBox($interpreter) {
