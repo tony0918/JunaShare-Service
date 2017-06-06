@@ -902,6 +902,68 @@ function juna_basic_features_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-product-field_reference_link'.
+  $field_instances['node-product-field_reference_link'] = array(
+    'bundle' => 'product',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '<p>填写相关的外联，title字段可选值有:</p>
+<ul>
+<li><b>tmall</b> - 天猫</li>
+<li><b>official</b> - 官网</li>
+<li><b>wechatqr</b> - 微信QR CODE</li>
+</ul>',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_default',
+        'weight' => 14,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_reference_link',
+    'label' => 'Reference Link',
+    'required' => 0,
+    'settings' => array(
+      'absolute_url' => 1,
+      'attributes' => array(
+        'class' => '',
+        'configurable_class' => 0,
+        'configurable_title' => 0,
+        'rel' => '',
+        'target' => 'default',
+        'title' => '',
+      ),
+      'display' => array(
+        'url_cutoff' => 80,
+      ),
+      'enable_tokens' => 1,
+      'rel_remove' => 'default',
+      'title' => 'required',
+      'title_label_use_field_label' => 0,
+      'title_maxlength' => 128,
+      'title_value' => '',
+      'url' => 0,
+      'user_register_form' => FALSE,
+      'validate_url' => 1,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'link',
+      'settings' => array(),
+      'type' => 'link_field',
+      'weight' => 16,
+    ),
+  );
+
   // Exported field_instance: 'node-product-field_related_sku_product'.
   $field_instances['node-product-field_related_sku_product'] = array(
     'bundle' => 'product',
@@ -3526,6 +3588,53 @@ function juna_basic_features_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance:
+  // 'node-yaoxiang_product-field_product_yaoxiang_price'.
+  $field_instances['node-yaoxiang_product-field_product_yaoxiang_price'] = array(
+    'bundle' => 'yaoxiang_product',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '该产品的摇享显示价格',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 13,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_product_yaoxiang_price',
+    'label' => 'Product Yaoxiang Price',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 4,
+    ),
+  );
+
   // Exported field_instance: 'node-yaoxiang_product-field_related_sku_product'.
   $field_instances['node-yaoxiang_product-field_related_sku_product'] = array(
     'bundle' => 'yaoxiang_product',
@@ -3608,8 +3717,55 @@ function juna_basic_features_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-yaoxiang_product-field_sku_product_item'.
+  $field_instances['node-yaoxiang_product-field_sku_product_item'] = array(
+    'bundle' => 'yaoxiang_product',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(),
+        'type' => 'entityreference_entity_id',
+        'weight' => 9,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_sku_product_item',
+    'label' => 'SKU Product Item',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 1,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
+  t('<p>填写相关的外联，title字段可选值有:</p>
+<ul>
+<li><b>tmall</b> - 天猫</li>
+<li><b>official</b> - 官网</li>
+<li><b>wechatqr</b> - 微信QR CODE</li>
+</ul>');
   t('<p>填写相关的外联，title字段可选值有:</p>
 <ul>
 <li><b>tmall</b> - 天猫</li>
@@ -3641,9 +3797,12 @@ function juna_basic_features_field_default_field_instances() {
   t('Product Short Description');
   t('Product Total Amount');
   t('Product Valid Period');
+  t('Product Yaoxiang Price');
+  t('Reference Link');
   t('Related Provider');
   t('Related SKU Product');
   t('Remaining Number');
+  t('SKU Product Item');
   t('Stock');
   t('Target Type');
   t('Yigou Price');
@@ -3703,6 +3862,7 @@ function juna_basic_features_field_default_field_instances() {
   t('点击地图获取经纬度');
   t('结束时间，日期格式1990-01-31 10:00:00');
   t('结束时间，格式1990-01-31 00:00:00');
+  t('该产品的摇享显示价格');
   t('该商品的上架生效日期');
 
   return $field_instances;

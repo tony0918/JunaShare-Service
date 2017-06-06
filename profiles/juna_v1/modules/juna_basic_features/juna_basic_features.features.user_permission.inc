@@ -62,7 +62,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'access coupon creation form',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'coupon',
   );
@@ -72,7 +71,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'access coupon list',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'coupon',
   );
@@ -82,7 +80,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'access coupon portal',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'coupon',
   );
@@ -427,7 +424,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'create ad_banner content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -471,7 +467,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'create sku_product content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -497,7 +492,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'create yaoxiang_product content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -688,7 +682,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit any ad_banner content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -698,7 +691,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit any info_page content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -733,7 +725,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit any sku_product content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -750,7 +741,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit any yaoxiang_product content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -769,7 +759,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit own ad_banner content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -788,7 +777,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit own info_page content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -823,7 +811,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit own sku_product content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
@@ -840,7 +827,6 @@ function juna_basic_features_user_default_permissions() {
     'name' => 'edit own yaoxiang_product content',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
     ),
     'module' => 'node',
   );
