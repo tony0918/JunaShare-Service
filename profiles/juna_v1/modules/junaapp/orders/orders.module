@@ -328,6 +328,14 @@ function orders_menu() {
     'weight' => 1,
     'file' => 'includes/orders.pages.inc',
   );
+  $items['admin/juna/orders/updatepackage'] = array(
+    'title' => 'Order Management Portal',
+    'description' => 'Manage orders.',
+    'page callback' => 'orders_admin_juna_orders_updatepackage',
+    'access arguments' => array('access order list'),
+    'type' => MENU_CALLBACK,
+    'file' => 'includes/orders.pages.inc',
+  );
   return $items;
 }
 

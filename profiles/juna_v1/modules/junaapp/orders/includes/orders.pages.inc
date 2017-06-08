@@ -448,3 +448,47 @@ function orders_export_comments_submit() {
   fclose($fp);
   exit;
 }
+
+function orders_admin_juna_orders_updatepackage() {
+  $csv = drupal_realpath(file_default_scheme() . '://csv/package.csv');
+  $num = 0;
+  if (file_exists($csv)) {
+    $csv = fopen($csv, 'r');
+    $start = 1496620800;
+
+    while (!feof($csv)) {
+      $data = fgetcsv($csv);
+      $mobile = preg_replace('~[^0-9]+~i', '', $data[0]);
+      $provider = $data[6];
+      $number = $data[7];
+
+      $query = db_select('users', 'u')
+        ->condition('u.name', $mobile);
+      $query->join('product_order', 'po', 'po.uid = u.uid');
+      $query->condition('po.created', $start, '<')
+        ->condition('po.status', ORDER_STATUS_UNDELIVERED)
+        ->fields('po');
+
+      $result = $query->execute()->fetchAll();
+
+      $transaction = db_transaction();
+      foreach ($result as $key => $value) {
+        db_update('product_order')
+          ->fields(array(
+            'express_provider' => $provider,
+            'express_id' => $number,
+            'updated' => REQUEST_TIME,
+            'delivery_time' => REQUEST_TIME,
+            'status' => ORDER_STATUS_DELIVERED
+          ))
+          ->condition('id', $value->id, '=')
+          ->execute();
+        $num++;
+      }
+      unset($transaction);
+    }
+
+    fclose($csv);
+  }
+  return 'OK ' . $num;
+}

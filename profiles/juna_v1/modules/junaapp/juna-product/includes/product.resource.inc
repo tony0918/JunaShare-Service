@@ -29,6 +29,14 @@ function product_my_box() {
       }
       $row['in_box'] = 1;
       $row['created'] = format_date($rows[$node->nid]->created, 'custom', 'Y-m-d H:i:s');
+      $row['share'] = array(
+        'wechat' => array(
+          'title' => $node->title,
+          'description' => '还不快来享什么免费领取。',
+          'url' => url('node/' . $node->nid, array('absolute' => TRUE)),
+          'img' => file_create_url('public://tubiao5@2x.png'),
+        ),
+      );
       switch ($node->type) {
         // 显示在我的盒子中的价值，如果是壹购商品，就用壹购实体的价格，如果是白领商品或者其他商品，就用SKU实体的市场价格
         case YIGOU_PRODUCT_CONTENT_TYPE:
@@ -66,8 +74,7 @@ function product_tobox($nid) {
   $node = $query->execute()->fetchAllAssoc('n.nid');
   if (empty($node)) {
     return services_error(t('商品已下架.'), 406);
-  }
-  else {
+  } else {
     $query = db_select('product_box', 'pb')
       ->condition('pb.uid', $user->uid, '=')
       ->fields('pb', array('nid'));
@@ -82,8 +89,7 @@ function product_tobox($nid) {
         drupal_write_record('product_box', $box);
       }
       return ['message' => '加入盒子成功', 'nid' => $nid];
-    }
-    else {
+    } else {
       return services_error(t('盒子已满，请先从盒子中删除部分商品.'), 406);
     }
   }
@@ -102,8 +108,7 @@ function product_make_a_purchase($nid) {
   $u = user_load($user->uid);
   if (empty($u->field_certed) || (empty($u->field_certed['und'][0]['value']))) {
     return services_error(t('请先完成认证'), 406);
-  }
-  elseif ($u->field_certed['und'][0]['value'] == 2) {
+  } elseif ($u->field_certed['und'][0]['value'] == 2) {
     return services_error(t('认证资料审核中'), 406);
   }
 
@@ -131,8 +136,7 @@ function product_make_a_purchase($nid) {
     $query->addField('f3', 'field_price_value', 'price');
 
     $node = $query->execute()->fetchAssoc('n.nid');
-  }
-  else {
+  } else {
     // 不在盒子中
     $query = db_select('node', 'n');
     $query->condition('n.nid', $nid, '=')
@@ -164,7 +168,7 @@ function product_make_a_purchase($nid) {
 //    return services_error(t('对不起，您已购买过该商品'), 406);
 //  }
 
-  $stock = (int) $node['stock'];
+  $stock = (int)$node['stock'];
   if ($num_of_orders >= $stock) {
     // 如果订单数额 >= 总库存数，售罄
     return services_error(t('商品已售罄.'), 406);
@@ -200,8 +204,7 @@ function product_share_product_apply($nid) {
   $u = user_load($user->uid);
   if (empty($u->field_certed) || (empty($u->field_certed['und'][0]['value']))) {
     return services_error(t('请先完成认证'), 406);
-  }
-  elseif ($u->field_certed['und'][0]['value'] == 2) {
+  } elseif ($u->field_certed['und'][0]['value'] == 2) {
     return services_error(t('认证资料审核中'), 406);
   }
 
@@ -231,10 +234,9 @@ function product_share_product_apply($nid) {
     $query->addField('f2', 'field_total_num_value', 'stock');
 
     $node = $query->execute()->fetchAssoc('n.nid');
-  }
-  else {
+  } else {
     // 不在盒子中
-    $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
+    $hour = (int)format_date(REQUEST_TIME, 'custom', 'H');
     if (8 > $hour && $hour >= 0) {
       watchdog('juna_service::product_share_product_apply', 'ERROR::商品限时结束::@sanity_check',
         array('@sanity_check' => $hour), WATCHDOG_DEBUG);
@@ -268,7 +270,7 @@ function product_share_product_apply($nid) {
     return services_error(t('对不起，您已申领过该商品'), 406);
   }
 
-  $stock = (int) $node['stock'];
+  $stock = (int)$node['stock'];
   if ($num_of_orders >= $stock) {
     // 如果订单数额 >= 总库存数，售罄
     return services_error(t('商品已领完.'), 406);
@@ -298,12 +300,11 @@ function product_yaoxiang_product_enrollment() {
   $u = user_load($user->uid);
   if (empty($u->field_certed) || (empty($u->field_certed['und'][0]['value']))) {
     return services_error(t('请先完成认证'), 406);
-  }
-  elseif ($u->field_certed['und'][0]['value'] == 2) {
+  } elseif ($u->field_certed['und'][0]['value'] == 2) {
     return services_error(t('认证资料审核中'), 406);
   }
 
-  $hour = (int) format_date(REQUEST_TIME, 'custom', 'H');
+  $hour = (int)format_date(REQUEST_TIME, 'custom', 'H');
   if (8 > $hour && $hour >= 22 && !_users_is_developer($user->uid)) {
     return services_error(t('摇享已结束.'), 406);
   }
