@@ -1,6 +1,5 @@
 <?php
-//print_r($node);
-//exit;
+//print_r($node);exit;
 /**
  * @file
  * Default theme implementation to display a node.
@@ -81,34 +80,44 @@
  * @ingroup themeable
  */
 ?>
-<div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix container-fluid"<?php print $attributes; ?>>
-<!--  <div class="caption row">-->
-<!--    <div class="col-xs-12 clo-md-12">-->
-<!--      <h4>--><?php //echo $node->field_product_display_name['und'][0]['safe_value']; ?><!--</h4>-->
-<!--      <h5><small>价值：</small><span class="text-danger">¥--><?php //echo $node->field_product_price['und'][0]['value']; ?><!--</span></h5>-->
-<!--    </div>-->
-<!--  </div>-->
+<div id="node-<?php print $node->nid; ?>"
+     class="<?php print $classes; ?> clearfix container-fluid"<?php print $attributes; ?>>
+
+  <?php print $user_picture; ?>
+
+  <?php print render($title_prefix); ?>
+  <?php if (!$page): ?>
+    <h2<?php print $title_attributes; ?>><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h2>
+  <?php endif; ?>
+  <?php print render($title_suffix); ?>
+
+  <?php if ($display_submitted): ?>
+    <div class="submitted">
+      <?php print $submitted; ?>
+    </div>
+  <?php endif; ?>
+
+  <div class="caption row">
+    <div class="col-xs-12 clo-md-12">
+      <h5><?php echo $title; ?></h5>
+      <h5>
+        <small>价值：</small>
+        <span class="text-danger">¥<?php echo $node->field_price['und'][0]['value']; ?></span></h5>
+    </div>
+  </div>
+
   <div class="content row"<?php print $content_attributes; ?>>
+
     <?php
+    // We hide the comments and links now so that we can render them later.
+    hide($content['comments']);
+    hide($content['links']);
     print render($content);
     ?>
   </div>
 
+  <?php print render($content['links']); ?>
+
+  <?php print render($content['comments']); ?>
+
 </div>
-<!--<div class="container-fluid">-->
-<!--  <div class="row">-->
-<!--    <div class="col-xs-12 col-md-12 text-center copyright">-->
-<!--      <p>-->
-<!--        <small>巨拿（上海）网络科技有限公司</small>-->
-<!--      </p>-->
-<!--      <p>-->
-<!--        <small>Copyright © 2017 All Rights Reserved</small>-->
-<!--      </p>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div class="row product-footer">-->
-<!--    <div class="col-xs-12 col-md-12">-->
-<!--      <a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.junashare.app"><h4 class="text-center">到享什么 查看更多</h4></a>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->

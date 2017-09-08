@@ -88,11 +88,13 @@
             <?php if ($site_name): ?>
               <?php if ($title): ?>
                 <div id="site-name"><strong>
-                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
+                    <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"
+                       rel="home"><span><?php print $site_name; ?></span></a>
                   </strong></div>
               <?php else: /* Use h1 when the content title is empty */ ?>
                 <h1 id="site-name">
-                  <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
+                  <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"
+                     rel="home"><span><?php print $site_name; ?></span></a>
                 </h1>
               <?php endif; ?>
             <?php endif; ?>
@@ -144,10 +146,14 @@
               <ul class="action-links"><?php print render($action_links); ?></ul><?php endif; ?>
             <?php print render($page['content']); ?>
             <?php print $feed_icons; ?>
+
             <h3 class="text-center">扫码下载享什么</h3>
             <div class="text-center">
-              <img class="img-responsive" src="<?php echo url(path_to_theme() . '/images/qr_20170606165100.png', array('absolute' => TRUE)) ?>" alt="">
+              <img class="img-responsive"
+                   src="<?php echo url(path_to_theme() . '/images/qr_20170606165100.png', array('absolute' => TRUE)) ?>"
+                   alt="">
             </div>
+
           </div>
         </div> <!-- /.section, /#content -->
 
@@ -170,9 +176,13 @@
       </div>
     </div> <!-- /#main, /#main-wrapper -->
 
-    <div id="footer">
-      <div class="section">
+    <div id="footer" class="container-fluid">
+      <div class="section row">
         <?php print render($page['footer']); ?>
+        <div class="col-xs-12 col-md-12 text-center">
+          <p>巨拿（上海）网络科技有限公司</p>
+          <p>Copyright © 2017 All Rights Reserved</p>
+        </div>
       </div>
     </div> <!-- /.section, /#footer -->
 

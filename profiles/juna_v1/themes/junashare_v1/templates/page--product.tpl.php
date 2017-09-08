@@ -144,10 +144,10 @@
               <ul class="action-links"><?php print render($action_links); ?></ul><?php endif; ?>
             <?php print render($page['content']); ?>
             <?php print $feed_icons; ?>
-            <h3 class="text-center">扫码下载享什么</h3>
-            <div class="text-center">
-              <img class="img-responsive" src="<?php echo url(path_to_theme() . '/images/qr_20170606165100.png', array('absolute' => TRUE)) ?>" alt="">
-            </div>
+<!--            <h3 class="text-center">扫码下载享什么</h3>-->
+<!--            <div class="text-center">-->
+<!--              <img class="img-responsive" src="--><?php //echo url(path_to_theme() . '/images/qr_20170606165100.png', array('absolute' => TRUE)) ?><!--" alt="">-->
+<!--            </div>-->
           </div>
         </div> <!-- /.section, /#content -->
 
@@ -170,8 +170,8 @@
       </div>
     </div> <!-- /#main, /#main-wrapper -->
 
-    <div id="footer">
-      <div class="section">
+    <div id="footer" class="container-fluid">
+      <div class="section row">
         <?php print render($page['footer']); ?>
       </div>
     </div> <!-- /.section, /#footer -->

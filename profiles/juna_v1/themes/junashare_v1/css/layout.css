@@ -35,3 +35,18 @@
 .node-type-page #page {
   padding-top: 30px;
 }
+
+.copyright {
+  color: #ADADAD;
+  padding: 5px 0;
+}
+
+.product-footer {
+  background-color: #00A29A;
+  padding: 5px 0;
+}
+
+.product-footer a {
+  color: #FFFFFF;
+  display: block;
+}
