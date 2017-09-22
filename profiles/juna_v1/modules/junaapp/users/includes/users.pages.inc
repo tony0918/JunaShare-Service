@@ -267,3 +267,35 @@ function users_juna_mock_users() {
   }
   return 'ok';
 }
+
+/**
+ * 批量认证用户并发券
+ * @return string
+ */
+function users_juna_users_batched_verify() {
+  set_time_limit(0);
+  module_load_include('inc', 'coupon', 'includes/coupon_helper');
+  $csv = drupal_realpath(file_default_scheme() . '://csv/user_verify.csv');
+  if (file_exists($csv)) {
+    $csv = fopen($csv, 'r');
+
+    while (!feof($csv)) {
+      $data = fgetcsv($csv);
+      $uid = (int)filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
+      $account = user_load($uid);
+      $account->field_username['und'][0]['value'] = $data[2];
+      $account->field_company_name['und'][0]['value'] = $data[3];
+      $account->field_company_address['und'][0]['value'] = $data[4];
+//      $account->field_certed['und'][0]['value'] = 1;
+      user_save($account);
+//      coupon_helper_deliver_a_coupon($uid,
+//        strtotime('2017-9-18 00:00:00'),
+//        strtotime('2017-9-24 23:59:59')
+//      );
+    }
+
+    fclose($csv);
+  }
+
+  return 'ok';
+}

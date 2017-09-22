@@ -450,11 +450,12 @@ function orders_export_comments_submit() {
 }
 
 function orders_admin_juna_orders_updatepackage() {
+  set_time_limit(0);
   $csv = drupal_realpath(file_default_scheme() . '://csv/package.csv');
   $num = 0;
   if (file_exists($csv)) {
     $csv = fopen($csv, 'r');
-    $start = 1496620800;
+    $start = 1505664000;
 
     while (!feof($csv)) {
       $data = fgetcsv($csv);

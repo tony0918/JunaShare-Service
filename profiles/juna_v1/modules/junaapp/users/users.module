@@ -432,6 +432,16 @@ function users_menu() {
     'weight' => 1,
     'file' => 'includes/users.pages.inc',
   );
+  $items['admin/juna/users/batched/verify'] = array(
+    'title' => 'Verify user',
+    'description' => 'Verify user',
+    'page callback' => 'users_juna_users_batched_verify',
+    'page arguments' => array('users_juna_admin_list'),
+    'access arguments' => array('administer juna users list'),
+    'type' => MENU_CALLBACK,
+    'weight' => 1,
+    'file' => 'includes/users.pages.inc',
+  );
   return $items;
 }
 
