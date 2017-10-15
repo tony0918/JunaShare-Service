@@ -282,14 +282,16 @@ function users_juna_users_batched_verify() {
       $data = fgetcsv($csv);
       $uid = (int)filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
       $account = user_load($uid);
+      // For user information update
 //      $account->field_username['und'][0]['value'] = $data[2];
 //      $account->field_company_name['und'][0]['value'] = $data[3];
 //      $account->field_company_address['und'][0]['value'] = $data[4];
+      // For user certification
       $account->field_certed['und'][0]['value'] = 1;
       user_save($account);
       coupon_helper_deliver_a_coupon($uid,
-        strtotime('2017-9-18 00:00:00'),
-        strtotime('2017-9-24 23:59:59')
+        strtotime('2017-10-09 00:00:00'),
+        strtotime('2017-10-15 23:59:59')
       );
     }
 
