@@ -455,7 +455,7 @@ function orders_admin_juna_orders_updatepackage() {
   $num = 0;
   if (file_exists($csv)) {
     $csv = fopen($csv, 'r');
-    $start = 1505664000;
+    $start = 1508083200;
 
     while (!feof($csv)) {
       $data = fgetcsv($csv);
