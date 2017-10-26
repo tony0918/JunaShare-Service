@@ -237,7 +237,7 @@ function users_juna_mock_users() {
 
     while (!feof($csv)) {
       $data = fgetcsv($csv);
-      $uid = (int) filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
+      $uid = (int)filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
       $uri = file_default_scheme() . '://csv/userimgs/' . $data[4] . '.jpg';
       $file = db_select('file_managed', 'fm')
         ->condition('fm.uri', $uri)
@@ -245,8 +245,7 @@ function users_juna_mock_users() {
       if ($file && isset($file['fid'])) {
         $file = file_load($file['fid']);
         file_usage_add($file, 'users', 'user', $uid);
-      }
-      else {
+      } else {
         $file = new stdClass();
         $file->fid = NULL;
         $file->uri = $uri;
@@ -260,7 +259,7 @@ function users_juna_mock_users() {
       $account->field_username['und']['0']['value'] = $data[1];
       $account->field_company_name['und'][0]['value'] = $data[2];
       $account->field_company_address['und'][0]['value'] = $data[3];
-      $account->field_cert['und'][0] = (array) $file;
+      $account->field_cert['und'][0] = (array)$file;
       $account->field_cert_type['und'][0]['value'] = 1;
       $account->field_certed['und'][0]['value'] = 1;
       $edit['pass'] = '123456';
@@ -287,33 +286,34 @@ function users_juna_users_batched_verify() {
       $data = fgetcsv($csv);
 
       // Fetch user by userId
-      //      $uid = (int) filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
+      $uid = (int)filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
 
       // Fetch user by username (mobile)
-      $mobile = filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
-      $query = new EntityFieldQuery();
-      $result = $query->entityCondition('entity_type', 'user')
-        ->propertyCondition('status', 1)
-        ->propertyCondition('name', $mobile)
-        ->execute();
-      $user = array_pop($result['user']);
-      $uid = $user->uid;
+//      $mobile = filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
+//      $query = new EntityFieldQuery();
+//      $result = $query->entityCondition('entity_type', 'user')
+//        ->propertyCondition('status', 1)
+//        ->propertyCondition('name', $mobile)
+//        ->execute();
+//      $user = array_pop($result['user']);
+//      $uid = $user->uid;
 
+      // Load user
       $account = user_load($uid);
 
       // For user information update
-      $account->field_username['und'][0]['value'] = $data[1];
-      $account->field_company_name['und'][0]['value'] = $data[2];
-      $account->field_company_address['und'][0]['value'] = $data[3];
+//      $account->field_username['und'][0]['value'] = $data[1];
+//      $account->field_company_name['und'][0]['value'] = $data[2];
+//      $account->field_company_address['und'][0]['value'] = $data[3];
 
       // For user certification
-      //      $account->field_certed['und'][0]['value'] = 1;
+      $account->field_certed['und'][0]['value'] = 1;
 
       user_save($account);
-      //      coupon_helper_deliver_a_coupon($uid,
-      //        strtotime('2017-10-09 00:00:00'),
-      //        strtotime('2017-10-15 23:59:59')
-      //      );
+//      coupon_helper_deliver_a_coupon($uid,
+//        strtotime('2017-10-09 00:00:00'),
+//        strtotime('2017-10-15 23:59:59')
+//      );
     }
 
     fclose($csv);
