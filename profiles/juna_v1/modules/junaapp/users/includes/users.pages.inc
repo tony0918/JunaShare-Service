@@ -289,7 +289,7 @@ function users_juna_users_batched_verify() {
       $uid = (int)filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
 
       // Fetch user by username (mobile)
-//      $mobile = filter_var($data[0], FILTER_SANITIZE_NUMBER_INT);
+//      $mobile = filter_var($data[1], FILTER_SANITIZE_NUMBER_INT);
 //      $query = new EntityFieldQuery();
 //      $result = $query->entityCondition('entity_type', 'user')
 //        ->propertyCondition('status', 1)
@@ -303,17 +303,17 @@ function users_juna_users_batched_verify() {
 
       // For user information update
 //      $account->field_username['und'][0]['value'] = $data[1];
-//      $account->field_company_name['und'][0]['value'] = $data[2];
-//      $account->field_company_address['und'][0]['value'] = $data[3];
+//      $account->field_company_name['und'][0]['value'] = $data[3];
+//      $account->field_company_address['und'][0]['value'] = $data[4];
 
       // For user certification
       $account->field_certed['und'][0]['value'] = 1;
 
       user_save($account);
-//      coupon_helper_deliver_a_coupon($uid,
-//        strtotime('2017-10-09 00:00:00'),
-//        strtotime('2017-10-15 23:59:59')
-//      );
+      coupon_helper_deliver_a_coupon($uid,
+        strtotime('2017-10-30 00:00:00'),
+        strtotime('2017-11-05 23:59:59')
+      );
     }
 
     fclose($csv);
