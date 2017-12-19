@@ -442,6 +442,16 @@ function users_menu() {
     'weight' => 1,
     'file' => 'includes/users.pages.inc',
   );
+  $items['admin/juna/users/batched/update'] = array(
+    'title' => 'Update user information',
+    'description' => 'Update user information',
+    'page callback' => 'users_juna_users_batched_update_info',
+    'page arguments' => array('users_juna_admin_list'),
+    'access arguments' => array('administer juna users list'),
+    'type' => MENU_CALLBACK,
+    'weight' => 1,
+    'file' => 'includes/users.pages.inc',
+  );
   return $items;
 }
 
