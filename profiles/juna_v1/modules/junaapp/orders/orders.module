@@ -363,7 +363,9 @@ function orders_weixin_notify() {
 
 function orders_payementweixin($order) {
   module_load_include('inc', 'orders', 'includes/config');
-  $newtime = $order->created + 30 * 60;
+  //$newtime = $order->created + 30 * 60;
+    $newtime = $order->created + 60 * 60;//更改为1个小时 yf
+    $node = node_load($order->nid);
   $now = REQUEST_TIME;
   if ($now > $newtime) {
     cancelOrder($order);
@@ -420,7 +422,7 @@ function orders_payementweixin($order) {
     'device_info' => 'WEB',
     //'nonce_str' => getRandStr(),
     'sign_type' => 'MD5',
-    'body' => '测试',
+    'body' => $node->title,
     //'detail' => $detail,
     'attach' => $attach,
     'out_trade_no' => $order->sorderid,//$order -> id,
@@ -440,7 +442,8 @@ function orders_pre_pay($orderid, $payment_type) {
   if (!$order) {
     return services_error(t('订单id错误'), 406);
   }
-  $newtime = $order->created + 30 * 60;
+  //$newtime = $order->created + 30 * 60;
+    $newtime = $order->created + 60 * 60;//时间改为1个小时
   $now = REQUEST_TIME;
   if ($now > $newtime) {
     $orderobj = new stdClass();
