@@ -574,6 +574,7 @@ function orders_notify() {
           $order->status = ORDER_STATUS_UNDELIVERED;
           $order->alipay_order_id = $trade_no;
           $order->payment_type = 1;
+          $order->payment_time = REQUEST_TIME;
           drupal_write_record('product_order', $order, 'sorderid');
           $log = db_query('SELECT * from {user_amount_log} WHERE sorderid=:sorderid', array(':sorderid' => $out_trade_no))->fetchAll();
           if (empty($log)) {

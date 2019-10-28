@@ -63,7 +63,8 @@ class WxPayNotifyCallBack extends \WxPayNotify {
 						$order = new stdClass();
 						$order->id = $attach->orderid;
 						$order->status = 2;
-						$oder->weixin_order_id = $tradeNo;
+						$order->weixin_order_id = $tradeNo;
+						$order -> payment_time = REQUEST_TIME;
 						drupal_write_record('product_order', $order, 'id');
 						$log = db_query('SELECT * from {user_amount_log} WHERE sorderid=:sorderid', array(':sorderid' => $sOrderNo))->fetchAll();
 						if (empty($log)) {
@@ -139,6 +140,7 @@ class WxPayNotifyCallBack extends \WxPayNotify {
 					$order->id = $attach->orderid;
 					$order->status = 2;
 					$order->weixin_order_id = $tradeNo;
+					$order->payment_time = REQUEST_TIME;
 					drupal_write_record('product_order', $order, 'id');
 					$log = db_query('SELECT * from {user_amount_log} WHERE sorderid=:sorderid', array(':sorderid' => $sOrderNo))->fetchAll();
 					if (empty($log)) {
